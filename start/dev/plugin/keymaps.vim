@@ -1,0 +1,16 @@
+nnoremap <F3>  :nohlsearch<CR>
+nnoremap <F6>  :exec '!cd "'.expand('%:p:h').'" && bash'<CR>
+
+nnoremap <C-c>      :cclose<CR>:lclose<CR>
+nnoremap <C-\><C-]> `P
+nnoremap <C-j>      :cn<CR>
+nnoremap <C-k>      :cp<CR>
+nnoremap <C-\><C-j> :lnext<CR>
+nnoremap <C-\><C-k> :lprevious<CR>
+nnoremap <C-h>      :colder<CR>
+nnoremap <C-l>      :cnewer<CR>
+
+nnoremap \b    :CtrlPBuffer<CR>
+nnoremap <c-f> :CtrlP<CR>
+
+nnoremap \\    :NERDTreeToggle <CR>
