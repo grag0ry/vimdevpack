@@ -1,3 +1,6 @@
 [submodule ".sm/space-vim-dark"]
 	path = .sm/space-vim-dark
 	url = https://github.com/liuchengxu/space-vim-dark.git
+[submodule ".sm/ctrlp"]
+	path = .sm/ctrlp
+	url = https://github.com/ctrlpvim/ctrlp.vim.git
