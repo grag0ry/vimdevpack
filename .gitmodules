@@ -7,3 +7,6 @@
 [submodule ".sm/nerdtree"]
 	path = .sm/nerdtree
 	url = https://github.com/preservim/nerdtree.git
+[submodule ".sm/syntastic"]
+	path = .sm/syntastic
+	url = https://github.com/vim-syntastic/syntastic.git

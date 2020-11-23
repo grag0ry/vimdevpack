@@ -19,6 +19,7 @@ nnoremap <c-f> :CtrlP<CR>
 nnoremap \t :Term<CR>
 nnoremap \T :TermV<CR>
 
-nnoremap \\ :NERDTreeToggle <CR>
+nnoremap \\ :NERDTreeToggle<CR>
+nnoremap \c :SyntasticCheck<CR>
 
 vnoremap _s :!sort 2>/dev/null<CR>
