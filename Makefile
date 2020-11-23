@@ -45,8 +45,8 @@ upgrade: sm-upgrade gtags-upgrade
 
 .PHONY: install-ln
 install-ln: sm
-	$(MKDIR) $(HOME)/.vim/pack/vimdevpack/cache/undo
 	$(RM) "$(dst)"
 	$(LN) -sf "$(curdir)" "$(dst)"
+	$(MKDIR) cache/undo
 	$(ECHO) 'if filereadable("$(dst)/vimrc") | source $(dst)/vimrc | endif' \
 		>> "$(HOME)/.vimrc"
