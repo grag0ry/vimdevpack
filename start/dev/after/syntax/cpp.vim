@@ -1,3 +1,1 @@
-nnoremap \h :SwitchSourceHeader<CR>
-nnoremap \s :SplitSwitchSourceHeader<CR>
-nnoremap \v :VSplitSwitchSourceHeader<CR>
+syn match cppException /\(\<throw\>\s\+\(::\)\{,1}\(\w\+::\)*\)\@<=\w\+\(\s*[(;]\)\@=/
