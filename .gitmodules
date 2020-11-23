@@ -12,7 +12,7 @@
 	url = https://github.com/vim-syntastic/syntastic.git
 [submodule ".sm/vim-cpp-enhanced-highlight"]
 	path = .sm/vim-cpp-enhanced-highlight
-	url = http://github.com/octol/vim-cpp-enhanced-highlight.git
+	url = https://github.com/octol/vim-cpp-enhanced-highlight.git
 [submodule ".sm/vim-nerdtree-sync"]
 	path = .sm/vim-nerdtree-sync
 	url = https://github.com/unkiwii/vim-nerdtree-sync.git
