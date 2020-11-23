@@ -2,6 +2,7 @@ nnoremap <F3>  :nohlsearch<CR>
 nnoremap <F6>  :exec '!cd "'.expand('%:p:h').'" && bash'<CR>
 
 nnoremap <C-c>      :cclose<CR>:lclose<CR>
+nnoremap <C-]>      mP:GtagsCursor<CR>
 nnoremap \g         mP:GrepCursor<CR>
 nnoremap \f         mP:FindCursor<CR>
 nnoremap <C-\><C-]> `P
@@ -15,6 +16,9 @@ nnoremap <C-l>      :cnewer<CR>
 nnoremap \b    :CtrlPBuffer<CR>
 nnoremap <c-f> :CtrlP<CR>
 
-nnoremap \\    :NERDTreeToggle <CR>
+nnoremap \t :Term<CR>
+nnoremap \T :TermV<CR>
+
+nnoremap \\ :NERDTreeToggle <CR>
 
 vnoremap _s :!sort 2>/dev/null<CR>
