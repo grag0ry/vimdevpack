@@ -10,7 +10,7 @@ dst = $(HOME)/.vim/pack/vimdevpack
 
 .PHONY: sm
 sm:
-	$(GIT) submodule update --init --recursive 
+	$(GIT) submodule update --init --recursive
 
 .PHONY: install-ln
 install-ln: sm

@@ -2,6 +2,8 @@ nnoremap <F3>  :nohlsearch<CR>
 nnoremap <F6>  :exec '!cd "'.expand('%:p:h').'" && bash'<CR>
 
 nnoremap <C-c>      :cclose<CR>:lclose<CR>
+nnoremap \g         mP:GrepCursor<CR>
+nnoremap \f         mP:FindCursor<CR>
 nnoremap <C-\><C-]> `P
 nnoremap <C-j>      :cn<CR>
 nnoremap <C-k>      :cp<CR>
@@ -14,3 +16,5 @@ nnoremap \b    :CtrlPBuffer<CR>
 nnoremap <c-f> :CtrlP<CR>
 
 nnoremap \\    :NERDTreeToggle <CR>
+
+vnoremap _s :!sort 2>/dev/null<CR>
