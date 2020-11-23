@@ -38,5 +38,13 @@ set exrc
 set secure
 
 " plugin config
+" ctrlp
 let g:ctrlp_map = ''
 let g:ctrlp_cache_dir = $HOME . "/.vim/pack/vimdevpack/cache/ctrlp"
+
+" netrw
+let g:netrw_liststyle = 3
+let g:netrw_altv = 1
+let g:netrw_browse_split = 4
+let g:netrw_banner = 0
+
