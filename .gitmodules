@@ -10,3 +10,6 @@
 [submodule ".sm/syntastic"]
 	path = .sm/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
+[submodule ".sm/vim-cpp-enhanced-highlight"]
+	path = .sm/vim-cpp-enhanced-highlight
+	url = http://github.com/octol/vim-cpp-enhanced-highlight.git

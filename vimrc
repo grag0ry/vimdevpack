@@ -59,3 +59,10 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_enable_perl_checker = 1
 let g:syntastic_perl_checkers = ["perl"]
 let g:syntastic_cpp_compiler_options = "-std=c++17"
+
+" vim-cpp-enhanced-highlight
+let g:cpp_posix_standard = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_class_scope_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+
