@@ -18,7 +18,7 @@ $2 += $(notdir $1)-upgrade
 
 .PHONY: $(notdir $1)-upgrade
 $(notdir $1)-upgrade:
-	( cd $1 && $$(GIT) pull )
+	( cd $1 && $(GIT) checkout master && $$(GIT) pull )
 
 endef
 sm_upgrade_gen = $(foreach a,$1,$(call sm_upgrade_gen_one,$a,$2))
