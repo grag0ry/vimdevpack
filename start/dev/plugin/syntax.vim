@@ -11,7 +11,7 @@ hi Normal          ctermbg=NONE guibg=NONE
 hi LineNr          ctermbg=NONE guibg=NONE
 hi SignColumn      ctermbg=NONE guibg=NONE
 hi Comment         ctermfg=59   guifg=#5C6370
-hi ExtraWhitespace ctermbg=67 guibg=#5F87AF
+hi ExtraWhitespace ctermbg=67   guibg=#5F87AF
 hi Conditional     cterm=NONE gui=NONE
 hi Exception       cterm=NONE gui=NONE
 hi Function        cterm=NONE gui=NONE
@@ -20,14 +20,17 @@ hi Repeat          cterm=NONE gui=NONE
 hi Keyword         cterm=NONE gui=NONE
 hi Structure       cterm=NONE gui=NONE
 hi StorageClass    cterm=NONE gui=NONE
+hi Statement       ctermfg=178 guifg=#D1951D
 
 hi Search    cterm=NONE gui=NONE
 hi IncSearch cterm=NONE gui=NONE
 
-hi cCustomClass    cterm=NONE gui=NONE ctermfg=128 guifg=#87afff
+hi cCustomClass    cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
+hi link cCustomType Typedef
 
 hi cppSTLexception cterm=NONE gui=NONE
-hi cppSTLnamespace cterm=NONE gui=NONE ctermfg=128 guifg=#87afff
+hi cppSTLnamespace cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
+hi link cppException cppSTLexception
 
 hi shSet           cterm=NONE gui=NONE
 hi shLoop          cterm=NONE gui=NONE
@@ -48,7 +51,6 @@ hi vimMap     cterm=NONE gui=NONE
 hi vimGroup   cterm=NONE gui=NONE
 hi vimHiGroup cterm=NONE gui=NONE
 
-hi Statement  ctermfg=178 guifg=#d1951d
-
-hi link cppException cppSTLexception
-hi link cCustomType  Typedef
+hi perlStatement    ctermfg=68  guifg=#4F97D7
+hi perlFunctionName ctermfg=169 guifg=#BC6EC5
+hi perlMethod       ctermfg=169 guifg=#BC6EC5
