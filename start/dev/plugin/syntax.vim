@@ -27,7 +27,7 @@ hi IncSearch cterm=NONE gui=NONE
 hi cCustomClass    cterm=NONE gui=NONE ctermfg=128 guifg=#87afff
 
 hi cppSTLexception cterm=NONE gui=NONE
-hi cppSTLnamespace cterm=NONE gui=NONE
+hi cppSTLnamespace cterm=NONE gui=NONE ctermfg=128 guifg=#87afff
 
 hi shSet           cterm=NONE gui=NONE
 hi shLoop          cterm=NONE gui=NONE
@@ -47,6 +47,8 @@ hi vimCommand cterm=NONE gui=NONE
 hi vimMap     cterm=NONE gui=NONE
 hi vimGroup   cterm=NONE gui=NONE
 hi vimHiGroup cterm=NONE gui=NONE
+
+hi Statement  ctermfg=178 guifg=#d1951d
 
 hi link cppException cppSTLexception
 hi link cCustomType  Typedef
