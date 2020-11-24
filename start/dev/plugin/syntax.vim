@@ -26,7 +26,6 @@ hi Search    cterm=NONE gui=NONE
 hi IncSearch cterm=NONE gui=NONE
 
 hi cCustomClass    cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
-hi link cCustomType Typedef
 
 hi cppSTLexception cterm=NONE gui=NONE
 hi cppSTLnamespace cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
