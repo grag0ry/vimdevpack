@@ -1,3 +1,4 @@
+nnoremap <F2>  :set list!<CR>
 nnoremap <F3>  :nohlsearch<CR>
 nnoremap <F6>  :exec '!cd "'.expand('%:p:h').'" && bash'<CR>
 
