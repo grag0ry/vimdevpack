@@ -20,6 +20,8 @@ hi Keyword         cterm=NONE gui=NONE
 hi Structure       cterm=NONE gui=NONE
 hi StorageClass    cterm=NONE gui=NONE
 hi Statement       ctermfg=178 guifg=#D1951D
+hi SpecialKey      ctermfg=59   guifg=#5C6370
+
 
 hi Search    cterm=NONE gui=NONE
 hi IncSearch cterm=NONE gui=NONE
