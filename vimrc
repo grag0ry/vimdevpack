@@ -15,7 +15,7 @@ set ruler
 set linebreak
 set laststatus=2
 
-set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
+set statusline=%<%f\ %y%h%m%r%=%-14.(%l,%c%V%)\ %P
 
 " autocomplete
 set wildmode=longest,list,full
