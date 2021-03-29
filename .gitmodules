@@ -17,5 +17,5 @@
 	path = .sm/vim-nerdtree-sync
 	url = https://github.com/unkiwii/vim-nerdtree-sync.git
 [submodule "start/vim-man"]
-	path = start/vim-man
+	path = .sm/vim-man
 	url = https://github.com/vim-utils/vim-man.git
