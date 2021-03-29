@@ -23,5 +23,6 @@ nnoremap \T :TermV<CR>
 
 nnoremap \\ :NERDTreeToggle<CR>
 nnoremap \c :SyntasticCheck<CR>
+nnoremap <C-\><C-c> :SyntasticReset<CR>
 
 vnoremap _s :!sort 2>/dev/null<CR>
