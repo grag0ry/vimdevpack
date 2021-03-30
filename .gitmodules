@@ -19,3 +19,9 @@
 [submodule "start/vim-man"]
 	path = .sm/vim-man
 	url = https://github.com/vim-utils/vim-man.git
+[submodule ".sm/vim-airline"]
+	path = .sm/vim-airline
+	url = https://github.com/vim-airline/vim-airline
+[submodule ".sm/vim-airline-themes"]
+	path = .sm/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes

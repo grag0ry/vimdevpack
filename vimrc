@@ -1,6 +1,6 @@
 " vim: set filetype=ft
 if exists('g:vimdevpack_vimrc_loaded')
-	fini
+    fini
 en
 let g:vimdevpack_vimrc_loaded = 1
 
@@ -15,7 +15,7 @@ set ruler
 set linebreak
 set laststatus=2
 
-set statusline=%<%f\ %y%h%m%r%=%-14.(%l,%c%V%)\ %P
+"set statusline=%<%f\ %y%h%m%r%=%-14.(%l,%c%V%)\ %P
 
 " autocomplete
 set wildmode=longest,list,full
@@ -65,3 +65,33 @@ let g:syntastic_cpp_compiler_options = "-std=c++17"
 let g:cpp_posix_standard = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_class_scope_highlight = 1
+
+" vim-airline
+let g:airline_theme='violet'
+let g:airline_mode_map = {
+    \ '__'     : '-',
+    \ 'c'      : 'C',
+    \ 'i'      : 'I',
+    \ 'ic'     : 'I',
+    \ 'ix'     : 'I',
+    \ 'n'      : 'N',
+    \ 'multi'  : 'M',
+    \ 'ni'     : 'N',
+    \ 'no'     : 'N',
+    \ 'R'      : 'R',
+    \ 'Rv'     : 'R',
+    \ 's'      : 'S',
+    \ 'S'      : 'S',
+    \ ''       : 'S',
+    \ 't'      : 'T',
+    \ 'v'      : 'V',
+    \ 'V'      : 'V',
+    \ ''     : 'V',
+    \ }
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.linenr = ''
+let g:airline_symbols_ascii = 1
+
