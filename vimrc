@@ -14,8 +14,7 @@ set number
 set ruler
 set linebreak
 set laststatus=2
-
-"set statusline=%<%f\ %y%h%m%r%=%-14.(%l,%c%V%)\ %P
+set noshowmode " vim-airline does
 
 " autocomplete
 set wildmode=longest,list,full
