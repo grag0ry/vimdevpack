@@ -23,8 +23,8 @@ hi Statement       ctermfg=178 guifg=#D1951D
 hi SpecialKey      ctermfg=59   guifg=#5C6370
 
 
-hi Search    cterm=NONE gui=NONE
-hi IncSearch cterm=NONE gui=NONE
+hi Search    cterm=NONE gui=NONE ctermfg=35 guifg=#CACFD2 ctermbg=253 guibg=#009966
+hi IncSearch cterm=NONE gui=NONE ctermfg=35 guifg=#CACFD2 ctermbg=253 guibg=#009966
 
 hi cCustomClass    cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
 
