@@ -84,6 +84,19 @@ function! s:DoPrettyXML()
   exe "set ft=" . l:origft
 endfunction
 
+function! s:XxdToggle()
+    if &filetype == "xxd"
+        %!xxd -r
+        if exists('b:old_filetype')
+            exec 'set filetype=' . (b:old_filetype)
+        endif
+    else
+        let b:old_filetype = &filetype
+        %!xxd
+        set filetype=xxd
+    endif
+endfunction
+
 command! -range=% DelExtraWhitespace <line1>,<line2>s/\s\+$//e
 command! Term call s:term_open()
 command! TermV call s:vterm_open()
@@ -95,3 +108,4 @@ command! -nargs=0 SwitchSourceHeader       call s:SwitchSourceHeader()
 command! -nargs=0 SplitSwitchSourceHeader  call s:SplitSwitchSourceHeader()
 command! -nargs=0 VSplitSwitchSourceHeader call s:VSplitSwitchSourceHeader()
 command! PrettyXML call s:DoPrettyXML()
+command! XxdToggle call s:XxdToggle()

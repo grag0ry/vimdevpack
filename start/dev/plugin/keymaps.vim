@@ -3,6 +3,7 @@ nnoremap <F3>  :nohlsearch<CR>
 nnoremap <F4>  :DelExtraWhitespace<CR>
 nnoremap <F5>  :redraw!<CR>
 nnoremap <F6>  :exec '!cd "'.expand('%:p:h').'" && bash'<CR>
+nnoremap <F7>  :XxdToggle<CR>
 
 nnoremap <C-c>      :cclose<CR>:lclose<CR>
 nnoremap <C-]>      mP:GtagsCursor<CR>
