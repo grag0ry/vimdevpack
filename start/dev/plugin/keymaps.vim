@@ -30,3 +30,4 @@ nnoremap <C-\><C-c> :SyntasticReset<CR>
 vnoremap _s :!sort 2>/dev/null<CR>
 
 inoremap <C-F> <C-X><C-U>
+inoremap <C-D> <C-X><C-O>

@@ -76,5 +76,17 @@ function! CompletePath(findstart, base)
     return []
 endfunction
 
-set completefunc=CompletePath
+function! CompleteGtags(findstart, base)
+    if a:findstart
+        let l:line = getline('.')
+        let l:start = col('.') - 1
+        while l:start > 0 && l:line[l:start - 1] =~ '\a'
+            let l:start -= 1
+        endwhile
+        return l:start
+    endif
+    return split(GtagsCandidate(a:base, a:base, 0), '\n')
+endfunction
 
+set completefunc=CompletePath
+set omnifunc=CompleteGtags
