@@ -1,11 +1,50 @@
+function! s:GetPathStart(line, end)
+    let l:i = 0
+    let l:stack = []
+    let l:pairs = { '{' : '}', '[' : ']', '<' : '>', '(' : ')', '"' : '"', '`' : '`', "'" : "'" }
+    while l:i < a:end
+        if l:i > 0 && a:line[l:i - 1] == '\'
+            let l:i += 1
+            continue
+        endif
+
+        let l:c = a:line[l:i]
+        let l:s = get(l:stack, -1, [-1, "none"])
+        if l:s[1] == "word" && (l:c =~ '\s' || l:s[1] == l:c || has_key(l:pairs, l:c))
+            unlet l:stack[-1]
+        endif
+
+        if l:s[1] == l:c
+            unlet l:stack[-1]
+        elseif has_key(l:pairs, l:c)
+            let l:stack += [ [l:i + 1, l:pairs[l:c]] ]
+        elseif l:s[1] != "word" && l:c =~ '\S'
+            let l:stack += [ [l:i, "word"] ]
+        endif
+
+        let l:i += 1
+    endwhile
+
+    call reverse(l:stack)
+    let l:res = get(l:stack, 0, [-1, "none"])
+    for l:s in l:stack
+        if (l:s[1] == '"' || l:s[1] == '`' || l:s[1] == "'")
+            let l:res = l:s
+            break
+        endif
+    endfor
+
+    if 0 <= l:res[0] && l:res[0] < a:end
+        return l:res[0]
+    else
+        return a:end
+    endif
+endfunction
+
 function! CompletePath(findstart, base)
     if a:findstart
-        let l:line  = getline('.')
-        let l:start = col('.') - 1
-        while l:start > 0 && !(l:line[l:start - 1] =~ "[\"'` \t]")
-            let l:start -= 1
-        endwhile
-        return l:start
+        let l:res = s:GetPathStart(getline('.'), col('.') - 1)
+        return l:res
     endif
 
     let l:dirs = []
