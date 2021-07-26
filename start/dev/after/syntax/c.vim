@@ -14,6 +14,37 @@ syn keyword cType uint_fast8_t  uint_fast16_t  uint_fast32_t  uint_fast64_t
 syn keyword cType uint_least8_t uint_least16_t uint_least32_t uint_least64_t
 syn keyword cType uintmax_t uintptr_t
 
+" POSIX constants
+syn keyword cPosixConstant DN_ACCESS DN_ATTRIB DN_CREATE DN_DELETE DN_MODIFY
+syn keyword cPosixConstant DN_MULTISHOT DN_RENAME F_ADD_SEALS FAPPEND FASYNC
+syn keyword cPosixConstant FD_CLOEXEC F_DUPFD F_DUPFD_CLOEXEC F_EXLCK FFSYNC
+syn keyword cPosixConstant F_GETFD F_GET_FILE_RW_HINT F_GETFL F_GETLEASE
+syn keyword cPosixConstant F_GETLK F_GETLK64 F_GETOWN F_GETOWN_EX F_GETPIPE_SZ
+syn keyword cPosixConstant F_GET_RW_HINT F_GET_SEALS F_GETSIG FNDELAY
+syn keyword cPosixConstant FNONBLOCK F_NOTIFY F_OFD_GETLK F_OFD_SETLK
+syn keyword cPosixConstant F_OFD_SETLKW F_RDLCK F_SEAL_FUTURE_WRITE
+syn keyword cPosixConstant F_SEAL_GROW F_SEAL_SEAL F_SEAL_SHRINK F_SEAL_WRITE
+syn keyword cPosixConstant F_SETFD F_SET_FILE_RW_HINT F_SETFL F_SETLEASE
+syn keyword cPosixConstant F_SETLK F_SETLK64 F_SETLKW F_SETLKW64 F_SETOWN
+syn keyword cPosixConstant F_SETOWN_EX F_SETPIPE_SZ F_SET_RW_HINT F_SETSIG
+syn keyword cPosixConstant F_SHLCK F_UNLCK F_WRLCK LOCK_EX LOCK_MAND LOCK_NB
+syn keyword cPosixConstant LOCK_READ LOCK_RW LOCK_SH LOCK_UN LOCK_WRITE
+syn keyword cPosixConstant MAX_HANDLE_SZ O_ACCMODE O_APPEND O_ASYNC O_CLOEXEC
+syn keyword cPosixConstant O_CREAT O_DIRECT O_DIRECTORY O_DSYNC O_EXCL O_FSYNC
+syn keyword cPosixConstant O_LARGEFILE O_NDELAY O_NOATIME O_NOCTTY O_NOFOLLOW
+syn keyword cPosixConstant O_NONBLOCK O_PATH O_RDONLY O_RDWR O_RSYNC O_SYNC
+syn keyword cPosixConstant O_TMPFILE O_TRUNC O_WRONLY POSIX_FADV_DONTNEED
+syn keyword cPosixConstant POSIX_FADV_NOREUSE POSIX_FADV_NORMAL
+syn keyword cPosixConstant POSIX_FADV_RANDOM POSIX_FADV_SEQUENTIAL
+syn keyword cPosixConstant POSIX_FADV_WILLNEED RWF_WRITE_LIFE_NOT_SET
+syn keyword cPosixConstant RWH_WRITE_LIFE_EXTREME RWH_WRITE_LIFE_LONG
+syn keyword cPosixConstant RWH_WRITE_LIFE_MEDIUM RWH_WRITE_LIFE_NONE
+syn keyword cPosixConstant RWH_WRITE_LIFE_NOT_SET RWH_WRITE_LIFE_SHORT
+syn keyword cPosixConstant SPLICE_F_GIFT SPLICE_F_MORE SPLICE_F_MOVE
+syn keyword cPosixConstant SPLICE_F_NONBLOCK SYNC_FILE_RANGE_WAIT_AFTER
+syn keyword cPosixConstant SYNC_FILE_RANGE_WAIT_BEFORE SYNC_FILE_RANGE_WRITE
+syn keyword cPosixConstant SYNC_FILE_RANGE_WRITE_AND_WAIT
+
 " Win32 types
 syn keyword cWinApiType __int3264 __int64 ATOM BOOL BOOLEAN BYTE CCHAR CHAR
 syn keyword cWinApiType COLORREF DWORD DWORD32 DWORD64 DWORDLONG DWORD_PTR
@@ -72,8 +103,9 @@ syn keyword cPosixError ERFKILL EHWPOISON ENOTSUP
 " Win32 errno
 syn match cWinApiError "\<ERROR_[A-Z_]\+\>"
 
-hi link cPosixError  cConstant
-hi link cWinApiError cConstant
-hi link cCustomType  cType
-hi link cWinApiType  cType
+hi link cPosixError    cConstant
+hi link cWinApiError   cConstant
+hi link cCustomType    cType
+hi link cPosixConstant cConstant
+hi link cWinApiType    cType
 hi link cWinApiStorageClass cStorageClass
