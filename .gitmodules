@@ -25,3 +25,6 @@
 [submodule ".sm/vim-airline-themes"]
 	path = .sm/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes
+[submodule ".sm/rust"]
+	path = .sm/rust
+	url = https://github.com/rust-lang/rust.vim.git
