@@ -55,4 +55,4 @@ hi perlStatement    ctermfg=68  guifg=#4F97D7
 hi perlFunctionName ctermfg=169 guifg=#BC6EC5
 hi perlMethod       ctermfg=169 guifg=#BC6EC5
 
-hi rustKeyword  cterm=NONE gui=NONE ctermfg=178 guifg=#D1951D
+hi rustKeyword  cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
