@@ -15,6 +15,7 @@ set ruler
 set linebreak
 set laststatus=2
 set noshowmode " vim-airline does
+filetype on
 
 " autocomplete
 set wildmode=longest,list,full

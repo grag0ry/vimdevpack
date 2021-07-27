@@ -24,6 +24,7 @@ nnoremap \t :Term<CR>
 nnoremap \T :TermV<CR>
 
 nnoremap \\ :NERDTreeToggle<CR>
+nnoremap <C-\><C-\> :TagbarToggle<CR>
 nnoremap \d :exec 'edit ' . expand('%:p:h')<CR>
 nnoremap \c :SyntasticCheck<CR>
 nnoremap <C-\><C-c> :SyntasticReset<CR>

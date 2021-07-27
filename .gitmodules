@@ -28,3 +28,6 @@
 [submodule ".sm/rust"]
 	path = .sm/rust
 	url = https://github.com/rust-lang/rust.vim.git
+[submodule ".sm/tagbar"]
+	path = .sm/tagbar
+	url = https://github.com/preservim/tagbar.git
