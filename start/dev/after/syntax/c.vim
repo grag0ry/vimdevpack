@@ -103,9 +103,15 @@ syn keyword cPosixError ERFKILL EHWPOISON ENOTSUP
 " Win32 errno
 syn match cWinApiError "\<ERROR_[A-Z_]\+\>"
 
+" WIN32 constants
+syn keyword cWinApiConstant INFINITE WAIT_ABANDONED WAIT_TIMEOUT WAIT_FAILED
+syn match cWinApiWaitConstant "\<\(WAIT_OBJECT_\|WAIT_ABANDONED_\)[0-9]\+\>"
+hi link cWinApiWaitConstant cWinApiConstant
+
 hi link cPosixError    cConstant
 hi link cWinApiError   cConstant
 hi link cCustomType    cType
 hi link cPosixConstant cConstant
 hi link cWinApiType    cType
 hi link cWinApiStorageClass cStorageClass
+hi link cWinApiConstant cConstant

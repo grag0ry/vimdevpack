@@ -31,6 +31,7 @@ hi cCustomClass    cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
 hi cppSTLexception cterm=NONE gui=NONE
 hi cppSTLnamespace cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
 hi link cppException cppSTLexception
+hi link cppAttribute cppExceptions
 
 hi shSet           cterm=NONE gui=NONE
 hi shLoop          cterm=NONE gui=NONE
