@@ -8,14 +8,49 @@ function! s:vterm_open()
     terminal ++shell ++curwin ++noclose
 endfunction
 
-function! s:Grep(args)
-    copen
-    cexpr system("grep -srnI " . a:args . " | sed -e 's/\r$//'")
+function! s:GrepCmd()
+    if exists('g:GrepCmd')
+        return g:GrepCmd
+    endif
+
+    " ripgrep
+    :silent let g:GrepCmd = system('which rg 2>/dev/null')
+    if (strlen(g:GrepCmd) != 0)
+        let g:GrepCmd = trim(g:GrepCmd) . ' --vimgrep'
+        return g:GrepCmd
+    endif
+
+    " normal grep
+    :silent let g:GrepCmd = system('which grep 2>/dev/null')
+    if (strlen(g:GrepCmd) != 0)
+        let g:GrepCmd = trim(g:GrepCmd) . ' -srnI'
+        return g:GrepCmd
+    endif
+
+    let g:GrepCmd = ''
+    return g:GrepCmd
 endfunction
 
-function! s:Find(args)
+function! s:Grep(...)
+    let l:GrepCmd = s:GrepCmd()
+    if (strlen(l:GrepCmd) == 0)
+        echoerr "Grep command not found"
+        return
+    endif
+    for arg in a:000
+        let l:GrepCmd .= ' ' . shellescape(arg)
+    endfor
     copen
-    cexpr system("find " . a:args . " -printf '%P:1:%Y\\n'")
+    cexpr system(l:GrepCmd . " | sed -e 's/\\r$//'")
+endfunction
+
+function! s:Find(...)
+    let l:FindCmd = 'find'
+    for arg in a:000
+        let l:FindCmd .= ' ' . shellescape(arg)
+    endfor
+    copen
+    cexpr system(l:FindCmd . " -printf '%P:1:%Y\\n'")
 endfunction
 
 function! s:EditCppHeader()
@@ -100,10 +135,10 @@ endfunction
 command! -range=% DelExtraWhitespace <line1>,<line2>s/\s\+$//e
 command! Term call s:term_open()
 command! TermV call s:vterm_open()
-command! -nargs=* -complete=file Grep call s:Grep(<q-args>)
+command! -nargs=* -complete=file Grep call s:Grep(<f-args>)
 command! -nargs=0 GrepCursor call s:Grep(expand("<cword>"))
-command! -nargs=* -complete=file Find call s:Find(<q-args>)
-command! -nargs=0 FindCursor call s:Find("-type f -name '*" . expand("<cword>") . "*'")
+command! -nargs=* -complete=file Find call s:Find(<f-args>)
+command! -nargs=0 FindCursor call s:Find("-type", "f", "-name", '*' . expand("<cword>") . '*')
 command! -nargs=0 SwitchSourceHeader       call s:SwitchSourceHeader()
 command! -nargs=0 SplitSwitchSourceHeader  call s:SplitSwitchSourceHeader()
 command! -nargs=0 VSplitSwitchSourceHeader call s:VSplitSwitchSourceHeader()
