@@ -41,6 +41,7 @@ set secure
 " ctrlp
 let g:ctrlp_map = ''
 let g:ctrlp_cache_dir = $HOME . "/.vim/pack/vimdevpack/cache/ctrlp"
+let g:ctrlp_user_command = 'find %s -type f -not -path "*.vs/*"'
 
 " netrw
 let g:netrw_liststyle = 3
