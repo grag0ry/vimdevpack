@@ -31,3 +31,6 @@
 [submodule ".sm/tagbar"]
 	path = .sm/tagbar
 	url = https://github.com/preservim/tagbar.git
+[submodule ".sm/mediawiki.vim"]
+	path = .sm/mediawiki.vim
+	url = https://github.com/vim-scripts/mediawiki.vim.git
