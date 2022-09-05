@@ -7,9 +7,11 @@ nnoremap <F7>  :XxdToggle<CR>
 
 nnoremap <C-c>      :cclose<CR>:lclose<CR>
 nnoremap <C-]>      mP:GtagsCursor<CR>
+nnoremap <C-LeftMouse> mP:GtagsCursor<CR>
 nnoremap \g         mP:GrepCursor<CR>
 nnoremap \f         mP:FindCursor<CR>
 nnoremap <C-\><C-]> `P
+nnoremap <C-RightMouse> `P
 nnoremap <C-j>      :cn<CR>
 nnoremap <C-k>      :cp<CR>
 nnoremap <C-\><C-j> :lnext<CR>

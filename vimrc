@@ -9,6 +9,7 @@ scriptencoding utf-8
 set term=xterm
 set backspace=2 " make backspace work like most other apps
 set t_Co=256
+set mouse=a
 
 set number
 set ruler
