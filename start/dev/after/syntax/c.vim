@@ -1,6 +1,6 @@
-nnoremap \h :SwitchSourceHeader<CR>
-nnoremap \s :SplitSwitchSourceHeader<CR>
-nnoremap \v :VSplitSwitchSourceHeader<CR>
+nnoremap <buffer> \h :SwitchSourceHeader<CR>
+nnoremap <buffer> \s :SplitSwitchSourceHeader<CR>
+nnoremap <buffer> \v :VSplitSwitchSourceHeader<CR>
 
 syn match cCustomType "\<\w\+_t\>"
 

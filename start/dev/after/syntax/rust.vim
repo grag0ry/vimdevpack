@@ -1,1 +1,1 @@
-vnoremap _t :!rustfmt<CR>
+vnoremap <buffer> _t :!rustfmt<CR>

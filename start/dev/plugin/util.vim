@@ -132,6 +132,13 @@ function! s:XxdToggle()
     endif
 endfunction
 
+function! s:SynStack()
+    if !exists("*synstack")
+        return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
 command! -range=% DelExtraWhitespace <line1>,<line2>s/\s\+$//e
 command! Term call s:term_open()
 command! TermV call s:vterm_open()
@@ -144,3 +151,4 @@ command! -nargs=0 SplitSwitchSourceHeader  call s:SplitSwitchSourceHeader()
 command! -nargs=0 VSplitSwitchSourceHeader call s:VSplitSwitchSourceHeader()
 command! PrettyXML call s:DoPrettyXML()
 command! XxdToggle call s:XxdToggle()
+command! SynStack call s:SynStack()
