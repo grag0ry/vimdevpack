@@ -34,3 +34,6 @@
 [submodule ".sm/mediawiki.vim"]
 	path = .sm/mediawiki.vim
 	url = https://github.com/vim-scripts/mediawiki.vim.git
+[submodule ".sm/omnisharp-vim"]
+	path = .sm/omnisharp-vim
+	url = https://github.com/OmniSharp/omnisharp-vim.git
