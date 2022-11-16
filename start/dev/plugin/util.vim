@@ -139,6 +139,21 @@ function! s:SynStack()
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
+function! s:GtagsUpdate()
+    if filereadable("GTAGS")
+        let l:cmd = "global -uv"
+    else
+        let l:cmd = "gtags -v"
+    endif
+    exec "below terminal " . l:cmd
+endfunction
+
+function! s:GtagsClearAll()
+    for f in ["GTAGS", "GPATH", "GRTAGS"]
+        echom 'Remove: ' . f . ' ' . (delete(f) == 0 ? 'SUCCEEDED' : 'FAILED')
+    endfor
+endfunction
+
 command! -range=% DelExtraWhitespace <line1>,<line2>s/\s\+$//e
 command! Term call s:term_open()
 command! TermV call s:vterm_open()
@@ -152,3 +167,7 @@ command! -nargs=0 VSplitSwitchSourceHeader call s:VSplitSwitchSourceHeader()
 command! PrettyXML call s:DoPrettyXML()
 command! XxdToggle call s:XxdToggle()
 command! SynStack call s:SynStack()
+command! GtagsUpdateAll call s:GtagsUpdate()
+command! GtagsClearAll call s:GtagsClearAll()
+command! -complete=file -nargs=1 Remove :echom 'Remove: '.'<f-args>'.' '.(delete(<f-args>) == 0 ? 'SUCCEEDED' : 'FAILED')
+
