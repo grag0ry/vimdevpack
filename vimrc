@@ -8,7 +8,11 @@ scriptencoding utf-8
 
 set term=xterm
 set backspace=2 " make backspace work like most other apps
-set t_Co=256
+if has("termguicolors")
+    set termguicolors
+else
+    set t_Co=256
+endif
 set mouse=a
 
 set number
