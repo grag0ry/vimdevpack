@@ -33,8 +33,43 @@ else
     let s:PathSeparator = '/'
 endif
 
+function s:TrimPath(path, keepfull)
+    if !len(a:path)
+        return ""
+    endif
+    let l:start = 0
+    let l:end = len(a:path) -1
+    if !a:keepfull
+        while a:path[l:start] == s:PathSeparator
+            let l:start += 1
+        endwhile
+    endif
+    while a:path[l:end] == s:PathSeparator
+        let l:end -= 1
+    endwhile
+    if l:start >= l:end
+        if a:keepfull
+            return a:path[0]
+        else
+            return ""
+        endif
+    endif
+    return a:path[l:start:l:end]
+endfunction
+
 function g:JoinPath(...)
-    return join(a:000, s:PathSeparator)
+    let l:result = s:TrimPath(a:000[0], v:true)
+    for path in a:000[1:-1]
+        let l:p = s:TrimPath(path, v:false)
+        if !len(l:p) || l:p == s:PathSeparator
+            continue
+        endif
+        if l:result != s:PathSeparator
+            let l:result .= "/"
+        endif
+        let l:result .= l:p
+    endfor
+    return l:result
 endfunction
 
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
