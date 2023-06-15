@@ -91,30 +91,37 @@ function! s:VSplitSwitchSourceHeader()
     call s:SwitchSourceHeader()
 endfunction
 
-function! s:DoPrettyXML()
+function! s:DoPrettyXML(l1, l2)
   " save the filetype so we can restore it later
   let l:origft = &ft
+  let l:l1 = a:l1
+  let l:l2 = a:l2
   set ft=
   " delete the xml header if it exists. This will
   " permit us to surround the document with fake tags
   " without creating invalid xml.
-  1s/<?xml .*?>//e
+  exe l:l1 . "," . l:l2 . 's/<?xml .*?>//e'
   " insert fake tags around the entire document.
   " This will permit us to pretty-format excerpts of
   " XML that may contain multiple top-level elements.
-  0put ='<PrettyXML>'
-  $put ='</PrettyXML>'
-  silent %!xmllint --format -
+  exe l:l1 - 1 . "put ='<PrettyXML>'"
+  exe l:l2 + 1 . "put ='</PrettyXML>'"
+  let l:l2 = l:l2 + 2
+  exe 'silent ' . l:l1 . ',' . l:l2 . '!xmllint --format -'
+  let l:l1 += 1
+  let l:l2 = search("</PrettyXML>")
   " xmllint will insert an <?xml?> header. it's easy enough to delete
   " if you don't want it.
   " delete the fake tags
-  2d
-  $d
+  exe l:l1 . 'd'
+  let l:l2 -= 1
+  exe l:l2 . 'd'
+  let l:l2 -= 1
   " restore the 'normal' indentation, which is one extra level
   " too deep due to the extra tags we wrapped around the document.
-  silent %<
+  exe 'silent ' . l:l1 . ',' . l:l2 . '<'
   " back to home
-  1
+  exe l:l1
   " restore the filetype
   exe "set ft=" . l:origft
 endfunction
@@ -154,6 +161,27 @@ function! s:GtagsClearAll()
     endfor
 endfunction
 
+" Escape/unescape & < > HTML entities in range (default current line).
+function! HtmlEntities(line1, line2, action)
+  let search = @/
+  let range = 'silent ' . a:line1 . ',' . a:line2
+  if a:action == 0  " must convert &amp; last
+    execute range . 'sno/&lt;/</eg'
+    execute range . 'sno/&gt;/>/eg'
+    execute range . 'sno/&quot;/"/eg'
+    execute range . 'sno/&apos;/''/eg'
+    execute range . 'sno/&amp;/&/eg'
+  else              " must convert & first
+    execute range . 'sno/&/&amp;/eg'
+    execute range . 'sno/</&lt;/eg'
+    execute range . 'sno/>/&gt;/eg'
+    execute range . 'sno/"/&quot;/eg'
+    execute range . 'sno/''/&apos;/eg'
+  endif
+  nohl
+  let @/ = search
+endfunction
+
 command! -range=% DelExtraWhitespace <line1>,<line2>s/\s\+$//e
 command! Term call s:term_open()
 command! TermV call s:vterm_open()
@@ -164,10 +192,11 @@ command! -nargs=0 FindCursor call s:Find("-type", "f", "-name", '*' . expand("<c
 command! -nargs=0 SwitchSourceHeader       call s:SwitchSourceHeader()
 command! -nargs=0 SplitSwitchSourceHeader  call s:SplitSwitchSourceHeader()
 command! -nargs=0 VSplitSwitchSourceHeader call s:VSplitSwitchSourceHeader()
-command! PrettyXML call s:DoPrettyXML()
+command! -range=% PrettyXML call s:DoPrettyXML(<line1>, <line2>)
 command! XxdToggle call s:XxdToggle()
 command! SynStack call s:SynStack()
 command! GtagsUpdateAll call s:GtagsUpdate()
 command! GtagsClearAll call s:GtagsClearAll()
 command! -complete=file -nargs=1 Remove :echom 'Remove: '.'<f-args>'.' '.(delete(<f-args>) == 0 ? 'SUCCEEDED' : 'FAILED')
+command! -range -nargs=1 XmlEntities call HtmlEntities(<line1>, <line2>, <args>)
 
