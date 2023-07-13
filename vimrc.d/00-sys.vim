@@ -1,37 +1,42 @@
-let g:OS = 'unknown'
-
-if (exists('$VIM_OS'))
-    let g:OS = $VIM_OS
-elseif has('win32unix')
-    let g:OS = 'cygwin'
-elseif has('win32')
-    let g:OS = 'windows'
-elseif has('macunix')
-    let g:OS = 'mac'
-elseif has('unix')
-    let s:uname = system('uname -a')
-    if (s:uname =~ "Microsoft")
-        let g:OS = 'wsl' " WSL 1
-    elseif (s:uname =~ "microsoft")
-        let g:OS = 'wsl' " WSL 2
-    elseif (s:uname =~ "Linux")
-        let g:OS = 'linux'
-    elseif (s:uname =~ "Darwin")
-        let g:OS = 'mac'
-    elseif (s:uname =~ "CYGWIN")
-        let g:OS = 'cygwin'
-    elseif (s:uname =~ "MINGW")
-        let g:OS = 'windows'
-    elseif (s:uname =~ "Msys")
-        let g:OS = 'windows'
+def DetectOS(): string
+    if (exists('$VIM_OS'))
+        return $VIM_OS
+    elseif has('win32unix')
+        return 'cygwin'
+    elseif has('win32')
+        return 'windows'
+    elseif has('macunix')
+        return 'mac'
+    elseif has('unix')
+        var uname = system('uname -a')
+        if (uname =~ "Microsoft")
+            return 'wsl' # WSL 1
+        elseif (uname =~ "microsoft")
+            return 'wsl' # WSL 2
+        elseif (uname =~ "Linux")
+            return 'linux'
+        elseif (uname =~ "Darwin")
+            return 'mac'
+        elseif (uname =~ "CYGWIN")
+            return 'cygwin'
+        elseif (uname =~ "MINGW")
+            return 'windows'
+        elseif (uname =~ "Msys")
+            return 'windows'
+        endif
     endif
-endif
+    return 'unknown'
+enddef
 
-if g:OS == 'windows'
-    let s:PathSeparator = '\\'
-else
-    let s:PathSeparator = '/'
-endif
+const g:OS = DetectOS()
+
+def g:PathSeparator(): string
+    if g:OS == 'windows'
+        return '\\'
+    else
+        return '/'
+    endif
+enddef
 
 function s:TrimPath(path, keepfull)
     if !len(a:path)
@@ -40,11 +45,11 @@ function s:TrimPath(path, keepfull)
     let l:start = 0
     let l:end = len(a:path) -1
     if !a:keepfull
-        while a:path[l:start] == s:PathSeparator
+        while a:path[l:start] == PathSeparator()
             let l:start += 1
         endwhile
     endif
-    while a:path[l:end] == s:PathSeparator
+    while a:path[l:end] == PathSeparator()
         let l:end -= 1
     endwhile
     if l:start >= l:end
@@ -61,10 +66,10 @@ function g:JoinPath(...)
     let l:result = s:TrimPath(a:000[0], v:true)
     for path in a:000[1:-1]
         let l:p = s:TrimPath(path, v:false)
-        if !len(l:p) || l:p == s:PathSeparator
+        if !len(l:p) || l:p == PathSeparator()
             continue
         endif
-        if l:result != s:PathSeparator
+        if l:result != PathSeparator()
             let l:result .= "/"
         endif
         let l:result .= l:p
