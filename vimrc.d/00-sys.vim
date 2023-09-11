@@ -1,4 +1,4 @@
-def DetectOS(): string
+function s:DetectOS()
     if (exists('$VIM_OS'))
         return $VIM_OS
     elseif has('win32unix')
@@ -8,11 +8,11 @@ def DetectOS(): string
     elseif has('macunix')
         return 'mac'
     elseif has('unix')
-        var uname = system('uname -a')
+        let uname = system('uname -a')
         if (uname =~ "Microsoft")
-            return 'wsl' # WSL 1
+            return 'wsl' " WSL 1
         elseif (uname =~ "microsoft")
-            return 'wsl' # WSL 2
+            return 'wsl' " WSL 2
         elseif (uname =~ "Linux")
             return 'linux'
         elseif (uname =~ "Darwin")
@@ -26,17 +26,17 @@ def DetectOS(): string
         endif
     endif
     return 'unknown'
-enddef
+endfunction
 
-const g:OS = DetectOS()
+let g:OS = s:DetectOS()
 
-def g:PathSeparator(): string
+function g:PathSeparator()
     if g:OS == 'windows'
         return '\\'
     else
         return '/'
     endif
-enddef
+endfunction
 
 function s:TrimPath(path, keepfull)
     if !len(a:path)

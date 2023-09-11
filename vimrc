@@ -6,7 +6,7 @@ let g:vimdevpack_vimrc_loaded = 1
 
 scriptencoding utf-8
 
-set term=xterm
+"set term=xterm
 set backspace=2 " make backspace work like most other apps
 if has("termguicolors")
     set termguicolors
