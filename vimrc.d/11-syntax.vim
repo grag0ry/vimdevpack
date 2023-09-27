@@ -1,7 +1,12 @@
+if has("termguicolors")
+    set termguicolors
+else
+    set t_Co=256
+endif
+
 syntax on
 colorscheme space-vim-dark
 
-set termguicolors
 set cursorline
 set hlsearch
 set colorcolumn=81
