@@ -1,8 +1,11 @@
 function s:get_manager()
     if exists("g:VimdevpackPluginManager")
         return g:VimdevpackPluginManager
+    elseif has('nvim')
+        return "vim-plug"
+    else
+        return "native"
     endif
-    return "native"
 endfunction
 
 let s:manager = s:get_manager()
@@ -35,7 +38,7 @@ call s:plug("gnuplot")
 call s:plug("gtags")
 call s:plug("mediawiki.vim")
 call s:plug("nerdtree")
-call s:plug("omnisharp-vim")
+" call s:plug("omnisharp-vim")
 call s:plug("rust")
 call s:plug("space-vim-dark")
 call s:plug("syntastic")

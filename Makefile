@@ -4,10 +4,10 @@ LN    = ln
 MKDIR = mkdir -p
 WGET  = wget
 
-mkpath = $(realpath $(lastword $(MAKEFILE_LIST)))
-curdir = $(dir $(mkpath))
-dst    = $(HOME)/.vim/pack/vimdevpack
-sm     = $(wildcard .sm/*)
+mkpath  = $(realpath $(lastword $(MAKEFILE_LIST)))
+curdir  = $(dir $(mkpath))
+dst-vim = $(HOME)/.vim/pack/vimdevpack
+sm      = $(wildcard .sm/*)
 sm-branch = master
 
 gtags_src = https://cvs.savannah.gnu.org/viewvc/*checkout*/global/global/gtags.vim
@@ -54,11 +54,17 @@ omnisharp-net6:
 omnisharp-wsl:
 	start/omnisharp-vim/installer/omnisharp-manager.sh -W -l cache/omnisharp/wsl
 
-.PHONY: install-ln
-install-ln: sm
-	$(RM) "$(dst)"
+.PHONY: install-vim
+install-vim: sm
+	$(RM) "$(dst-vim)"
 	$(MKDIR) $(HOME)/.vim/pack/
-	$(LN) -sf "$(curdir)" "$(dst)"
+	$(LN) -sf "$(curdir)" "$(dst-vim)"
 	$(MKDIR) cache/undo
-	$(ECHO) 'if filereadable("$(dst)/vimrc") | source $(dst)/vimrc | endif' \
+	$(ECHO) 'if filereadable("$(dst-vim)/vimrc") | source $(dst-vim)/vimrc | endif' \
 		>> "$(HOME)/.vimrc"
+
+.PHONY: install-nvim
+install-nvim: sm
+	$(MKDIR) cache/undo-nvim
+	$(MKDIR) $(HOME)/.config/nvim
+	$(ECHO) 'if filereadable("$(curdir)/vimrc") | source $(curdir)/vimrc | endif' >> "$(HOME)/.config/nvim/init.vim"
