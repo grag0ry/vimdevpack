@@ -40,3 +40,6 @@
 [submodule ".sm/gnuplot.vim"]
 	path = .sm/gnuplot.vim
 	url = https://github.com/dpezto/gnuplot.vim
+[submodule ".sm/vim-plug"]
+	path = .sm/vim-plug
+	url = https://github.com/junegunn/vim-plug.git
