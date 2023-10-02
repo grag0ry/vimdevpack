@@ -1,11 +1,19 @@
 function! s:term_open()
     botright split
-    terminal ++shell ++curwin ++noclose
+    if has('nvim')
+        terminal
+    else
+        terminal ++shell ++curwin ++noclose
+    endif
 endfunction
 
 function! s:vterm_open()
     botright vsplit
-    terminal ++shell ++curwin ++noclose
+    if has('nvim')
+        terminal
+    else
+        terminal ++shell ++curwin ++noclose
+    endif
 endfunction
 
 function! s:GrepCmd()
@@ -152,7 +160,12 @@ function! s:GtagsUpdate()
     else
         let l:cmd = "gtags -v"
     endif
-    exec "below terminal " . l:cmd
+    if has('nvim')
+        botright split
+        exec "terminal " . l:cmd
+    else
+        exec "below terminal " . l:cmd
+    endif
 endfunction
 
 function! s:GtagsClearAll()
