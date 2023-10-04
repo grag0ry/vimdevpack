@@ -19,7 +19,7 @@ endfunction
 
 function s:plug(name)
     if s:manager == 'vim-plug'
-        exe "Plug '" . g:JoinPath(g:PackPath, "opt", a:name) . "'"
+        call plug#(g:JoinPath(g:PackPath, "opt", a:name))
     elseif s:manager == 'native'
         exe "packadd " . a:name
     endif

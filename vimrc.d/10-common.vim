@@ -20,6 +20,9 @@ set smarttab
 set expandtab
 set smartindent
 
+" search
+set noincsearch
+
 " list
 set listchars=tab:……,nbsp:⎵,trail:·
 set list
