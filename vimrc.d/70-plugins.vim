@@ -12,14 +12,14 @@ let s:manager = s:get_manager()
 
 function s:plug_begin()
     if s:manager == 'vim-plug'
-        exe 'source ' . fnameescape(g:JoinPath(g:PackPath, "vim-plug", "plug.vim"))
+        exe 'source ' . fnameescape(g:JoinPath(g:PackPluginPath, "vim-plug", "plug.vim"))
         exe "call plug#begin()"
     endif
 endfunction
 
 function s:plug(name)
     if s:manager == 'vim-plug'
-        call plug#(g:JoinPath(g:PackPath, "opt", a:name))
+        call plug#(g:JoinPath(g:PackPluginPath, a:name))
     elseif s:manager == 'native'
         exe "packadd " . a:name
     endif

@@ -3,15 +3,29 @@ GIT   = git
 LN    = ln
 MKDIR = mkdir -p
 WGET  = wget
+SED   = sed
+TOUCH = touch
 
 mkpath  = $(realpath $(lastword $(MAKEFILE_LIST)))
 curdir  = $(dir $(mkpath))
+packdir = $(curdir)vimpack
 dst-vim = $(HOME)/.vim/pack/vimdevpack
 sm      = $(wildcard .sm/*)
 sm-branch = master
 
 gtags_src = https://cvs.savannah.gnu.org/viewvc/*checkout*/global/global/gtags.vim
 gtags_dst = start/gtags/plugin/gtags.vim
+
+
+define patch-vimrc =
+$(TOUCH) "$1"
+$(SED) -i -e '/vimdevpack/{:a;N;/endvimdevpack/!ba};/vimdevpack/d' "$1"
+$(ECHO) '" vimdevpack' >> "$1"
+$(ECHO) 'if filereadable("$(curdir)vimrc")' >> "$1"
+$(ECHO) '    exe "source " . fnameescape("$(curdir)vimrc")' >> "$1"
+$(ECHO) 'endif' >> "$1"
+$(ECHO) '" endvimdevpack' >> "$1"
+endef
 
 .PHONY: all
 all: sm
@@ -57,14 +71,13 @@ omnisharp-wsl:
 .PHONY: install-vim
 install-vim: sm
 	$(RM) "$(dst-vim)"
-	$(MKDIR) $(HOME)/.vim/pack/
-	$(LN) -sf "$(curdir)" "$(dst-vim)"
+	$(MKDIR) "$(dir dst-vim)"
+	$(LN) -s "$(packdir)" "$(dst-vim)"
 	$(MKDIR) cache/undo
-	$(ECHO) 'if filereadable("$(dst-vim)/vimrc") | source $(dst-vim)/vimrc | endif' \
-		>> "$(HOME)/.vimrc"
+	$(call patch-vimrc,$(HOME)/.vimrc)
 
 .PHONY: install-nvim
 install-nvim: sm
 	$(MKDIR) cache/undo-nvim
 	$(MKDIR) $(HOME)/.config/nvim
-	$(ECHO) 'if filereadable("$(curdir)/vimrc") | source $(curdir)/vimrc | endif' >> "$(HOME)/.config/nvim/init.vim"
+	$(call patch-vimrc,$(HOME)/.config/nvim/init.vim)

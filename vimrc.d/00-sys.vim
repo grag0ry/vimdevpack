@@ -80,4 +80,5 @@ endfunction
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 let g:PackPath = resolve(g:JoinPath(s:path, '..'))
 let g:PackCachePath = g:JoinPath(g:PackPath, 'cache')
+let g:PackPluginPath = g:JoinPath(g:PackPath, 'plugin.vim')
 
