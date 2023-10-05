@@ -25,6 +25,16 @@ function s:plug(name)
     endif
 endfunction
 
+function s:plug_nvim(name)
+    if has('nvim')
+        if s:manager == 'vim-plug'
+            call plug#(g:JoinPath(g:PackPluginPathNvim, a:name))
+        elseif s:manager == 'native'
+            exe "packadd " . a:name
+        endif
+    endif
+endfunction
+
 function s:plug_end()
     if s:manager == 'vim-plug'
         call plug#end()
@@ -48,4 +58,5 @@ call s:plug("vim-airline-themes")
 call s:plug("vim-cpp-enhanced-highlight")
 call s:plug("vim-man")
 call s:plug("vim-nerdtree-sync")
+call s:plug_nvim("nvim-lspconfig")
 call s:plug_end()

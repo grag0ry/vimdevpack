@@ -43,3 +43,6 @@
 [submodule ".sm/vim-plug"]
 	path = .sm/vim-plug
 	url = https://github.com/junegunn/vim-plug.git
+[submodule ".sm/nvim-lspconfig"]
+	path = .sm/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig.git
