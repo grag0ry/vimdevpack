@@ -38,6 +38,24 @@ function g:PathSeparator()
     endif
 endfunction
 
+if g:OS == "wsl"
+    function PathWin2Lin(path)
+        let l:res = system(["wslpath", "-u", a:path])
+        if v:shell_error != 0
+            throw "wslpath: " . l:res
+        endif
+        return trim(l:res)
+    endfunction
+
+    function PathLin2Win(path)
+        let l:res = system(["wslpath", "-w", a:path])
+        if v:shell_error != 0
+            throw "wslpath: " . l:res
+        endif
+        return trim(l:res)
+    endfunction
+endif
+
 function s:TrimPath(path, keepfull)
     if !len(a:path)
         return ""

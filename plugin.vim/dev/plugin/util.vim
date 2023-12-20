@@ -1,3 +1,30 @@
+if exists('g:vimdevpack_util_loaded')
+    fini
+en
+let g:vimdevpack_util_loaded = 1
+
+function! s:WhichImpl(which, cmd)
+    let l:res = system([a:which, a:cmd])
+    if v:shell_error != 0
+        throw "which: " . l:res
+    endif
+    return trim(l:res)
+endfunction
+
+if g:OS == "wsl"
+    function s:WhichWin(cmd)
+        return s:WhichImpl(PathWin2Lin("C:\\Windows\\System32\\where.exe"), a:cmd)
+    endfunction
+endif
+
+function s:Which(cmd)
+    if g:OS == 'windows'
+        return s:WhichImpl("C:\\Windows\\System32\\where.exe", a:cmd)
+    else
+        return s:WhichImpl('which', a:cmd)
+    endif
+endfunction
+
 function! s:term_open()
     botright split
     if has('nvim')
@@ -212,4 +239,8 @@ command! GtagsUpdateAll call s:GtagsUpdate()
 command! GtagsClearAll call s:GtagsClearAll()
 command! -complete=file -nargs=1 Remove :echom 'Remove: '.'<f-args>'.' '.(delete(<f-args>) == 0 ? 'SUCCEEDED' : 'FAILED')
 command! -range -nargs=1 XmlEntities call HtmlEntities(<line1>, <line2>, <args>)
+command! -nargs=1 Which :echom s:Which(<f-args>)
+if g:OS == "wsl"
+    command! -nargs=1 WhichWin :echom s:WhichWin(<f-args>)
+endif
 
