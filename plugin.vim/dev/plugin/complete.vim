@@ -89,4 +89,4 @@ function! CompleteGtags(findstart, base)
 endfunction
 
 set completefunc=CompletePath
-set omnifunc=CompleteGtags
+"set omnifunc=CompleteGtags

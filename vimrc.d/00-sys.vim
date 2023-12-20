@@ -83,3 +83,7 @@ let g:PackCachePath = g:JoinPath(g:PackPath, 'cache')
 let g:PackPluginPath = g:JoinPath(g:PackPath, 'plugin.vim')
 let g:PackPluginPathNvim = g:JoinPath(g:PackPath, 'plugin.nvim')
 
+function g:MakeCachePath(path)
+    return g:JoinPath(g:PackCachePath, a:path)
+endfunction
+
