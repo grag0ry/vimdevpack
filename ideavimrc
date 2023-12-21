@@ -1,0 +1,22 @@
+set hls
+set NERDTree
+
+nnoremap <F3>  :nohlsearch<CR>
+
+" Ctrl-P
+nmap \b  <Action>(RecentFiles)
+nmap <c-f> <Action>(GotoFile)
+" TagbarToggle
+nmap <c-\><c-\> <Action>(ActivateStructureToolWindow)
+
+nmap \\\\ :NERDTreeToggle<CR>
+nmap \f :NERDTreeFind<CR>
+
+nmap gD <Action>(GotoDeclaration)
+nmap gd <Action>(GotoDeclaration)
+nmap gi <Action>(GotoImplementation)
+nmap \D <Action>(QuickTypeDefinition)
+nmap \r <Action>(RefactoringMenu)
+nmap gr <Action>(ShowUsages)
+
+
