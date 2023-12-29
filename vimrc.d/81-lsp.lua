@@ -6,11 +6,11 @@ lspconfig.util.default_config = vim.tbl_extend(
     { autostart = false }
 )
 
-lspconfig.omnisharp.setup{
-    cmd = { vim.fn.MakeCachePath("omnisharp/net6/OmniSharp") },
-}
+lspconfig.csharp_ls.setup{}
+
 lspconfig.pyright.setup{
     cmd = { vim.fn.MakeCachePath("node_modules/.bin/pyright-langserver"), "--stdio" },
 }
 
+lspconfig.clangd.setup{}
 

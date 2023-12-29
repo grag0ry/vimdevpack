@@ -62,3 +62,8 @@ hi perlFunctionName ctermfg=169 guifg=#BC6EC5
 hi perlMethod       ctermfg=169 guifg=#BC6EC5
 
 hi rustKeyword  cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
+
+if has('nvim')
+    hi link @lsp.type.variable Normal
+    hi link @lsp.type.parameter Float
+endif
