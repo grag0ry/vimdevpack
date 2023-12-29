@@ -17,12 +17,13 @@ end
 function SyntasticCallback(errlist)
     local diaglist = {}
     for _, e in ipairs(errlist) do
-        lnum = (e.lnum ~= 0) and e.lnum - 1 or 0
-        end_lnum = (e.end_lnum ~= 0) and e.end_lnum - 1 or 0
-        col = (e.col ~= 0) and e.col - 1 or 0
-        end_col = (e.end_col ~= 0) and e.end_col - 1 or 0
-        if diaglist[e.bufnr] == nil then diaglist[e.bufnr] = {} end
-        table.insert(diaglist[e.bufnr], {
+        local lnum = (e.lnum ~= 0) and e.lnum - 1 or 0
+        local end_lnum = (e.end_lnum ~= 0) and e.end_lnum - 1 or 0
+        local col = (e.col ~= 0) and e.col - 1 or 0
+        local end_col = (e.end_col ~= 0) and e.end_col - 1 or 0
+        local key = tostring(e.bufnr)
+        if diaglist[key] == nil then diaglist[key] = {} end
+        table.insert(diaglist[key], {
             bufnr = e.bufnr,
             lnum = lnum,
             end_lnum = end_lnum,
@@ -32,15 +33,14 @@ function SyntasticCallback(errlist)
             message = e.text,
         })
     end
-    local bufnr = vim.fn.bufnr()
-    if #diaglist == 0 then
-        vim.diagnostic.reset(ns, bufnr)
-    else
-        for bufnr, list in ipairs(diaglist) do
-            vim.diagnostic.set(ns, bufnr, list, nil)
-        end
+    local no_errors = true
+    local currbuf = vim.fn.bufnr()
+    for bufnr, list in pairs(diaglist) do
+        vim.diagnostic.set(ns, tonumber(bufnr), list, nil)
+        no_errors = false
     end
-    vim.g.XXX = diaglist
-    vim.g.XXX2 = errlist
+    if no_errors then
+        vim.diagnostic.reset(ns, currbuf)
+    end
 end
 

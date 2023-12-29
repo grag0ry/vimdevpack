@@ -15,6 +15,7 @@ let g:syntastic_enable_balloons = 0
 let g:syntastic_enable_highlighting = 0
 
 function! SyntasticCheckHook(errors)
+    let g:SyntasticCheckHookDebugErrors = a:errors
     call v:lua.SyntasticCallback(a:errors)
 endfunction
 endif
