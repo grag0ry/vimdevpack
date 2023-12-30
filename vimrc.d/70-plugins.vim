@@ -35,6 +35,12 @@ function s:plug_nvim(name)
     endif
 endfunction
 
+function s:plug_vim(name)
+    if !has('nvim')
+        call s:plug(a:name)
+    endif
+endfunction
+
 function s:plug_end()
     if s:manager == 'vim-plug'
         call plug#end()
@@ -55,7 +61,7 @@ call s:plug("tagbar")
 call s:plug("vim-airline")
 call s:plug("vim-airline-themes")
 call s:plug("vim-cpp-enhanced-highlight")
-call s:plug("vim-man")
+call s:plug_vim("vim-man")
 call s:plug("vim-nerdtree-sync")
 call s:plug_nvim("nvim-lspconfig")
 call s:plug_end()
