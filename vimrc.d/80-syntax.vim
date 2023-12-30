@@ -5,12 +5,22 @@ else
 endif
 
 syntax on
-colorscheme space-vim-dark
+if (has('nvim'))
+    colorscheme moonfly
+else
+    colorscheme space-vim-dark
+endif
 
 set cursorline
 set hlsearch
 set colorcolumn=81
 
+hi link cppException cppSTLexception
+hi link cppAttribute cppExceptions
+
+if (has('nvim'))
+    fini
+else
 " Fix colors
 hi Normal          ctermbg=NONE guibg=NONE
 hi LineNr          ctermbg=NONE guibg=NONE
@@ -35,8 +45,6 @@ hi cCustomClass    cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
 
 hi cppSTLexception cterm=NONE gui=NONE
 hi cppSTLnamespace cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
-hi link cppException cppSTLexception
-hi link cppAttribute cppExceptions
 
 hi shSet           cterm=NONE gui=NONE
 hi shLoop          cterm=NONE gui=NONE
@@ -66,4 +74,6 @@ hi rustKeyword  cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
 if has('nvim')
     hi link @lsp.type.variable Normal
     hi link @lsp.type.parameter Float
+endif
+
 endif

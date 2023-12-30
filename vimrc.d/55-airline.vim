@@ -1,4 +1,6 @@
-let g:airline_theme='violet'
+if !has('nvim')
+    let g:airline_theme='violet'
+endif
 let g:airline_mode_map = {
     \ '__'     : '-',
     \ 'c'      : 'C',

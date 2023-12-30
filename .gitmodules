@@ -43,3 +43,6 @@
 [submodule ".sm/nvim-lspconfig"]
 	path = .sm/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule ".sm/vim-moonfly-colors"]
+	path = .sm/vim-moonfly-colors
+	url = https://github.com/bluz71/vim-moonfly-colors.git
