@@ -60,14 +60,6 @@ gtags-upgrade:
 .PHONY: upgrade
 upgrade: sm-upgrade gtags-upgrade
 
-.PHONY: omnisharp-net6
-omnisharp-net6:
-	start/omnisharp-vim/installer/omnisharp-manager.sh -6 -l cache/omnisharp/net6
-
-.PHONY: omnisharp-wsl
-omnisharp-wsl:
-	start/omnisharp-vim/installer/omnisharp-manager.sh -W -l cache/omnisharp/wsl
-
 .PHONY: install-vim
 install-vim: sm
 	$(RM) "$(dst-vim)"
