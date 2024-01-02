@@ -31,9 +31,16 @@ nnoremap <c-f> :CtrlP<CR>
 nnoremap \t :Term<CR>
 nnoremap \T :TermV<CR>
 
-nnoremap \\ :NERDTreeToggle<CR>
+if has('nvim')
+    nnoremap \\ :NeotreeToggle<CR>
+    nnoremap \d :NeotreeCurrent<CR>
+    nnoremap \w :NeotreeBuffers<CR>
+    nnoremap \z :NeotreeGitstatus<CR>
+else
+    nnoremap \\ :NERDTreeToggle<CR>
+    nnoremap \d :exec 'edit ' . expand('%:p:h')<CR>
+endif
 nnoremap <C-\><C-\> :TagbarToggle<CR>
-nnoremap \d :exec 'edit ' . expand('%:p:h')<CR>
 nnoremap \c :SyntasticCheck<CR>
 if has('nvim')
     lua vim.keymap.set('n', '<C-\\><C-c>', SyntasticReset)

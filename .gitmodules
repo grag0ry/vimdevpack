@@ -52,3 +52,12 @@
 [submodule ".sm/lualine.nvim"]
 	path = .sm/lualine.nvim
 	url = https://github.com/nvim-lualine/lualine.nvim.git
+[submodule ".sm/plenary.nvim"]
+	path = .sm/plenary.nvim
+	url = https://github.com/nvim-lua/plenary.nvim.git
+[submodule ".sm/nui.nvim"]
+	path = .sm/nui.nvim
+	url = https://github.com/MunifTanjim/nui.nvim.git
+[submodule ".sm/neo-tree.nvim"]
+	path = .sm/neo-tree.nvim
+	url = https://github.com/nvim-neo-tree/neo-tree.nvim.git
