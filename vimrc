@@ -11,11 +11,13 @@ if exists("g:VimdevpackInclude")
     let s:inc = g:VimdevpackInclude
 endif
 
-let s:files = globpath(s:inc, '*.vim')
+let s:files = filter(split(globpath(s:inc, '*.vim'), '\n'), 'v:val !~ "\.only\.vim$"')
 if has('nvim')
-    let s:files .= "\n" . globpath(s:inc, '*.lua')
+    let s:files = s:files + split(globpath(s:inc, '*.lua'), '\n')
+else
+    let s:files = s:files + split(globpath(s:inc, '*.only.vim'), '\n')
 endif
 
-for s:item in sort(split(s:files, '\n'))
+for s:item in sort(s:files)
     execute 'source ' . fnameescape(s:item)
 endfor
