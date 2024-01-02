@@ -61,3 +61,6 @@
 [submodule ".sm/neo-tree.nvim"]
 	path = .sm/neo-tree.nvim
 	url = https://github.com/nvim-neo-tree/neo-tree.nvim.git
+[submodule ".sm/nvim-notify"]
+	path = .sm/nvim-notify
+	url = https://github.com/rcarriga/nvim-notify.git
