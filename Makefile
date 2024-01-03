@@ -14,7 +14,7 @@ sm      = $(wildcard .sm/*)
 sm-branch = master
 
 gtags_src = https://cvs.savannah.gnu.org/viewvc/*checkout*/global/global/gtags.vim
-gtags_dst = start/gtags/plugin/gtags.vim
+gtags_dst = plugin.vim/gtags/plugin/gtags.vim
 
 
 define patch-vimrc =
@@ -58,6 +58,10 @@ gnuplot.vim-upgrade: sm-branch=main
 
 telescope-fzf-native.nvim-upgrade: sm-branch=main
 
+neo-tree.nvim-upgrade: sm-branch=main
+
+nui.nvim-upgrade: sm-branch=main
+
 .PHONY: sm
 sm:
 	$(GIT) submodule update --init --recursive
@@ -71,6 +75,7 @@ gtags-upgrade:
 
 .PHONY: upgrade
 upgrade: sm-upgrade gtags-upgrade
+	@$(ECHO) Successfully upgraded
 
 .PHONY: install-vim
 install-vim: sm
