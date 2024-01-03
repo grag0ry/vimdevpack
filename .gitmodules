@@ -64,3 +64,9 @@
 [submodule ".sm/nvim-notify"]
 	path = .sm/nvim-notify
 	url = https://github.com/rcarriga/nvim-notify.git
+[submodule ".sm/telescope.nvim"]
+	path = .sm/telescope.nvim
+	url = https://github.com/nvim-telescope/telescope.nvim.git
+[submodule ".sm/telescope-fzf-native.nvim"]
+	path = .sm/telescope-fzf-native.nvim
+	url = https://github.com/nvim-telescope/telescope-fzf-native.nvim.git

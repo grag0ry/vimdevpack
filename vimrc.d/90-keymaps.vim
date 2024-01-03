@@ -14,8 +14,6 @@ endif
 nnoremap <C-c>      :cclose<CR>:lclose<CR>
 nnoremap <C-]>      mP:GtagsCursor<CR>
 nnoremap <C-LeftMouse> mP:GtagsCursor<CR>
-nnoremap \g         mP:GrepCursor<CR>
-nnoremap \f         mP:FindCursor<CR>
 nnoremap <C-\><C-]> `P
 nnoremap <C-RightMouse> `P
 nnoremap <C-j>      :cn<CR>
@@ -25,20 +23,25 @@ nnoremap <C-\><C-k> :lprevious<CR>
 nnoremap <C-h>      :colder<CR>
 nnoremap <C-l>      :cnewer<CR>
 
-nnoremap \b    :CtrlPBuffer<CR>
-nnoremap <c-f> :CtrlP<CR>
-
 nnoremap \t :Term<CR>
 nnoremap \T :TermV<CR>
 
 if has('nvim')
+    nnoremap \b :Telescope buffers<CR>
+    nnoremap <c-f> :Telescope find_files<CR>
+    nnoremap \g :Telescope grep_string<CR>
+    nnoremap \f :Telescope live_grep<CR>
     nnoremap \\ :NeotreeToggle<CR>
     nnoremap \d :NeotreeCurrent<CR>
     nnoremap \w :NeotreeBuffers<CR>
     nnoremap \z :NeotreeGitstatus<CR>
 else
+    nnoremap \b    :CtrlPBuffer<CR>
+    nnoremap <c-f> :CtrlP<CR>
     nnoremap \\ :NERDTreeToggle<CR>
     nnoremap \d :exec 'edit ' . expand('%:p:h')<CR>
+    nnoremap \g mP:GrepCursor<CR>
+    nnoremap \f mP:FindCursor<CR>
 endif
 nnoremap <C-\><C-\> :TagbarToggle<CR>
 nnoremap \c :SyntasticCheck<CR>

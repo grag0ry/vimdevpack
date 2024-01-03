@@ -36,7 +36,17 @@ $2 += $(notdir $1)-upgrade
 
 .PHONY: $(notdir $1)-upgrade
 $(notdir $1)-upgrade:
-	( cd $1 && $(GIT) checkout $$(sm-branch) && $$(GIT) pull )
+	( cd $1 \
+		&& $$(GIT) reset . \
+		&& $$(GIT) checkout . \
+		&& $$(GIT) checkout $$(sm-branch) \
+		&& $$(GIT) checkout . \
+		&& $$(GIT) reset --hard origin/HEAD \
+		&& $$(GIT) clean -fdx \
+		&& $$(GIT) pull )
+ifeq ($(notdir $1),telescope-fzf-native.nvim)
+	$$(MAKE) -C $1
+endif
 
 endef
 sm_upgrade_gen = $(foreach a,$1,$(call sm_upgrade_gen_one,$a,$2))
@@ -45,6 +55,8 @@ sm_upgrade = $(eval $(call sm_upgrade_gen,$1,$2))
 $(call sm_upgrade,$(sm),sm_upgrade_targets)
 
 gnuplot.vim-upgrade: sm-branch=main
+
+telescope-fzf-native.nvim-upgrade: sm-branch=main
 
 .PHONY: sm
 sm:
