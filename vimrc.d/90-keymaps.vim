@@ -11,6 +11,9 @@ if has('nvim')
     nnoremap <F12>  :LspInfo<CR>
 endif
 
+noremap _y "+y
+noremap _p "+p
+
 nnoremap <C-c>      :cclose<CR>:lclose<CR>
 nnoremap <C-]>      mP:GtagsCursor<CR>
 nnoremap <C-LeftMouse> mP:GtagsCursor<CR>
@@ -35,6 +38,7 @@ if has('nvim')
     nnoremap \d :NeotreeCurrent<CR>
     nnoremap \w :NeotreeBuffers<CR>
     nnoremap \z :NeotreeGitstatus<CR>
+    nnoremap <C-_> :Telescope current_buffer_fuzzy_find<CR>
 else
     nnoremap \b    :CtrlPBuffer<CR>
     nnoremap <c-f> :CtrlP<CR>
@@ -73,7 +77,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+        -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
         vim.keymap.set('n', '\\D', vim.lsp.buf.type_definition, opts)
         vim.keymap.set('n', '\\r', vim.lsp.buf.rename, opts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)

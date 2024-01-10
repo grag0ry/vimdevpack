@@ -7,6 +7,19 @@ require('telescope').setup {
             case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                              -- the default case_mode is "smart_case"
         }
+    },
+    pickers = {
+        diagnostics = {
+            layout_strategy = 'vertical',
+            layout_config = {width=0.9, height=0.9}
+        },
+        buffers = {
+            sort_mru = true,
+            layout_strategy = 'bottom_pane',
+            layout_config = { prompt_position = "bottom" },
+            path_display = { truncate = 3 },
+            previewer = false
+        }
     }
 }
 
