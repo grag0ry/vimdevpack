@@ -73,3 +73,6 @@
 [submodule ".sm/vim-dirdiff"]
 	path = .sm/vim-dirdiff
 	url = https://github.com/will133/vim-dirdiff.git
+[submodule ".sm/diffview.nvim"]
+	path = .sm/diffview.nvim
+	url = https://github.com/sindrets/diffview.nvim.git
