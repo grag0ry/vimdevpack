@@ -62,6 +62,8 @@ neo-tree.nvim-upgrade: sm-branch=main
 
 nui.nvim-upgrade: sm-branch=main
 
+diffview.nvim-upgrade: sm-branch=main
+
 .PHONY: sm
 sm:
 	$(GIT) submodule update --init --recursive
