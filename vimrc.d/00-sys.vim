@@ -98,6 +98,8 @@ endfunction
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 let g:PackPath = resolve(g:JoinPath(s:path, '..'))
 let g:PackCachePath = g:JoinPath(g:PackPath, 'cache')
+let g:PackPluginGit = g:JoinPath(g:PackPath, 'plugin.git')
+let g:PackPluginDir = g:JoinPath(g:PackPath, 'plugin.d')
 let g:PackPluginPath = g:JoinPath(g:PackPath, 'plugin.vim')
 let g:PackPluginPathNvim = g:JoinPath(g:PackPath, 'plugin.nvim')
 

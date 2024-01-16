@@ -10,11 +10,11 @@ mkpath  = $(realpath $(lastword $(MAKEFILE_LIST)))
 curdir  = $(dir $(mkpath))
 packdir = $(curdir)vimpack
 dst-vim = $(HOME)/.vim/pack/vimdevpack
-sm      = $(wildcard .sm/*)
+sm      = $(wildcard plugin.git/*)
 sm-branch = master
 
 gtags_src = https://cvs.savannah.gnu.org/viewvc/*checkout*/global/global/gtags.vim
-gtags_dst = plugin.vim/gtags/plugin/gtags.vim
+gtags_dst = plugin.d/gtags/plugin/gtags.vim
 
 
 define patch-vimrc =
@@ -79,9 +79,6 @@ upgrade: sm-upgrade gtags-upgrade
 
 .PHONY: install-vim
 install-vim: sm
-	$(RM) "$(dst-vim)"
-	$(MKDIR) "$(dir dst-vim)"
-	$(LN) -s "$(packdir)" "$(dst-vim)"
 	$(MKDIR) cache/undo
 	$(call patch-vimrc,$(HOME)/.vimrc)
 
