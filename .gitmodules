@@ -1,78 +1,78 @@
-[submodule ".sm/space-vim-dark"]
-	path = .sm/space-vim-dark
+[submodule "plugin.git/space-vim-dark"]
+	path = plugin.git/space-vim-dark
 	url = https://github.com/liuchengxu/space-vim-dark.git
-[submodule ".sm/ctrlp"]
-	path = .sm/ctrlp
+[submodule "plugin.git/ctrlp"]
+	path = plugin.git/ctrlp
 	url = https://github.com/ctrlpvim/ctrlp.vim.git
-[submodule ".sm/nerdtree"]
-	path = .sm/nerdtree
+[submodule "plugin.git/nerdtree"]
+	path = plugin.git/nerdtree
 	url = https://github.com/preservim/nerdtree.git
-[submodule ".sm/syntastic"]
-	path = .sm/syntastic
+[submodule "plugin.git/syntastic"]
+	path = plugin.git/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
-[submodule ".sm/vim-cpp-enhanced-highlight"]
-	path = .sm/vim-cpp-enhanced-highlight
+[submodule "plugin.git/vim-cpp-enhanced-highlight"]
+	path = plugin.git/vim-cpp-enhanced-highlight
 	url = https://github.com/octol/vim-cpp-enhanced-highlight.git
-[submodule ".sm/vim-nerdtree-sync"]
-	path = .sm/vim-nerdtree-sync
+[submodule "plugin.git/vim-nerdtree-sync"]
+	path = plugin.git/vim-nerdtree-sync
 	url = https://github.com/unkiwii/vim-nerdtree-sync.git
 [submodule "start/vim-man"]
-	path = .sm/vim-man
+	path = plugin.git/vim-man
 	url = https://github.com/vim-utils/vim-man.git
-[submodule ".sm/vim-airline"]
-	path = .sm/vim-airline
+[submodule "plugin.git/vim-airline"]
+	path = plugin.git/vim-airline
 	url = https://github.com/vim-airline/vim-airline
-[submodule ".sm/vim-airline-themes"]
-	path = .sm/vim-airline-themes
+[submodule "plugin.git/vim-airline-themes"]
+	path = plugin.git/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes
-[submodule ".sm/rust"]
-	path = .sm/rust
+[submodule "plugin.git/rust"]
+	path = plugin.git/rust
 	url = https://github.com/rust-lang/rust.vim.git
-[submodule ".sm/tagbar"]
-	path = .sm/tagbar
+[submodule "plugin.git/tagbar"]
+	path = plugin.git/tagbar
 	url = https://github.com/preservim/tagbar.git
-[submodule ".sm/mediawiki.vim"]
-	path = .sm/mediawiki.vim
+[submodule "plugin.git/mediawiki.vim"]
+	path = plugin.git/mediawiki.vim
 	url = https://github.com/vim-scripts/mediawiki.vim.git
-[submodule ".sm/gnuplot.vim"]
-	path = .sm/gnuplot.vim
+[submodule "plugin.git/gnuplot.vim"]
+	path = plugin.git/gnuplot.vim
 	url = https://github.com/dpezto/gnuplot.vim
-[submodule ".sm/vim-plug"]
-	path = .sm/vim-plug
+[submodule "plugin.git/vim-plug"]
+	path = plugin.git/vim-plug
 	url = https://github.com/junegunn/vim-plug.git
-[submodule ".sm/nvim-lspconfig"]
-	path = .sm/nvim-lspconfig
+[submodule "plugin.git/nvim-lspconfig"]
+	path = plugin.git/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
-[submodule ".sm/vim-moonfly-colors"]
-	path = .sm/vim-moonfly-colors
+[submodule "plugin.git/vim-moonfly-colors"]
+	path = plugin.git/vim-moonfly-colors
 	url = https://github.com/bluz71/vim-moonfly-colors.git
-[submodule ".sm/nvim-web-devicons"]
-	path = .sm/nvim-web-devicons
+[submodule "plugin.git/nvim-web-devicons"]
+	path = plugin.git/nvim-web-devicons
 	url = https://github.com/nvim-tree/nvim-web-devicons.git
-[submodule ".sm/lualine.nvim"]
-	path = .sm/lualine.nvim
+[submodule "plugin.git/lualine.nvim"]
+	path = plugin.git/lualine.nvim
 	url = https://github.com/nvim-lualine/lualine.nvim.git
-[submodule ".sm/plenary.nvim"]
-	path = .sm/plenary.nvim
+[submodule "plugin.git/plenary.nvim"]
+	path = plugin.git/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim.git
-[submodule ".sm/nui.nvim"]
-	path = .sm/nui.nvim
+[submodule "plugin.git/nui.nvim"]
+	path = plugin.git/nui.nvim
 	url = https://github.com/MunifTanjim/nui.nvim.git
-[submodule ".sm/neo-tree.nvim"]
-	path = .sm/neo-tree.nvim
+[submodule "plugin.git/neo-tree.nvim"]
+	path = plugin.git/neo-tree.nvim
 	url = https://github.com/nvim-neo-tree/neo-tree.nvim.git
-[submodule ".sm/nvim-notify"]
-	path = .sm/nvim-notify
+[submodule "plugin.git/nvim-notify"]
+	path = plugin.git/nvim-notify
 	url = https://github.com/rcarriga/nvim-notify.git
-[submodule ".sm/telescope.nvim"]
-	path = .sm/telescope.nvim
+[submodule "plugin.git/telescope.nvim"]
+	path = plugin.git/telescope.nvim
 	url = https://github.com/nvim-telescope/telescope.nvim.git
-[submodule ".sm/telescope-fzf-native.nvim"]
-	path = .sm/telescope-fzf-native.nvim
+[submodule "plugin.git/telescope-fzf-native.nvim"]
+	path = plugin.git/telescope-fzf-native.nvim
 	url = https://github.com/nvim-telescope/telescope-fzf-native.nvim.git
-[submodule ".sm/vim-dirdiff"]
-	path = .sm/vim-dirdiff
+[submodule "plugin.git/vim-dirdiff"]
+	path = plugin.git/vim-dirdiff
 	url = https://github.com/will133/vim-dirdiff.git
-[submodule ".sm/diffview.nvim"]
-	path = .sm/diffview.nvim
+[submodule "plugin.git/diffview.nvim"]
+	path = plugin.git/diffview.nvim
 	url = https://github.com/sindrets/diffview.nvim.git

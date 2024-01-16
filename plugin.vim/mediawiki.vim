@@ -1,1 +1,1 @@
-../.sm/mediawiki.vim
+../plugin.git/mediawiki.vim

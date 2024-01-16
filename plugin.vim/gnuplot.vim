@@ -1,1 +1,1 @@
-../.sm/gnuplot.vim
+../plugin.git/gnuplot.vim
