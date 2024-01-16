@@ -8,7 +8,11 @@ function s:DetectOS()
     elseif has('macunix')
         return 'mac'
     elseif has('unix')
-        let uname = system('uname -a')
+        if has('nvim')
+            let uname_table = v:lua.vim.loop.os_uname()
+            let uname = uname_table.sysname . " " . uname_table.release
+        else
+            let uname = system('uname -a')
         if (uname =~ "Microsoft")
             return 'wsl' " WSL 1
         elseif (uname =~ "microsoft")

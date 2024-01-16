@@ -1,3 +1,7 @@
+if has('nvim')
+    fini
+endif
+
 let g:ctrlp_map = ''
 let g:ctrlp_cache_dir = g:JoinPath(g:PackCachePath, "ctrlp")
 
