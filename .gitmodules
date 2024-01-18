@@ -76,3 +76,6 @@
 [submodule "plugin.git/diffview.nvim"]
 	path = plugin.git/diffview.nvim
 	url = https://github.com/sindrets/diffview.nvim.git
+[submodule "lsp/csharp-language-server"]
+	path = lsp/csharp-language-server
+	url = https://github.com/razzmatazz/csharp-language-server.git
