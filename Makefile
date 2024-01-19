@@ -6,6 +6,8 @@ WGET   = wget
 SED    = sed
 TOUCH  = touch
 DOTNET = $(dotnet-bin)
+PYTHON = python
+UNZIP  = unzip
 
 mkpath     = $(realpath $(lastword $(MAKEFILE_LIST)))
 curdir     = $(dir $(mkpath))
@@ -13,7 +15,7 @@ cachedir   = cache/
 devenv     = devenv/
 tools      = tools/
 bindir     = $(devenv)bin/
-link-bin   = $(LN) "../../$1" "$(bindir)$(if $2,$2,$(notdir $1))"
+link-bin   = $(RM) $(bindir)$(if $2,$2,$(notdir $1)) && $(LN) "../../$1" "$(bindir)$(if $2,$2,$(notdir $1))"
 plugin-git = plugin.git/
 plugin-dir = plugin.d/
 new-path += $(patsubst %/,%,$(curdir)$(bindir))
@@ -38,6 +40,13 @@ csharp-ls-src = lsp/csharp-language-server/src/CSharpLanguageServer/
 csharp-ls-dst = $(devenv)opt/csharp-ls/
 csharp-ls-dep = $(wildcard $(csharp-ls-src)*.fs)
 
+clangd-github-repo = "clangd/clangd"
+clangd-url-file = $(devenv)clangd-url
+clangd-url = $(file <$(clangd-url-file))
+clangd-bin = $(bindir)clangd
+clangd-unpack-dst = $(devenv)opt/
+clangd-dst = $(firstword $(wildcard $(clangd-unpack-dst)*/bin/clangd))
+
 devenv-enviroment-vim = $(devenv)env.vim
 devenv-enviroment-sh  = $(devenv)env.sh
 
@@ -45,6 +54,7 @@ gtags-websrc = https://cvs.savannah.gnu.org/viewvc/*checkout*/global/global/gtag
 gtags-dst = $(plugin-dir)gtags/plugin/gtags.vim
 
 git-upgrade = $(tools)git-upgrade.sh
+github-assets = $(tools)github-assets.py
 
 .PHONY: all
 all: sm plugin lsp $(target-cachedir) devenv-enviroment
@@ -89,8 +99,18 @@ $(csharp-ls-bin): $(csharp-ls-dep) $(dotnet-bin) $(target-sm)
 	$(call link-bin,$(csharp-ls-dst)CSharpLanguageServer,csharp-ls)
 	$(TOUCH) "$@"
 
+$(clangd-url-file): $(target-devenv)
+	$(PYTHON) "$(github-assets)" -r "$(clangd-github-repo)" -f "clangd-linux-[0-9.]+\.zip" > "$@"
+
+$(clangd-bin): $(clangd-url-file) $(target-cachedir)
+	$(MKDIR) "$(clangd-unpack-dst)"
+	$(WGET) "$(clangd-url)" -O "$(cachedir)$(notdir $(clangd-url))"
+	( cd "$(clangd-unpack-dst)" && $(UNZIP) -o "$(curdir)$(cachedir)$(notdir $(clangd-url))" )
+	$(call link-bin,$(clangd-dst),clangd)
+	$(TOUCH) "$@"
+
 .PHONY: lsp
-lsp: $(csharp-ls-bin)
+lsp: $(csharp-ls-bin) $(clangd-bin)
 
 $(devenv-enviroment-vim): $(target-devenv)
 	$(file >$@,let $$DOTNET_ROOT = '$(DOTNET_ROOT)')
