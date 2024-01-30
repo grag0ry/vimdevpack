@@ -16,9 +16,21 @@ devenv     = devenv/
 tools      = tools/
 bindir     = $(devenv)bin/
 link-bin   = $(RM) $(bindir)$(if $2,$2,$(notdir $1)) && $(LN) "../../$1" "$(bindir)$(if $2,$2,$(notdir $1))"
+link-native-bin = $(RM) $(bindir)$1 && $(LN) "$(shell which "$1")" "$(bindir)$1"
 plugin-git = plugin.git/
 plugin-dir = plugin.d/
 new-path += $(patsubst %/,%,$(curdir)$(bindir))
+
+ifeq ($(CFG_FORCE_NATIVE_TOOLS),1)
+test-native = $(shell $(tools)test-native.sh $1)
+CFG_DOTNET    ?= $(call test-native,dotnet 8)
+CFG_CSHARP_LS ?= $(call test-native,csharp-ls)
+CFG_CLANGD    ?= $(call test-native,clangd)
+else
+CFG_DOTNET    ?= local
+CFG_CSHARP_LS ?= local
+CFG_CLANGD    ?= local
+endif
 
 dotnet-websrc  = https://dot.net/v1/dotnet-install.sh
 dotnet-install = $(devenv)dotnet-install.sh
@@ -26,8 +38,10 @@ dotnet-version = 8.0
 dotnet-root    = $(devenv)opt/dotnet-$(dotnet-version)/
 dotnet-bin     = $(bindir)dotnet
 
+ifeq ($(CFG_DOTNET),local)
 DOTNET_ROOT = $(patsubst %/,%,$(curdir)$(dotnet-root))
 export DOTNET_ROOT
+endif
 
 target-cachedir = $(cachedir).exists
 target-devenv = $(devenv).exists
@@ -71,6 +85,7 @@ $(target-bindir): $(target-devenv)
 	$(MKDIR) "$(dir $@)"
 	$(TOUCH) "$@"
 
+ifeq ($(CFG_DOTNET),local)
 $(dotnet-install): $(target-devenv)
 	$(WGET) "$(dotnet-websrc)" -O "$@"
 	$(TOUCH) "$@"
@@ -79,6 +94,10 @@ $(dotnet-bin): $(dotnet-install) $(target-bindir)
 	$(SHELL) "$<" --install-dir "$(dotnet-root)" --channel $(dotnet-version)
 	$(call link-bin,$(dotnet-root)dotnet)
 	$(TOUCH) "$@"
+else
+$(dotnet-bin): $(target-bindir)
+	$(call link-native-bin,dotnet)
+endif
 
 $(target-sm): $(target-devenv) .gitmodules
 	$(GIT) submodule update --init --recursive
@@ -94,11 +113,17 @@ $(target-plugin): $(target-sm) $(target-devenv)
 .PHONY: plugin
 plugin: $(target-plugin)
 
+ifeq ($(CFG_CSHARP_LS),local)
 $(csharp-ls-bin): $(csharp-ls-dep) $(dotnet-bin) $(target-sm)
 	$(DOTNET) build -c Release -r linux-x64 --self-contained=false -o "$(csharp-ls-dst)" "$(csharp-ls-src)"
 	$(call link-bin,$(csharp-ls-dst)CSharpLanguageServer,csharp-ls)
 	$(TOUCH) "$@"
+else
+$(csharp-ls-bin): $(target-bindir)
+	$(call link-native-bin,csharp-ls)
+endif
 
+ifeq ($(CFG_CLANGD),local)
 $(clangd-url-file): $(target-devenv)
 	$(PYTHON) "$(github-assets)" -r "$(clangd-github-repo)" -f "clangd-linux-[0-9.]+\.zip" > "$@"
 
@@ -108,17 +133,29 @@ $(clangd-bin): $(clangd-url-file) $(target-cachedir)
 	( cd "$(clangd-unpack-dst)" && $(UNZIP) -o "$(curdir)$(cachedir)$(notdir $(clangd-url))" )
 	$(call link-bin,$(clangd-dst),clangd)
 	$(TOUCH) "$@"
+else
+$(clangd-bin): $(target-bindir)
+	$(call link-native-bin,clangd)
+endif
 
 .PHONY: lsp
 lsp: $(csharp-ls-bin) $(clangd-bin)
 
 $(devenv-enviroment-vim): $(target-devenv)
+ifeq ($(CFG_DOTNET),local)
 	$(file >$@,let $$DOTNET_ROOT = '$(DOTNET_ROOT)')
 	$(file >>$@,let $$PATH = '$(new-path):' . $$PATH)
+else
+	$(file >$@,let $$PATH = '$(new-path):' . $$PATH)
+endif
 
 $(devenv-enviroment-sh): $(target-devenv)
+ifeq ($(CFG_DOTNET),local)
 	$(file >$@,export $$DOTNET_ROOT = '$(DOTNET_ROOT)')
 	$(file >>$@,export $$PATH = "$(new-path):$$PATH")
+else
+	$(file >$@,export $$PATH = "$(new-path):$$PATH")
+endif
 
 .PHONY: devenv-enviroment
 devenv-enviroment: $(devenv-enviroment-vim) $(devenv-enviroment-sh)
@@ -159,3 +196,4 @@ upgrade:
 	$(MAKE) upgrade-sm
 	$(MAKE) upgrade-gtags
 	$(MAKE) --always-make all
+
