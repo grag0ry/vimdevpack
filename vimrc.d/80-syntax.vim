@@ -18,6 +18,10 @@ set colorcolumn=81
 hi link cppException cppSTLexception
 hi link cppAttribute cppExceptions
 
+if exists(':GuiFont')
+    GuiFont DejaVuSansM Nerd Font Mono:h11
+endif
+
 if (has('nvim'))
     fini
 else
