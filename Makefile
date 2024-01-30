@@ -21,6 +21,8 @@ plugin-git = plugin.git/
 plugin-dir = plugin.d/
 new-path += $(patsubst %/,%,$(curdir)$(bindir))
 
+-include config.mk
+
 ifeq ($(CFG_FORCE_NATIVE_TOOLS),1)
 test-native = $(shell $(tools)test-native.sh $1)
 CFG_DOTNET    ?= $(call test-native,dotnet 8)
