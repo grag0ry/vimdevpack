@@ -49,7 +49,7 @@ require('lualine').setup {
                         {
                             'fileformat',
                             padding = 0,
-                            symbols = {unix = "LF ", dos = "CR LR ", mac = "CR "},
+                            symbols = {unix = "LF ", dos = "CRLF ", mac = "CR "},
                         }
                     },
         lualine_y = {'progress'},
