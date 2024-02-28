@@ -33,7 +33,8 @@ if has('nvim')
     nnoremap \b :Telescope buffers<CR>
     nnoremap <c-f> :Telescope find_files<CR>
     nnoremap \g :Telescope grep_string<CR>
-    nnoremap \f :Telescope live_grep<CR>
+    nnoremap \f :LiveGrep<CR>
+    nnoremap <C-\><C-f> :LiveGrep ./
     nnoremap \\ :NeotreeToggle<CR>
     nnoremap \d :NeotreeCurrent<CR>
     nnoremap \w :NeotreeBuffers<CR>

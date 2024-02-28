@@ -24,3 +24,17 @@ require('telescope').setup {
 }
 
 require('telescope').load_extension('fzf')
+
+vim.api.nvim_create_user_command('LiveGrep',
+    function(opts)
+        if next(opts.fargs) == nil then
+            require('telescope.builtin').live_grep({prompt_title = vim.loop.cwd()})
+        else
+            require('telescope.builtin').live_grep({cwd = opts.fargs[1],
+                                                    prompt_title = opts.fargs[1]})
+        end
+    end,
+    { nargs = '?', complete = 'file' }
+)
+
+
