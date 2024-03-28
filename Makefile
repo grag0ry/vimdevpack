@@ -188,6 +188,9 @@ endif
 plugin: $(target-plugin)
 
 ifeq ($(CFG_CSHARP_LS),local)
+$(csharp-ls-dep):
+	@true
+
 $(csharp-ls-bin): $(csharp-ls-dep) $(dotnet-bin) $(target-sm)
 	$(DOTNET) build -c Release -r $(dotnet-rid) --self-contained=false -o "$(csharp-ls-dst)" "$(csharp-ls-src)"
 	$(call link-bin,$(csharp-ls-dst)$(csharp-ls-exe),$(notdir $@))
