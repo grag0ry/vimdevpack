@@ -170,7 +170,9 @@ $(dotnet-bin): $(target-bindir)
 endif
 
 $(target-sm): $(target-devenv) .gitmodules
+ifeq ($(UPGRADE),)
 	$(GIT) submodule update --init --recursive
+endif
 	$(TOUCH) "$@"
 
 .PHONY: sm
@@ -283,5 +285,5 @@ upgrade-gtags:
 upgrade:
 	$(MAKE) upgrade-sm
 	$(MAKE) upgrade-gtags
-	$(MAKE) --always-make all
+	$(MAKE) --always-make all UPGRADE=1
 
