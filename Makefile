@@ -56,6 +56,7 @@ endif
 
 dotnet-version = 8.0
 dotnet-root    = $(devenv)opt/dotnet-$(dotnet-version)/
+dotnet-tools   = $(devenv)dotnet-tools/
 ifeq ($(OS),Windows_NT)
 dotnet-websrc  = https://dot.net/v1/dotnet-install.ps1
 dotnet-install = $(devenv)dotnet-install.ps1
@@ -74,6 +75,19 @@ ifeq ($(CFG_DOTNET),local)
 DOTNET_ROOT = $(call winpath,$(patsubst %/,%,$(curdir)$(dotnet-root)))
 export DOTNET_ROOT
 endif
+
+define dotnet-tool-target =
+ifeq ($$(OS),Windows_NT)
+dotnet-tool-$1 = $$(bindir)$2.bat
+dotnet-tool-$1-exe = $2.exe
+else
+dotnet-tool-$1 = $$(bindir)$2
+dotnet-tool-$1-exe = $2
+endif
+$$(dotnet-tool-$1): $$(dotnet-bin)
+	$$(DOTNET) tool update $1 --tool-path "$$(dotnet-tools)"
+	$$(call link-bin,$$(dotnet-tools)$$(dotnet-tool-$1-exe),$$(notdir $$@))
+endef
 
 target-cachedir = $(cachedir).exists
 target-devenv = $(devenv).exists
@@ -109,6 +123,12 @@ clangd-url         = $(file <$(clangd-url-file))
 clangd-unpack-dst  = $(devenv)opt/
 clangd-dst         = $(clangd-unpack-dst)clangd_$(clangd-version)/bin/$(clangd-exe)
 
+powershell-es-github-repo = PowerShell/PowerShellEditorServices
+powershell-es-url-file    = $(devenv)powershell-es-url
+powershell-es-url         = $(file <$(powershell-es-url-file))
+powershell-es-unpack-dst  = $(devenv)opt/powershell-es/
+powershell-es-target      = $(devenv).powershell-es
+
 devenv-enviroment-vim = $(devenv)env.vim
 devenv-enviroment-sh  = $(devenv)env.sh
 
@@ -140,10 +160,12 @@ $(dotnet-install): $(target-devenv)
 
 $(dotnet-bin): $(dotnet-install) $(target-bindir)
 	$(call dotnet-ins-cmd,$<)
+	$(MKDIR) "$(dotnet-tools)"
 	$(call link-bin,$(dotnet-root)$(notdir $@))
 	$(TOUCH) "$@"
 else
 $(dotnet-bin): $(target-bindir)
+	$(MKDIR) "$(dotnet-tools)"
 	$(call link-native-bin,dotnet)
 endif
 
@@ -190,8 +212,19 @@ $(clangd-bin): $(target-bindir)
 	$(call link-native-bin,clangd)
 endif
 
+$(eval $(call dotnet-tool-target,powershell,pwsh))
+
+$(powershell-es-url-file): $(target-devenv)
+	$(PYTHON) "$(github-assets)" -r "$(powershell-es-github-repo)" > "$@"
+
+$(powershell-es-target): $(dotnet-tool-powershell) $(target-devenv) $(target-cachedir) $(powershell-es-url-file)
+	$(MKDIR) "$(powershell-es-unpack-dst)"
+	$(WGET) "$(powershell-es-url)" -O "$(cachedir)$(notdir $(powershell-es-url))"
+	( cd "$(powershell-es-unpack-dst)" && $(UNZIP) -o "$(curdir)$(cachedir)$(notdir $(powershell-es-url))" )
+	$(TOUCH) "$@"
+
 .PHONY: lsp
-lsp: $(csharp-ls-bin) $(clangd-bin)
+lsp: $(csharp-ls-bin) $(clangd-bin) $(powershell-es-target)
 
 $(devenv-enviroment-vim): $(target-devenv)
 ifeq ($(CFG_DOTNET),local)

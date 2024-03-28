@@ -110,5 +110,9 @@ function g:MakeCachePath(path)
     return g:JoinPath(g:PackCachePath, a:path)
 endfunction
 
+function g:MakeDevenvPath(path)
+    return g:JoinPath(g:PackDevenvPath, a:path)
+endfunction
+
 execute 'source ' . fnameescape(g:JoinPath(g:PackDevenvPath, 'env.vim'))
 

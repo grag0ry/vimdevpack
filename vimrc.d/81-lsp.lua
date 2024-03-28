@@ -14,6 +14,10 @@ lspconfig.pyright.setup{
 
 lspconfig.clangd.setup{}
 
+lspconfig.powershell_es.setup{
+  bundle_path = vim.fn.MakeDevenvPath("opt/powershell-es")
+}
+
 --make --always-make --dry-run \
 -- | grep -wE 'gcc|g\+\+' \
 -- | grep -w '\-c' \
