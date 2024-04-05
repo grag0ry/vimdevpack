@@ -46,11 +46,9 @@ endif
 ifeq ($(CFG_TEST_NATIVE_TOOLS),1)
 test-native = $(shell $(tools)test-native.sh $1)
 CFG_DOTNET    ?= $(call test-native,dotnet 8)
-CFG_CSHARP_LS ?= $(call test-native,csharp-ls)
 CFG_CLANGD    ?= $(call test-native,clangd)
 else
 CFG_DOTNET    ?= local
-CFG_CSHARP_LS ?= local
 CFG_CLANGD    ?= local
 endif
 
@@ -94,17 +92,6 @@ target-devenv = $(devenv).exists
 target-bindir = $(bindir).exists
 target-sm = $(devenv).sm-init
 target-plugin = $(devenv).plugin-build
-
-ifeq ($(OS),Windows_NT)
-csharp-ls-bin = $(bindir)csharp-ls.bat
-csharp-ls-exe = CSharpLanguageServer.exe
-else
-csharp-ls-bin = $(bindir)csharp-ls
-csharp-ls-exe = CSharpLanguageServer
-endif
-csharp-ls-src = lsp/csharp-language-server/src/CSharpLanguageServer/
-csharp-ls-dst = $(devenv)opt/csharp-ls/
-csharp-ls-dep = $(wildcard $(csharp-ls-src)*.fs)
 
 ifeq ($(OS),Windows_NT)
 clangd-assets-filter = clangd-windows-[0-9.]+\.zip
@@ -189,19 +176,6 @@ endif
 .PHONY: plugin
 plugin: $(target-plugin)
 
-ifeq ($(CFG_CSHARP_LS),local)
-$(csharp-ls-dep):
-	@true
-
-$(csharp-ls-bin): $(csharp-ls-dep) $(dotnet-bin) $(target-sm)
-	$(DOTNET) build -c Release -r $(dotnet-rid) --self-contained=false -o "$(csharp-ls-dst)" "$(csharp-ls-src)"
-	$(call link-bin,$(csharp-ls-dst)$(csharp-ls-exe),$(notdir $@))
-	$(TOUCH) "$@"
-else
-$(csharp-ls-bin): $(target-bindir)
-	$(call link-native-bin,csharp-ls)
-endif
-
 ifeq ($(CFG_CLANGD),local)
 $(clangd-url-file): $(target-devenv)
 	$(PYTHON) "$(github-assets)" -r "$(clangd-github-repo)" -f "$(clangd-assets-filter)" > "$@"
@@ -218,6 +192,7 @@ $(clangd-bin): $(target-bindir)
 endif
 
 $(eval $(call dotnet-tool-target,powershell,pwsh))
+$(eval $(call dotnet-tool-target,csharp-ls,csharp-ls))
 
 $(powershell-es-url-file): $(target-devenv)
 	$(PYTHON) "$(github-assets)" -r "$(powershell-es-github-repo)" > "$@"
@@ -229,7 +204,7 @@ $(powershell-es-target): $(dotnet-tool-powershell) $(target-devenv) $(target-cac
 	$(TOUCH) "$@"
 
 .PHONY: lsp
-lsp: $(csharp-ls-bin) $(clangd-bin) $(powershell-es-target)
+lsp: $(dotnet-tool-csharp-ls) $(clangd-bin) $(powershell-es-target)
 
 $(devenv-enviroment-vim): $(target-devenv)
 ifeq ($(CFG_DOTNET),local)
