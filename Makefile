@@ -47,9 +47,11 @@ ifeq ($(CFG_TEST_NATIVE_TOOLS),1)
 test-native = $(shell $(tools)test-native.sh $1)
 CFG_DOTNET    ?= $(call test-native,dotnet 8)
 CFG_CLANGD    ?= $(call test-native,clangd)
+CFG_NODEJS    ?= $(call test-native,node)
 else
 CFG_DOTNET    ?= local
 CFG_CLANGD    ?= local
+CFG_NODEJS    ?= local
 endif
 
 dotnet-version = 8.0
@@ -85,6 +87,31 @@ endif
 $$(dotnet-tool-$1): $$(dotnet-bin)
 	$$(DOTNET) tool update $1 --tool-path "$$(dotnet-tools)"
 	$$(call link-bin,$$(dotnet-tools)$$(dotnet-tool-$1-exe),$$(notdir $$@))
+endef
+
+node-fnm-src = https://fnm.vercel.app/install
+node-fnm-ins = $(devenv)fnm-install.sh
+node-fnm-dst = $(devenv)opt/fnm/
+node-fnm-bin = $(node-fnm-dst)fnm
+node-npm-dir = $(devenv)npm/
+ifeq ($(OS),Windows_NT)
+node-bin     = $(bindir)node.bat
+node-npm     = $(bindir)npm.bat
+else
+node-bin     = $(bindir)node
+node-npm     = $(bindir)npm
+endif
+define node-npm-target =
+ifeq ($$(OS),Windows_NT)
+node-npm-$1 = $$(bindir)$2.bat
+node-npm-$1-exe = $2.exe
+else
+node-npm-$1 = $$(bindir)$2
+node-npm-$1-exe = $2
+endif
+$$(node-npm-$1): $$(node-npm)
+	$$(node-npm) install --prefix "$$(node-npm-dir)" "$1"
+	$$(call link-bin,$$(node-npm-dir)node_modules/.bin/$$(node-npm-$1-exe),$$(notdir $$@))
 endef
 
 target-cachedir = $(cachedir).exists
@@ -156,6 +183,36 @@ $(dotnet-bin): $(target-bindir)
 	$(call link-native-bin,dotnet)
 endif
 
+ifeq ($(CFG_NODEJS),local)
+$(node-fnm-ins): $(target-devenv)
+	$(WGET) "$(node-fnm-src)" -O "$@"
+	$(TOUCH) "$@"
+
+$(node-fnm-bin): $(node-fnm-ins)
+	$(SHELL) "$<" -s -d "$(abspath $(node-fnm-dst))"
+	$(TOUCH) "$@"
+
+$(node-bin): $(node-fnm-bin)
+	$(node-fnm-bin) --fnm-dir=$(abspath $(node-fnm-dst)) install --lts
+	$(call link-bin,$(node-fnm-dst)aliases/lts-latest/bin/$(notdir $@))
+	$(TOUCH) "$@"
+
+$(node-npm): $(node-bin)
+	$(MKDIR) "$(node-npm-dir)"
+	$(MKDIR) "$(node-npm-dir)node_modules"
+	$(call link-bin,$(node-fnm-dst)aliases/lts-latest/bin/$(notdir $@))
+	$(TOUCH) "$@"
+
+else
+$(node-bin): $(target-bindir)
+	$(call link-native-bin,node)
+
+$(node-npm): $(node-bin)
+	$(MKDIR) "$(node-npm-dir)"
+	$(MKDIR) "$(node-npm-dir)node_modules"
+	$(call link-native-bin,npm)
+endif
+
 $(target-sm): $(target-devenv) .gitmodules
 ifeq ($(UPGRADE),)
 	$(GIT) submodule update --init --recursive
@@ -193,6 +250,8 @@ endif
 
 $(eval $(call dotnet-tool-target,powershell,pwsh))
 $(eval $(call dotnet-tool-target,csharp-ls,csharp-ls))
+$(eval $(call node-npm-target,pyright,pyright-langserver))
+$(eval $(call node-npm-target,bash-language-server,bash-language-server))
 
 $(powershell-es-url-file): $(target-devenv)
 	$(PYTHON) "$(github-assets)" -r "$(powershell-es-github-repo)" > "$@"
@@ -204,7 +263,7 @@ $(powershell-es-target): $(dotnet-tool-powershell) $(target-devenv) $(target-cac
 	$(TOUCH) "$@"
 
 .PHONY: lsp
-lsp: $(dotnet-tool-csharp-ls) $(clangd-bin) $(powershell-es-target)
+lsp: $(dotnet-tool-csharp-ls) $(clangd-bin) $(powershell-es-target) $(node-npm-pyright) $(node-npm-bash-language-server)
 
 $(devenv-enviroment-vim): $(target-devenv)
 ifeq ($(CFG_DOTNET),local)

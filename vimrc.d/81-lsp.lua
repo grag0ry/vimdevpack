@@ -7,13 +7,9 @@ lspconfig.util.default_config = vim.tbl_extend(
 )
 
 lspconfig.csharp_ls.setup{}
-
-lspconfig.pyright.setup{
-    cmd = { vim.fn.MakeCachePath("node_modules/.bin/pyright-langserver"), "--stdio" },
-}
-
 lspconfig.clangd.setup{}
-
+lspconfig.pyright.setup{}
+lspconfig.bashls.setup{}
 lspconfig.powershell_es.setup{
   bundle_path = vim.fn.MakeDevenvPath("opt/powershell-es")
 }
