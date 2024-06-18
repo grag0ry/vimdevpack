@@ -4,6 +4,7 @@ LN     = ln -sf
 MKDIR  = mkdir -p
 WGET   = wget
 SED    = sed
+TAR    = tar
 TOUCH  = touch
 DOTNET = $(dotnet-bin)
 PYTHON = python
@@ -42,6 +43,8 @@ link-bin = $(RM) $(bindir)$(if $2,$2,$(notdir $1)) && $(LN) "../../$1" "$(bindir
 endif
 
 -include config.mk
+
+# Add https://github.com/koalaman/shellcheck#installing
 
 ifeq ($(CFG_TEST_NATIVE_TOOLS),1)
 test-native = $(shell $(tools)test-native.sh $1)
@@ -87,6 +90,7 @@ endif
 $$(dotnet-tool-$1): $$(dotnet-bin)
 	$$(DOTNET) tool update $1 --tool-path "$$(dotnet-tools)"
 	$$(call link-bin,$$(dotnet-tools)$$(dotnet-tool-$1-exe),$$(notdir $$@))
+	$$(TOUCH) "$$@"
 endef
 
 node-fnm-src = https://fnm.vercel.app/install
@@ -112,6 +116,7 @@ endif
 $$(node-npm-$1): $$(node-npm)
 	$$(node-npm) install --prefix "$$(node-npm-dir)" "$1"
 	$$(call link-bin,$$(node-npm-dir)node_modules/.bin/$$(node-npm-$1-exe),$$(notdir $$@))
+	$$(TOUCH) "$$@"
 endef
 
 target-cachedir = $(cachedir).exists
@@ -142,6 +147,17 @@ powershell-es-url-file    = $(devenv)powershell-es-url
 powershell-es-url         = $(file <$(powershell-es-url-file))
 powershell-es-unpack-dst  = $(devenv)opt/powershell-es/
 powershell-es-target      = $(devenv).powershell-es
+
+ifeq ($(OS),Windows_NT)
+shellcheck-url = https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.zip
+shellcheck-exe = $(shellcheck-dst)shellcheck.exe
+shellcheck-bin = $(bindir)shellcheck.bat
+else
+shellcheck-url = https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz
+shellcheck-exe = $(shellcheck-dst)shellcheck
+shellcheck-bin = $(bindir)shellcheck
+endif
+shellcheck-dst = $(devenv)opt/shellcheck/
 
 devenv-enviroment-vim = $(devenv)env.vim
 devenv-enviroment-sh  = $(devenv)env.sh
@@ -248,10 +264,23 @@ $(clangd-bin): $(target-bindir)
 	$(call link-native-bin,clangd)
 endif
 
+$(shellcheck-bin): $(target-cachedir)
+	$(MKDIR) "$(shellcheck-dst)"
+	$(WGET) "$(shellcheck-url)" -O "$(cachedir)$(notdir $(shellcheck-url))"
+ifeq ($(OS),Windows_NT)
+	( cd "$(shellcheck-dst)" && $(UNZIP) -o "$(curdir)$(cachedir)$(notdir $(shellcheck-url))" )
+else
+	( cd "$(shellcheck-dst)" && tar xvf "$(curdir)$(cachedir)$(notdir $(shellcheck-url))" --strip-components=1 )
+endif
+	$(call link-bin,$(shellcheck-exe),$(notdir $@))
+	$(TOUCH) "$@"
+
 $(eval $(call dotnet-tool-target,powershell,pwsh))
 $(eval $(call dotnet-tool-target,csharp-ls,csharp-ls))
 $(eval $(call node-npm-target,pyright,pyright-langserver))
 $(eval $(call node-npm-target,bash-language-server,bash-language-server))
+
+$(node-npm-bash-language-server): $(shellcheck-bin)
 
 $(powershell-es-url-file): $(target-devenv)
 	$(PYTHON) "$(github-assets)" -r "$(powershell-es-github-repo)" > "$@"
