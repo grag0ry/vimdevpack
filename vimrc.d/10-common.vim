@@ -24,7 +24,8 @@ set smartindent
 set noincsearch
 
 " list
-set listchars=tab:……,nbsp:⎵,trail:·
+set listchars=tab:>…,nbsp:⎵,trail:·
+
 set list
 
 " enable project specific
