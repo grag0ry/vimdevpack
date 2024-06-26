@@ -34,13 +34,18 @@ function SyntasticCallback(errlist)
         })
     end
     local no_errors = true
+    local show_qflist = false
     local currbuf = vim.fn.bufnr()
     for bufnr, list in pairs(diaglist) do
         vim.diagnostic.set(ns, tonumber(bufnr), list, nil)
+        if bufnr ~= currbuf then show_qflist = true end
         no_errors = false
     end
     if no_errors then
         vim.diagnostic.reset(ns, currbuf)
+    end
+    if show_qflist then
+        vim.diagnostic.setqflist()
     end
 end
 

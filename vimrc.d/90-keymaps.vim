@@ -68,6 +68,7 @@ vim.keymap.set('n', '\\e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '\\q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<C-\\><C-q>', vim.diagnostic.setqflist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
