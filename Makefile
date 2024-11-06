@@ -114,7 +114,7 @@ node-npm-$1 = $$(bindir)$2
 node-npm-$1-exe = $2
 endif
 $$(node-npm-$1): $$(node-npm)
-	$$(node-npm) install --prefix "$$(node-npm-dir)" "$1"
+	$(node-npm) -ddd install --prefix "$$(node-npm-dir)" "$1"
 	$$(call link-bin,$$(node-npm-dir)node_modules/.bin/$$(node-npm-$1-exe),$$(notdir $$@))
 	$$(TOUCH) "$$@"
 endef
@@ -304,10 +304,10 @@ endif
 
 $(devenv-enviroment-sh): $(target-devenv)
 ifeq ($(CFG_DOTNET),local)
-	$(file >$@,export $$DOTNET_ROOT = '$(DOTNET_ROOT)')
-	$(file >>$@,export $$PATH = "$(new-path):$$PATH")
+	$(file >$@,export DOTNET_ROOT='$(DOTNET_ROOT)')
+	$(file >>$@,export PATH="$(new-path):$$PATH")
 else
-	$(file >$@,export $$PATH = "$(new-path):$$PATH")
+	$(file >$@,export PATH="$(new-path):$$PATH")
 endif
 
 .PHONY: devenv-enviroment
