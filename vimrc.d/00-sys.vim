@@ -42,6 +42,8 @@ function g:PathSeparator()
     endif
 endfunction
 
+let s:PathSeparator = g:PathSeparator()
+
 if g:OS == "wsl"
     function PathWin2Lin(path)
         let l:res = system(["wslpath", "-u", a:path])
@@ -67,11 +69,11 @@ function s:TrimPath(path, keepfull)
     let l:start = 0
     let l:end = len(a:path) -1
     if !a:keepfull
-        while a:path[l:start] == PathSeparator()
+        while a:path[l:start] == s:PathSeparator
             let l:start += 1
         endwhile
     endif
-    while a:path[l:end] == PathSeparator()
+    while a:path[l:end] == s:PathSeparator
         let l:end -= 1
     endwhile
     if l:start >= l:end
@@ -88,15 +90,35 @@ function g:JoinPath(...)
     let l:result = s:TrimPath(a:000[0], v:true)
     for path in a:000[1:-1]
         let l:p = s:TrimPath(path, v:false)
-        if !len(l:p) || l:p == PathSeparator()
+        if !len(l:p) || l:p == s:PathSeparator
             continue
         endif
-        if l:result != PathSeparator()
-            let l:result .= "/"
+        if l:result != s:PathSeparator
+            let l:result .= s:PathSeparator
         endif
         let l:result .= l:p
     endfor
     return l:result
+endfunction
+
+function g:DirName(path)
+    if !len(a:path)
+        return ""
+    endif
+    let l:end = len(a:path) - 1
+    while  l:end > 0 && a:path[l:end] == s:PathSeparator
+        let l:end -= 1
+    endwhile
+    while l:end >= 0 && a:path[l:end] != s:PathSeparator
+        let l:end -= 1
+    endwhile
+    if l:end < 0
+        return "."
+    endif
+    while l:end > 0 && a:path[l:end] == s:PathSeparator
+        let l:end -= 1
+    endwhile
+    return a:path[0:l:end]
 endfunction
 
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -105,6 +127,7 @@ let g:PackCachePath = g:JoinPath(g:PackPath, 'cache')
 let g:PackDevenvPath = g:JoinPath(g:PackPath, 'devenv')
 let g:PackPluginGit = g:JoinPath(g:PackPath, 'plugin.git')
 let g:PackPluginDir = g:JoinPath(g:PackPath, 'plugin.d')
+let g:GitTopLevel = g:DirName(finddir(".git", ".;"))
 
 function g:MakeCachePath(path)
     return g:JoinPath(g:PackCachePath, a:path)
