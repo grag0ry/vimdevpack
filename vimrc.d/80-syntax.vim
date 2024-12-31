@@ -5,27 +5,48 @@ else
 endif
 
 syntax on
-if (has('nvim'))
-    colorscheme moonfly
-else
-    colorscheme space-vim-dark
-endif
 
 set cursorline
 set hlsearch
 set colorcolumn=81
-
-hi link cppException cppSTLexception
-hi link cppAttribute cppExceptions
 
 if exists(':GuiFont')
     GuiFont DejaVuSansM Nerd Font Mono:h11
 endif
 
 if (has('nvim'))
-    fini
-else
+
+colorscheme moonfly
+lua << EOF
+    vim.opt.runtimepath:prepend(vim.fn.MakeCachePath("treesitter-parsers"))
+    require'nvim-treesitter.configs'.setup {
+        ensure_installed = {
+            "c", "cpp", "c_sharp",
+            "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
+            "xml",
+            "python", "perl",
+            "bash", "powershell"
+        },
+        highlight = {
+            enable = true,
+            -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+            -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+            -- Using this option may slow down your editor, and you may see some duplicate highlights.
+            -- Instead of true it can also be a list of languages
+            additional_vim_regex_highlighting = false,
+        },
+        parser_install_dir = vim.fn.MakeCachePath("treesitter-parsers"),
+    }
+EOF
+
+else " has('nvim')
+
+colorscheme space-vim-dark
+hi link cppException cppSTLexception
+hi link cppAttribute cppExceptions
+
 " Fix colors
+
 hi Normal          ctermbg=NONE guibg=NONE
 hi LineNr          ctermbg=NONE guibg=NONE
 hi SignColumn      ctermbg=NONE guibg=NONE
@@ -75,9 +96,4 @@ hi perlMethod       ctermfg=169 guifg=#BC6EC5
 
 hi rustKeyword  cterm=NONE gui=NONE ctermfg=128 guifg=#87AFFF
 
-if has('nvim')
-    hi link @lsp.type.variable Normal
-    hi link @lsp.type.parameter Float
-endif
-
-endif
+endif " has('nvim')

@@ -76,3 +76,6 @@
 [submodule "plugin.git/diffview.nvim"]
 	path = plugin.git/diffview.nvim
 	url = https://github.com/sindrets/diffview.nvim.git
+[submodule "plugin.git/nvim-treesitter"]
+	path = plugin.git/nvim-treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter.git

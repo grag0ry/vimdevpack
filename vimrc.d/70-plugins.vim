@@ -15,6 +15,7 @@ call plug#(s:g("nvim-web-devicons"), s:_if(has('nvim')))
 call plug#(s:g("nvim-notify"), s:_if(has('nvim')))
 call plug#(s:g("nui.nvim"), s:_if(has('nvim')))
 call plug#(s:g("nvim-lspconfig"), s:_if(has('nvim')))
+call plug#(s:g("nvim-treesitter"), s:_if(has('nvim'), {'do': ':TSUpdate'}))
 
 call plug#(s:d('dev'))
 
@@ -43,7 +44,7 @@ call plug#(s:g("mediawiki.vim"))
 
 call plug#(s:g("space-vim-dark"), s:_if(!has('nvim')))
 call plug#(s:g("vim-moonfly-colors"), s:_if(has('nvim')))
-call plug#(s:g("vim-cpp-enhanced-highlight"))
+call plug#(s:g("vim-cpp-enhanced-highlight"), s:_if(!has('nvim')))
 
 call plug#(s:g("rust"), s:_if(0))
 
