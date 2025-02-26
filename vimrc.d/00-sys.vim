@@ -102,23 +102,7 @@ function g:JoinPath(...)
 endfunction
 
 function g:DirName(path)
-    if !len(a:path)
-        return ""
-    endif
-    let l:end = len(a:path) - 1
-    while  l:end > 0 && a:path[l:end] == s:PathSeparator
-        let l:end -= 1
-    endwhile
-    while l:end >= 0 && a:path[l:end] != s:PathSeparator
-        let l:end -= 1
-    endwhile
-    if l:end < 0
-        return "."
-    endif
-    while l:end > 0 && a:path[l:end] == s:PathSeparator
-        let l:end -= 1
-    endwhile
-    return a:path[0:l:end]
+    return fnamemodify(a:path, ':h')
 endfunction
 
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -127,7 +111,11 @@ let g:PackCachePath = g:JoinPath(g:PackPath, 'cache')
 let g:PackDevenvPath = g:JoinPath(g:PackPath, 'devenv')
 let g:PackPluginGit = g:JoinPath(g:PackPath, 'plugin.git')
 let g:PackPluginDir = g:JoinPath(g:PackPath, 'plugin.d')
-let g:GitTopLevel = g:DirName(finddir(".git", ".;"))
+if isdirectory(".git")
+    let g:GitTopLevel = fnamemodify(resolve('.'), ':p')
+else
+    let g:GitTopLevel = g:DirName(finddir(".git", ".;"))
+endif
 
 function g:MakeCachePath(path)
     return g:JoinPath(g:PackCachePath, a:path)
