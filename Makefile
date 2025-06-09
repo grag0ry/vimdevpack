@@ -57,7 +57,7 @@ CFG_CLANGD    ?= local
 CFG_NODEJS    ?= local
 endif
 
-dotnet-version = 8.0
+dotnet-version = 9.0
 dotnet-root    = $(devenv)opt/dotnet-$(dotnet-version)/
 dotnet-tools   = $(devenv)dotnet-tools/
 ifeq ($(OS),Windows_NT)
