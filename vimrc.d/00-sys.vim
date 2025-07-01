@@ -76,7 +76,7 @@ function s:TrimPath(path, keepfull)
     while a:path[l:end] == s:PathSeparator
         let l:end -= 1
     endwhile
-    if l:start >= l:end
+    if l:start > l:end
         if a:keepfull
             return a:path[0]
         else
@@ -86,9 +86,9 @@ function s:TrimPath(path, keepfull)
     return a:path[l:start:l:end]
 endfunction
 
-function g:JoinPath(...)
-    let l:result = s:TrimPath(a:000[0], v:true)
-    for path in a:000[1:-1]
+function g:LJoinPath(parts)
+    let l:result = s:TrimPath(a:parts[0], v:true)
+    for path in a:parts[1:-1]
         let l:p = s:TrimPath(path, v:false)
         if !len(l:p) || l:p == s:PathSeparator
             continue
@@ -98,6 +98,21 @@ function g:JoinPath(...)
         endif
         let l:result .= l:p
     endfor
+    return l:result
+endfunction
+
+function g:JoinPath(...)
+    return g:LJoinPath(a:000)
+endfunction
+
+function g:SplitPath(path)
+    if !len(a:path)
+        return []
+    endif
+    let l:result = split(a:path, s:PathSeparator)
+    if a:path[0] == s:PathSeparator
+        let l:result[0] = s:PathSeparator . l:result[0]
+    endif
     return l:result
 endfunction
 
