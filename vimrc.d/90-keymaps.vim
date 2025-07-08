@@ -62,13 +62,17 @@ inoremap <C-F> <C-X><C-U>
 "inoremap <C-D> <C-X><C-O>
 
 if has('nvim')
+
+nnoremap <C-\><C-h> :DiffviewFileHistory %<CR>
+nnoremap <C-\><C-d> :DiffviewOpen<CR>
+nnoremap <C-\><C-q> :DiffviewClose<CR>
+
 lua <<EOF
 
 vim.keymap.set('n', '\\e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '\\q', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<C-\\><C-q>', vim.diagnostic.setqflist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
