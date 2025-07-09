@@ -10,6 +10,9 @@ setmetatable(encoding_remap, {
         return key
     end
 })
+
+local git_blame = require('gitblame')
+
 require('lualine').setup {
     sections = {
         lualine_a = {
@@ -32,6 +35,28 @@ require('lualine').setup {
                     vim.fn.setreg("+", msg)
                     vim.notify(msg, "info", {
                         title = "Full path",
+                        animate = false,
+                        render = "wrapped-compact",
+                        hide_from_history = true
+                    })
+                end
+            },
+            {
+                git_blame.get_current_blame_text,
+                cond = git_blame.is_blame_text_available,
+                on_click = function(n, b, m)
+                    if n ~= 2 then
+                        return
+                    end
+                    if b == "l" then
+                        vim.cmd("GitBlameCopyCommitURL")
+                    elseif b == "r" then
+                        vim.cmd("GitBlameCopySHA")
+                    else
+                        return
+                    end
+                    vim.notify(vim.fn.getreg("+"), "info", {
+                        title = "blame",
                         animate = false,
                         render = "wrapped-compact",
                         hide_from_history = true

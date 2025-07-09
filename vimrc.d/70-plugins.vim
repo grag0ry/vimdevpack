@@ -26,6 +26,7 @@ call plug#(s:g("vim-man"), s:_if(!has('nvim')))
 
 call plug#(s:g("vim-dirdiff"))
 call plug#(s:g("diffview.nvim"), s:_if(has('nvim')))
+call plug#(s:g("git-blame.nvim"), s:_if(has('nvim')))
 
 call plug#(s:g("vim-airline"), s:_if(!has('nvim')))
 call plug#(s:g("vim-airline-themes"), s:_if(!has('nvim')))

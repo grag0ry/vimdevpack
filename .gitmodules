@@ -79,3 +79,6 @@
 [submodule "plugin.git/nvim-treesitter"]
 	path = plugin.git/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+[submodule "plugin.git/git-blame.nvim"]
+	path = plugin.git/git-blame.nvim
+	url = https://github.com/f-person/git-blame.nvim.git

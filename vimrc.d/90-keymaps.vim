@@ -66,6 +66,7 @@ if has('nvim')
 nnoremap <C-\><C-h> :DiffviewFileHistory %<CR>
 nnoremap <C-\><C-d> :DiffviewOpen<CR>
 nnoremap <C-\><C-q> :DiffviewClose<CR>
+nnoremap <C-\><C-a> :GitBlameToggle<CR>
 
 lua <<EOF
 
