@@ -68,7 +68,13 @@ nnoremap <C-\><C-d> :DiffviewOpen<CR>
 nnoremap <C-\><C-q> :DiffviewClose<CR>
 nnoremap <C-\><C-a> :GitBlameToggle<CR>
 
+
 lua <<EOF
+vim.keymap.set('n', '<C-\\><C-s>', function()
+    require('gitblame').get_sha(function(s)
+        vim.cmd("DiffviewOpen " .. string.sub(s,1,8) .. "^!")
+    end)
+end)
 
 vim.keymap.set('n', '\\e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
