@@ -64,6 +64,7 @@ inoremap <C-F> <C-X><C-U>
 if has('nvim')
 
 nnoremap <C-\><C-h> :DiffviewFileHistory %<CR>
+vnoremap <buffer> <C-\><C-h> :DiffviewFileHistory<CR>
 nnoremap <C-\><C-d> :DiffviewOpen<CR>
 nnoremap <C-\><C-q> :DiffviewClose<CR>
 nnoremap <C-\><C-a> :GitBlameToggle<CR>
