@@ -71,8 +71,8 @@ nnoremap <C-\><C-a> :GitBlameToggle<CR>
 
 lua <<EOF
 vim.keymap.set('n', '<C-\\><C-s>', function()
-    require('gitblame').get_sha(function(s)
-        vim.cmd("DiffviewOpen " .. string.sub(s,1,8) .. "^!")
+    require('gitblame').get_sha(function(sha)
+        require('vdp').diffview_sha(sha, '%')
     end)
 end)
 
