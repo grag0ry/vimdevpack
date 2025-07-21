@@ -1,9 +1,6 @@
 [submodule "plugin.git/syntastic"]
 	path = plugin.git/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
-[submodule "plugin.git/rust"]
-	path = plugin.git/rust
-	url = https://github.com/rust-lang/rust.vim.git
 [submodule "plugin.git/tagbar"]
 	path = plugin.git/tagbar
 	url = https://github.com/preservim/tagbar.git
