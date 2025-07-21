@@ -22,7 +22,6 @@ call plug#(s:d('dev'))
 call plug#(s:d("gtags"))
 call plug#(s:g("tagbar"))
 call plug#(s:g("syntastic"))
-call plug#(s:g("vim-man"), s:_if(!has('nvim')))
 
 call plug#(s:g("vim-dirdiff"))
 call plug#(s:g("diffview.nvim"), s:_if(has('nvim')))

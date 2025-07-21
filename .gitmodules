@@ -13,9 +13,6 @@
 [submodule "plugin.git/vim-nerdtree-sync"]
 	path = plugin.git/vim-nerdtree-sync
 	url = https://github.com/unkiwii/vim-nerdtree-sync.git
-[submodule "start/vim-man"]
-	path = plugin.git/vim-man
-	url = https://github.com/vim-utils/vim-man.git
 [submodule "plugin.git/vim-airline"]
 	path = plugin.git/vim-airline
 	url = https://github.com/vim-airline/vim-airline
