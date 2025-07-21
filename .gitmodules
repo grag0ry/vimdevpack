@@ -13,12 +13,6 @@
 [submodule "plugin.git/vim-nerdtree-sync"]
 	path = plugin.git/vim-nerdtree-sync
 	url = https://github.com/unkiwii/vim-nerdtree-sync.git
-[submodule "plugin.git/vim-airline"]
-	path = plugin.git/vim-airline
-	url = https://github.com/vim-airline/vim-airline
-[submodule "plugin.git/vim-airline-themes"]
-	path = plugin.git/vim-airline-themes
-	url = https://github.com/vim-airline/vim-airline-themes
 [submodule "plugin.git/rust"]
 	path = plugin.git/rust
 	url = https://github.com/rust-lang/rust.vim.git
