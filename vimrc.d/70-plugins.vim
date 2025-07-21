@@ -37,7 +37,6 @@ call plug#(s:g("neo-tree.nvim"), s:_if(has('nvim')))
 call plug#(s:g("gnuplot.vim"))
 call plug#(s:g("mediawiki.vim"))
 
-call plug#(s:g("space-vim-dark"), s:_if(!has('nvim')))
 call plug#(s:g("vim-moonfly-colors"), s:_if(has('nvim')))
 call plug#(s:g("vim-cpp-enhanced-highlight"), s:_if(!has('nvim')))
 
