@@ -32,7 +32,6 @@ call plug#(s:g("vim-airline"), s:_if(!has('nvim')))
 call plug#(s:g("vim-airline-themes"), s:_if(!has('nvim')))
 call plug#(s:g("lualine.nvim"), s:_if(has('nvim')))
 
-call plug#(s:g("ctrlp"), s:_if(!has('nvim')))
 call plug#(s:g("telescope-fzf-native.nvim"), s:_if(has('nvim')))
 call plug#(s:g("telescope.nvim"), s:_if(has('nvim')))
 
