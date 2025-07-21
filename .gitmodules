@@ -1,18 +1,12 @@
 [submodule "plugin.git/space-vim-dark"]
 	path = plugin.git/space-vim-dark
 	url = https://github.com/liuchengxu/space-vim-dark.git
-[submodule "plugin.git/nerdtree"]
-	path = plugin.git/nerdtree
-	url = https://github.com/preservim/nerdtree.git
 [submodule "plugin.git/syntastic"]
 	path = plugin.git/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
 [submodule "plugin.git/vim-cpp-enhanced-highlight"]
 	path = plugin.git/vim-cpp-enhanced-highlight
 	url = https://github.com/octol/vim-cpp-enhanced-highlight.git
-[submodule "plugin.git/vim-nerdtree-sync"]
-	path = plugin.git/vim-nerdtree-sync
-	url = https://github.com/unkiwii/vim-nerdtree-sync.git
 [submodule "plugin.git/rust"]
 	path = plugin.git/rust
 	url = https://github.com/rust-lang/rust.vim.git

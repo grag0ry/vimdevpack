@@ -32,8 +32,6 @@ call plug#(s:g("lualine.nvim"), s:_if(has('nvim')))
 call plug#(s:g("telescope-fzf-native.nvim"), s:_if(has('nvim')))
 call plug#(s:g("telescope.nvim"), s:_if(has('nvim')))
 
-call plug#(s:g("nerdtree"), s:_if(!has('nvim')))
-call plug#(s:g("vim-nerdtree-sync"), s:_if(!has('nvim')))
 call plug#(s:g("neo-tree.nvim"), s:_if(has('nvim')))
 
 call plug#(s:g("gnuplot.vim"))
