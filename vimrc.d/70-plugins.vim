@@ -10,12 +10,12 @@ exe 'source ' . fnameescape(g:JoinPath(g:PackPluginGit, "vim-plug", "plug.vim"))
 
 call plug#begin()
 
-call plug#(s:g("plenary.nvim"), s:_if(has('nvim')))
-call plug#(s:g("nvim-web-devicons"), s:_if(has('nvim')))
-call plug#(s:g("nvim-notify"), s:_if(has('nvim')))
-call plug#(s:g("nui.nvim"), s:_if(has('nvim')))
-call plug#(s:g("nvim-lspconfig"), s:_if(has('nvim')))
-call plug#(s:g("nvim-treesitter"), s:_if(has('nvim'), {'do': ':TSUpdate'}))
+call plug#(s:g("plenary.nvim"))
+call plug#(s:g("nvim-web-devicons"))
+call plug#(s:g("nvim-notify"))
+call plug#(s:g("nui.nvim"))
+call plug#(s:g("nvim-lspconfig"))
+call plug#(s:g("nvim-treesitter"), {'do': ':TSUpdate'})
 
 call plug#(s:d('dev'))
 
@@ -24,22 +24,20 @@ call plug#(s:g("tagbar"))
 call plug#(s:g("syntastic"))
 
 call plug#(s:g("vim-dirdiff"))
-call plug#(s:g("diffview.nvim"), s:_if(has('nvim')))
-call plug#(s:g("git-blame.nvim"), s:_if(has('nvim')))
+call plug#(s:g("diffview.nvim"))
+call plug#(s:g("git-blame.nvim"))
 
-call plug#(s:g("lualine.nvim"), s:_if(has('nvim')))
+call plug#(s:g("lualine.nvim"))
 
-call plug#(s:g("telescope-fzf-native.nvim"), s:_if(has('nvim')))
-call plug#(s:g("telescope.nvim"), s:_if(has('nvim')))
+call plug#(s:g("telescope-fzf-native.nvim"))
+call plug#(s:g("telescope.nvim"))
 
-call plug#(s:g("neo-tree.nvim"), s:_if(has('nvim')))
+call plug#(s:g("neo-tree.nvim"))
 
 call plug#(s:g("gnuplot.vim"))
 call plug#(s:g("mediawiki.vim"))
 
-call plug#(s:g("vim-moonfly-colors"), s:_if(has('nvim')))
-
-call plug#(s:g("rust"), s:_if(0))
+call plug#(s:g("vim-moonfly-colors"))
 
 call plug#end()
 

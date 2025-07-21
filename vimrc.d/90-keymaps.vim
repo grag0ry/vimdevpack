@@ -2,14 +2,11 @@ nnoremap <F2>  :set list!<CR>
 nnoremap <F3>  :nohlsearch<CR>
 nnoremap <F4>  :DelExtraWhitespace<CR>
 nnoremap <F5>  :redraw!<CR>
-nnoremap <F6>  :exec '!cd "'.expand('%:p:h').'" && bash'<CR>
 nnoremap <F7>  :XxdToggle<CR>
-if has('nvim')
-    nnoremap <F9>  :LspStart<CR>
-    nnoremap <F10>  :LspStop<CR>
-    nnoremap <F11>  :LspRestart<CR>
-    nnoremap <F12>  :LspInfo<CR>
-endif
+nnoremap <F9>  :LspStart<CR>
+nnoremap <F10>  :LspStop<CR>
+nnoremap <F11>  :LspRestart<CR>
+nnoremap <F12>  :LspInfo<CR>
 
 noremap _y "+y
 noremap _p "+p
@@ -26,42 +23,24 @@ nnoremap <C-\><C-k> :lprevious<CR>
 nnoremap <C-h>      :colder<CR>
 nnoremap <C-l>      :cnewer<CR>
 
-nnoremap \t :Term<CR>
-nnoremap \T :TermV<CR>
-
-if has('nvim')
-    nnoremap \b :Telescope buffers<CR>
-    nnoremap <c-f> :Telescope find_files<CR>
-    nnoremap \g :Telescope grep_string<CR>
-    nnoremap \f :LiveGrep<CR>
-    nnoremap <C-\><C-f> :LiveGrep ./
-    nnoremap \\ :NeotreeToggle<CR>
-    nnoremap \d :NeotreeCurrent<CR>
-    nnoremap \w :NeotreeBuffers<CR>
-    nnoremap \z :NeotreeGitstatus<CR>
-    nnoremap <C-_> :Telescope current_buffer_fuzzy_find<CR>
-else
-    nnoremap \b    :CtrlPBuffer<CR>
-    nnoremap <c-f> :CtrlP<CR>
-    nnoremap \\ :NERDTreeToggle<CR>
-    nnoremap \d :exec 'edit ' . expand('%:p:h')<CR>
-    nnoremap \g mP:GrepCursor<CR>
-    nnoremap \f mP:FindCursor<CR>
-endif
+nnoremap \b :Telescope buffers<CR>
+nnoremap <c-f> :Telescope find_files<CR>
+nnoremap \g :Telescope grep_string<CR>
+nnoremap \f :LiveGrep<CR>
+nnoremap <C-\><C-f> :LiveGrep ./
+nnoremap \\ :NeotreeToggle<CR>
+nnoremap \d :NeotreeCurrent<CR>
+nnoremap \w :NeotreeBuffers<CR>
+nnoremap \z :NeotreeGitstatus<CR>
+nnoremap <C-_> :Telescope current_buffer_fuzzy_find<CR>
 nnoremap <C-\><C-\> :TagbarToggle<CR>
 nnoremap \c :SyntasticCheck<CR>
-if has('nvim')
-    lua vim.keymap.set('n', '<C-\\><C-c>', SyntasticReset)
-else
-    nnoremap <C-\><C-c> :SyntasticReset<CR>
-endif
+lua vim.keymap.set('n', '<C-\\><C-c>', SyntasticReset)
 
 vnoremap _s :!sort 2>/dev/null<CR>
 
 inoremap <C-F> <C-X><C-U>
 "inoremap <C-D> <C-X><C-O>
-
-if has('nvim')
 
 nnoremap <C-\><C-h> :DiffviewFileHistory %<CR>
 vnoremap <buffer> <C-\><C-h> :DiffviewFileHistory<CR>
@@ -99,4 +78,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 EOF
-endif
