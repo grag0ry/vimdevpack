@@ -26,6 +26,29 @@ plugin: $(fake-submodule) $(fake-plugin-build) $(CACHE)/.exists $(CACHE)/undo/.e
 
 # Tools
 
+ifneq ($(filter shellcheck,$(CFG_TOOLS)),)
+ifeq ($(OS),Windows_NT)
+CLEAN += $(CACHE)/shellcheck.zip
+$(CACHE)/shellcheck.zip:
+	$(call github-assets,koalaman/shellcheck,$@,\.zip)
+
+$(DEVENV)/shellcheck/shellcheck: $(CACHE)/shellcheck.zip
+	mkdir -p "$(dir $@)"
+	cd "$(dir $@)" && unzip -o "$(abspath $<)"
+else
+CLEAN += $(CACHE)/shellcheck.linux.x86_64.tar.xz
+$(CACHE)/shellcheck.linux.x86_64.tar.xz:
+	$(call github-assets,koalaman/shellcheck,$@,linux.x86_64)
+
+$(DEVENV)/shellcheck/shellcheck: $(CACHE)/shellcheck.linux.x86_64.tar.xz
+	mkdir -p "$(dir $@)"
+	tar -C "$(dir $@)" -xvf "$(abspath $<)" --strip-components=1 --touch
+endif
+
+$(call linkbin,$(DEVENV)/shellcheck/shellcheck)
+tools: $(BIN)/shellcheck
+endif
+
 # LSP
 
 ifneq ($(filter csharp-ls,$(CFG_LSP)),)
@@ -56,29 +79,6 @@ endif
 ifneq ($(filter bash-language-server,$(CFG_LSP)),)
 $(call nodejs-npm,bash-language-server)
 lsp: $(BIN)/bash-language-server
-endif
-
-ifneq ($(filter shellcheck,$(CFG_LSP)),)
-ifeq ($(OS),Windows_NT)
-CLEAN += $(CACHE)/shellcheck.zip
-$(CACHE)/shellcheck.zip:
-	$(call github-assets,koalaman/shellcheck,$@,\.zip)
-
-$(DEVENV)/shellcheck/shellcheck: $(CACHE)/shellcheck.zip
-	mkdir -p "$(dir $@)"
-	cd "$(dir $@)" && unzip -o "$(abspath $<)"
-else
-CLEAN += $(CACHE)/shellcheck.linux.x86_64.tar.xz
-$(CACHE)/shellcheck.linux.x86_64.tar.xz:
-	$(call github-assets,koalaman/shellcheck,$@,linux.x86_64)
-
-$(DEVENV)/shellcheck/shellcheck: $(CACHE)/shellcheck.linux.x86_64.tar.xz
-	mkdir -p "$(dir $@)"
-	tar -C "$(dir $@)" -xvf "$(abspath $<)" --strip-components=1 --touch
-endif
-
-$(call linkbin,$(DEVENV)/shellcheck/shellcheck)
-lsp: $(BIN)/shellcheck
 endif
 
 ifneq ($(filter clangd,$(CFG_LSP)),)

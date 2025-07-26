@@ -3,6 +3,14 @@
 # shellcheck disable=SC2034
 set -e -u -o pipefail
 
+instr-trim() {
+    local -n str=$1
+    str="${str#"${str%%[![:space:]]*}"}"
+    str="${str%"${str##*[![:space:]]}"}"
+}
+
+str-trim() { local s=$1; instr-trim s; print "%s\n" "$s"; }
+
 : "${CFG_OS:=$(uname -s)}"
 
 if [[ -n ${CFG_OSID:-} ]]; then
@@ -23,7 +31,27 @@ fi
 : "${CFG_DOTNET_VERSION:=$([[ -n $CFG_DOTNET_NATIVE ]] && dotnet --version || echo 9.0)}"
 : "${CFG_NODEJS_NATIVE=$([[ -n $(command -v node) ]] && echo 1 || echo)}"
 
-: "${CFG_LSP="csharp-ls powershell-es pyright bash-language-server shellcheck clangd"}"
+if [[ -z ${CFG_LSP+DEFINED} ]]; then
+    lsp=(csharp-ls powershell-es pyright bash-language-server clangd)
+    CFG_LSP=
+    CFG_LSP_NATIVE=
+    for t in "${lsp[@]}"; do
+        [[ -n $(command -v "$t") ]] && CFG_LSP_NATIVE+=$t$' ' || CFG_LSP+=$t$' '
+    done
+    instr-trim CFG_LSP
+    instr-trim CFG_LSP_NATIVE
+fi
+
+if [[ -z ${CFG_TOOLS+DEFINED} ]]; then
+    tools=(shellcheck)
+    CFG_TOOLS=
+    CFG_TOOLS_NATIVE=
+    for t in "${tools[@]}"; do
+        [[ -n $(command -v "$t") ]] && CFG_TOOLS_NATIVE+=$t$' ' || CFG_TOOLS+=$t$' '
+    done
+    instr-trim CFG_TOOLS
+    instr-trim CFG_TOOLS_NATIVE
+fi
 
 while IFS= read -r var; do
     if [[ -n ${!var:-} ]]; then
