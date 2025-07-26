@@ -4,9 +4,7 @@ ifeq ($(CFG_DOTNET_NATIVE),)
 DOTNET_ROOT = $(DEVENV)/dotnet-$(CFG_DOTNET_VERSION)
 export DOTNET_ROOT
 
-define VIMENV +=
-$(NL)let $$DOTNET_ROOT = '$(call winpath,$(abspath $(DOTNET_ROOT)))'
-endef
+$(call vimenv-addvar,$$DOTNET_ROOT,$(call winpath,$(abspath $(DOTNET_ROOT))))
 
 CLEAN += $(CACHE)/dotnet-install.sh
 

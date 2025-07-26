@@ -2,6 +2,11 @@ PRJROOT = $(dir $(lastword $(MAKEFILE_LIST)))
 TOOLS = $(PRJROOT)tools/
 CONFIG = $(PRJROOT)config.mk
 
+define NL=
+
+
+endef
+
 ifeq ($(OS),Windows_NT)
 MSYS = winsymlinks:native
 export MSYS
@@ -29,31 +34,31 @@ print-config:
 $(foreach v,$(filter CFG_%, $(.VARIABLES)),$(eval config: export $v=$($v)))
 $(foreach v,$(filter CFG_%, $(.VARIABLES)),$(eval print-config: export $v=$($v)))
 
-define NL=
-
-
-endef
-
 M4=m4 -P $(foreach v,$(filter CFG_%, $(.VARIABLES)),$(if $($v),-D"m4_$(v)=$($(v))"))
 
 BIN    = $(CFG_BINDIR)
 CACHE  = $(CFG_CACHE)
 DEVENV = $(CFG_DEVENV)
-VIMENV =
 
+VIMENV = " This file is auto generate by `make vim.env`
 CLEAN = $(BIN) $(DEVENV)
 
+define vimenv-add-impl =
+$(eval define VIMENV +=
+$(NL)$1
+endef)
+endef
+vimenv-add = $(call vimenv-add-impl,$(subst $$,$$$$,$1))
+vimenv-addvar = $(call vimenv-add,let $1 = '$2')
+
+$(call vimenv-addvar,g:PackPath,$(call winpath,$(abspath $(PRJROOT))))
+$(call vimenv-addvar,g:PackDevenvPath,$(call winpath,$(abspath $(DEVENV))))
+$(call vimenv-addvar,g:PackCachePath,$(call winpath,$(abspath $(CACHE))))
+
 export PATH:=$(abspath $(BIN)):$(PATH)
+$(call vimenv-add,let $$PATH = '$(call winpath,$(abspath $(BIN)))$(pathsep)' . $$PATH)
 
-define VIMENV =
-let g:PackPath = '$(call winpath,$(abspath $(PRJROOT)))'
-let g:PackDevenvPath = '$(call winpath,$(abspath $(DEVENV)))'
-let g:PackCachePath = '$(call winpath,$(abspath $(CACHE)))'
-endef
-
-define VIMENV +=
-$(NL)let $$PATH = '$(call winpath,$(abspath $(BIN)))$(pathsep)' . $$PATH
-endef
+$(foreach v,$(filter CFG_%, $(.VARIABLES)),$(call vimenv-addvar,g:VDP_$v,$($v)))
 
 %/.exists:
 	mkdir -p "$(dir $@)"
