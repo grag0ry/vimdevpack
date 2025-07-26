@@ -15,6 +15,7 @@ if exists(':GuiFont')
 endif
 
 colorscheme moonfly
+if g:OS != "windows"
 lua << EOF
     vim.opt.runtimepath:prepend(vim.fn.MakeCachePath("treesitter-parsers"))
     require'nvim-treesitter.configs'.setup {
@@ -36,3 +37,4 @@ lua << EOF
         parser_install_dir = vim.fn.MakeCachePath("treesitter-parsers"),
     }
 EOF
+endif

@@ -5,6 +5,7 @@ en
 let g:vimdevpack_vimrc_loaded = 1
 
 if !has('nvim')
+    echoerr "nvim required"
     fini
 en
 

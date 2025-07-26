@@ -117,10 +117,6 @@ function g:DirName(path)
     return fnamemodify(a:path, ':h')
 endfunction
 
-let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-let g:PackPath = resolve(g:JoinPath(s:path, '..'))
-let g:PackCachePath = g:JoinPath(g:PackPath, 'cache')
-let g:PackDevenvPath = g:JoinPath(g:PackPath, 'devenv')
 let g:PackPluginGit = g:JoinPath(g:PackPath, 'plugin.git')
 let g:PackPluginDir = g:JoinPath(g:PackPath, 'plugin.d')
 if isdirectory(".git")
@@ -136,6 +132,4 @@ endfunction
 function g:MakeDevenvPath(path)
     return g:JoinPath(g:PackDevenvPath, a:path)
 endfunction
-
-execute 'source ' . fnameescape(g:JoinPath(g:PackDevenvPath, 'env.vim'))
 

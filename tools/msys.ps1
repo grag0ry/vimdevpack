@@ -2,7 +2,7 @@ $ErrorActionPreference="Stop"
 $Verbose = $false
 
 $PackDir = Split-Path -Path $(Split-Path $script:MyInvocation.MyCommand.Path) -Parent
-$DevenvDir = Join-Path -Path $PackDir -ChildPath "devenv"
+$DevenvDir = Join-Path -Path $PackDir -ChildPath "msys"
 $MsysDir = Join-Path -Path $DevenvDir -ChildPath "msys64"
 $MSysSrc = "https://repo.msys2.org/distrib"
 $MSysPkg = "msys2-x86_64-latest.sfx.exe"
@@ -31,7 +31,7 @@ function Install-Msys2
         }
     }
     Get-Msys2
-    Invoke-Msys2 "pacman --noconfirm -S make git mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-requests unzip"
+    Invoke-Msys2 "pacman --noconfirm -S make git mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-jq unzip"
 }
 
 function Get-Msys2

@@ -11,7 +11,7 @@ lspconfig.clangd.setup{}
 lspconfig.pyright.setup{}
 lspconfig.bashls.setup{}
 lspconfig.powershell_es.setup{
-  bundle_path = vim.fn.MakeDevenvPath("opt/powershell-es")
+  bundle_path = vim.fn.MakeDevenvPath("powershell-es")
 }
 
 --make --always-make --dry-run \
