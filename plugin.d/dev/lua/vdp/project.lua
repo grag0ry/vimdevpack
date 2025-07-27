@@ -40,7 +40,7 @@ function prj.cb_buf_switch()
 end
 
 function prj.issubdir(path, dir)
-    return string.sub(path, 0, string.len(dir)) == dir
+    return string.sub(path, 0, #dir) == dir
 end
 
 function prj.cb_buf_enter(args)
@@ -56,7 +56,7 @@ function prj.cb_buf_enter(args)
             if prj.issubdir(path, sub.path) then
                 vim.b.VDPProjectSubIdx = i
                 if sub.auto_cd then vim.b.VDPProjectCD = sub.path end
-                if sub.enter_cb then sub.enter_cb() end
+                if sub.enter_cb then sub.enter_cb(path) end
                 break
             end
         end
