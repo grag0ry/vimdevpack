@@ -39,7 +39,7 @@ function g:PathSeparator()
     endif
 endfunction
 
-let s:PathSeparator = g:PathSeparator()
+let g:PathSeparator = g:PathSeparator()
 
 if g:OS == "wsl"
     function PathWin2Lin(path)
@@ -66,11 +66,11 @@ function s:TrimPath(path, keepfull)
     let l:start = 0
     let l:end = len(a:path) -1
     if !a:keepfull
-        while a:path[l:start] == s:PathSeparator
+        while a:path[l:start] == g:PathSeparator
             let l:start += 1
         endwhile
     endif
-    while a:path[l:end] == s:PathSeparator
+    while a:path[l:end] == g:PathSeparator
         let l:end -= 1
     endwhile
     if l:start > l:end
@@ -87,11 +87,11 @@ function g:LJoinPath(parts)
     let l:result = s:TrimPath(a:parts[0], v:true)
     for path in a:parts[1:-1]
         let l:p = s:TrimPath(path, v:false)
-        if !len(l:p) || l:p == s:PathSeparator
+        if !len(l:p) || l:p == g:PathSeparator
             continue
         endif
-        if l:result != s:PathSeparator
-            let l:result .= s:PathSeparator
+        if l:result != g:PathSeparator
+            let l:result .= g:PathSeparator
         endif
         let l:result .= l:p
     endfor
@@ -106,9 +106,9 @@ function g:SplitPath(path)
     if !len(a:path)
         return []
     endif
-    let l:result = split(a:path, s:PathSeparator)
-    if a:path[0] == s:PathSeparator
-        let l:result[0] = s:PathSeparator . l:result[0]
+    let l:result = split(a:path, g:PathSeparator)
+    if a:path[0] == g:PathSeparator
+        let l:result[0] = g:PathSeparator . l:result[0]
     endif
     return l:result
 endfunction
