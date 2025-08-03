@@ -123,6 +123,7 @@ install: export NVIM_VIMENV=$(call winpath,$(abspath vim.env))
 install: export NVIM_VIMRC=$(call winpath,$(abspath vimrc))
 install:
 	mkdir -p "$(dir $(NVIM_CONFIG))"
+	touch "$(NVIM_CONFIG)"
 	sed -i -e '/vimdevpack/{:a;N;/endvimdevpack/!ba};/vimdevpack/d' "$(NVIM_CONFIG)"
 	printf "%s\n" \
 		"\" vimdevpack" \
