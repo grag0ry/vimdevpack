@@ -49,6 +49,11 @@ $(call linkbin,$(DEVENV)/shellcheck/shellcheck)
 tools: $(BIN)/shellcheck
 endif
 
+ifneq ($(filter tree-sitter,$(CFG_TOOLS)),)
+$(call nodejs-npm,tree-sitter,tree-sitter-cli)
+tools: $(BIN)/tree-sitter
+endif
+
 # LSP
 
 ifneq ($(filter csharp-ls,$(CFG_LSP)),)

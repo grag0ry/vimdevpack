@@ -43,7 +43,7 @@ if [[ -z ${CFG_LSP+DEFINED} ]]; then
 fi
 
 if [[ -z ${CFG_TOOLS+DEFINED} ]]; then
-    tools=(shellcheck)
+    tools=(shellcheck tree-sitter)
     CFG_TOOLS=
     CFG_TOOLS_NATIVE=
     for t in "${tools[@]}"; do
