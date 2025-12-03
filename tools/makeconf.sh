@@ -28,7 +28,12 @@ fi
 : "${CFG_BINDIR:=devenv/bin}"
 
 : "${CFG_DOTNET_NATIVE=$([[ -n $(command -v dotnet) ]] && echo 1 || echo)}"
-: "${CFG_DOTNET_VERSION:=$([[ -n $CFG_DOTNET_NATIVE ]] && dotnet --version || echo 9.0)}"
+if [[ -n $CFG_DOTNET_NATIVE ]]; then
+    CFG_DOTNET_SDKS=$(dotnet --list-sdks | awk '{print $1}')
+else
+    : "${CFG_DOTNET_SDKS:="LTS"}"
+fi
+
 : "${CFG_NODEJS_NATIVE=$([[ -n $(command -v node) ]] && echo 1 || echo)}"
 
 if [[ -z ${CFG_LSP+DEFINED} ]]; then
