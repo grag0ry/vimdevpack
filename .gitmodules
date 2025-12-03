@@ -55,3 +55,6 @@
 [submodule "plugin.git/git-blame.nvim"]
 	path = plugin.git/git-blame.nvim
 	url = https://github.com/f-person/git-blame.nvim.git
+[submodule "plugin.git/roslyn.nvim"]
+	path = plugin.git/roslyn.nvim
+	url = https://github.com/seblyng/roslyn.nvim

@@ -107,6 +107,23 @@ $(call linkbin,$(DEVENV)/clangd/bin/clangd,clangd)
 lsp: $(BIN)/clangd
 endif
 
+ifneq ($(filter roslyn-ls,$(CFG_LSP)),)
+CLEAN += $(CACHE)/roslyn-ls.zip
+$(CACHE)/roslyn-ls.zip:
+ifeq ($(OS),Windows_NT)
+	$(call github-assets,Crashdummyy/roslynLanguageServer,$@,win-x64)
+else
+	$(call github-assets,Crashdummyy/roslynLanguageServer,$@,linux-x64)
+endif
+
+$(call fake,roslyn-ls)
+roslyn-ls: $(CACHE)/roslyn-ls.zip
+	mkdir -p "$(DEVENV)/roslyn-ls"
+	cd "$(DEVENV)/roslyn-ls" && unzip -o "$(abspath $<)"
+
+lsp: $(fake-roslyn-ls)
+endif
+
 # Env
 
 CLEAN += vim.env

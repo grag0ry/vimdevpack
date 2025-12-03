@@ -16,6 +16,7 @@ call plug#(s:g("nvim-notify"))
 call plug#(s:g("nui.nvim"))
 call plug#(s:g("nvim-lspconfig"))
 call plug#(s:g("nvim-treesitter"), s:_if(g:OS != "windows", {'do': ':TSUpdate'}))
+call plug#(s:g("roslyn.nvim"))
 
 call plug#(s:d('dev'))
 
