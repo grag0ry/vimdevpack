@@ -120,12 +120,10 @@ endfunc
 
 function! s:GtagsUpdate()
     if filereadable("GTAGS")
-        let l:cmd = "global -uv"
+        lua require('vdp').run("global -u", {"global", "-u"}, {}, nil)
     else
-        let l:cmd = "gtags -v"
+        lua require('vdp').run("gtags", {"gtags"}, {}, nil)
     endif
-    botright split
-    exec "terminal " . l:cmd
 endfunction
 
 function! s:GtagsClearAll()
