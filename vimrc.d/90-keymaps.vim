@@ -64,16 +64,25 @@ vim.keymap.set('n', '\\q', vim.diagnostic.setloclist)
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev)
+        local tb = require("telescope.builtin")
+        local opts = { buffer = ev.buf, silent = true }
+
         vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-        local opts = { buffer = ev.buf }
+
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'gd', tb.lsp_definitions, opts)
+        vim.keymap.set('n', 'gi', tb.lsp_implementations, opts)
+        vim.keymap.set('n', 'gr', function()
+            tb.lsp_references({ include_declaration = false, show_line = true })
+        end, opts)
+        vim.keymap.set('n', '\\D', tb.lsp_type_definitions, opts)
+
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-        -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-        vim.keymap.set('n', '\\D', vim.lsp.buf.type_definition, opts)
+        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
         vim.keymap.set('n', '\\r', vim.lsp.buf.rename, opts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+
+        vim.keymap.set('n', 'gs', tb.lsp_document_symbols, { buffer = ev.buf, desc = "Document symbols" })
+        vim.keymap.set('n', 'gS', tb.lsp_workspace_symbols, { buffer = ev.buf, desc = "Workspace symbols" })
     end,
 })
 

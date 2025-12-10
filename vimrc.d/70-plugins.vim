@@ -31,6 +31,7 @@ call plug#(s:g("git-blame.nvim"))
 call plug#(s:g("lualine.nvim"))
 
 call plug#(s:g("telescope-fzf-native.nvim"))
+call plug#(s:g("telescope-ui-select.nvim"))
 call plug#(s:g("telescope.nvim"))
 
 call plug#(s:g("neo-tree.nvim"))

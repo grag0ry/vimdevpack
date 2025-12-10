@@ -58,3 +58,6 @@
 [submodule "plugin.git/roslyn.nvim"]
 	path = plugin.git/roslyn.nvim
 	url = https://github.com/seblyng/roslyn.nvim
+[submodule "plugin.git/telescope-ui-select.nvim"]
+	path = plugin.git/telescope-ui-select.nvim
+	url = https://github.com/nvim-telescope/telescope-ui-select.nvim.git
