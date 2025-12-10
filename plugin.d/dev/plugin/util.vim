@@ -119,11 +119,19 @@ function! s:SynStack()
 endfunc
 
 function! s:GtagsUpdate()
-    if filereadable("GTAGS")
-        lua require('vdp').run("global -u", {"global", "-u"}, {}, nil)
+lua <<EOF
+    local cmd = {}
+    if vim.fn.filereadable("GTAGS") then
+        cmd = {"global", "-u"}
     else
-        lua require('vdp').run("gtags", {"gtags"}, {}, nil)
-    endif
+        cmd = {"gtags"}
+    end
+    local on_exit = function(obj, notification)
+        if obj.code == 0 then return end
+        vim.notify(obj.stderr, nil, {replace = notification})
+    end
+    require('vdp').run(table.concat(cmd, " "), cmd, {text = true}, on_exit)
+EOF
 endfunction
 
 function! s:GtagsClearAll()

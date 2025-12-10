@@ -69,25 +69,27 @@ function vdp.run(name, cmd, opts, on_exit)
     })
 
     local on_exit_impl = function(obj)
-        ctx.spinner = nil
-        if obj.code == 0 then
-            ctx.notification = vim.notify("succeed", 'info', {
-                hide_from_history = false,
-                icon = "",
-                replace = ctx.notification,
-                animate = true,
-                timeout = 3000,
-            })
-        else
-            ctx.notification = vim.notify("failed", 'error', {
-                hide_from_history = false,
-                icon = "",
-                replace = ctx.notification,
-                animate = true,
-                timeout = 3000,
-            })
-        end
-        if on_exit then on_exit(obj, ctx.notification) end
+        vim.schedule(function()
+            ctx.spinner = nil
+            if obj.code == 0 then
+                ctx.notification = vim.notify("succeed", 'info', {
+                    hide_from_history = false,
+                    icon = "",
+                    replace = ctx.notification,
+                    animate = true,
+                    timeout = 3000,
+                })
+            else
+                ctx.notification = vim.notify("failed", 'error', {
+                    hide_from_history = false,
+                    icon = "",
+                    replace = ctx.notification,
+                    animate = true,
+                    timeout = 3000,
+                })
+            end
+            if on_exit then on_exit(obj, ctx.notification) end
+        end)
     end
 
     local ok, obj = xpcall(
