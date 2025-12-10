@@ -31,7 +31,6 @@ nnoremap <C-\><C-f> :LiveGrep ./
 nnoremap \\ :NeotreeToggle<CR>
 nnoremap \d :NeotreeCurrent<CR>
 nnoremap \w :NeotreeBuffers<CR>
-nnoremap \z :NeotreeGitstatus<CR>
 nnoremap <C-_> :Telescope current_buffer_fuzzy_find<CR>
 nnoremap <C-\><C-\> :TagbarToggle<CR>
 nnoremap \c :SyntasticCheck<CR>
@@ -47,6 +46,7 @@ vnoremap <buffer> <C-\><C-h> :DiffviewFileHistory<CR>
 nnoremap <C-\><C-d> :DiffviewOpen<CR>
 nnoremap <C-\><C-q> :DiffviewClose<CR>
 nnoremap <C-\><C-a> :GitBlameToggle<CR>
+nnoremap <C-\><C-z> :NeotreeGitstatus<CR>
 
 
 lua <<EOF

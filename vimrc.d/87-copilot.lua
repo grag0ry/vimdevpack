@@ -6,7 +6,7 @@ if vim.g.VDP_CFG_PLUGIN_COPILOT_CHAT == "1" then
         },
     })
 
-    vim.keymap.set('n', '\\c', function()
+    vim.keymap.set('n', '_c', function()
         local splitright = vim.opt.splitright:get()
         vim.opt.splitright = true
         require('CopilotChat').toggle()
