@@ -78,7 +78,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', '\\D', tb.lsp_type_definitions, opts)
 
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
         vim.keymap.set('n', '\\r', vim.lsp.buf.rename, opts)
 
         vim.keymap.set('n', 'gs', tb.lsp_document_symbols, { buffer = ev.buf, desc = "Document symbols" })
