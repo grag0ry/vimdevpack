@@ -61,3 +61,6 @@
 [submodule "plugin.git/telescope-ui-select.nvim"]
 	path = plugin.git/telescope-ui-select.nvim
 	url = https://github.com/nvim-telescope/telescope-ui-select.nvim.git
+[submodule "plugin.git/CopilotChat.nvim"]
+	path = plugin.git/CopilotChat.nvim
+	url = https://github.com/CopilotC-Nvim/CopilotChat.nvim.git

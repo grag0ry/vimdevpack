@@ -41,5 +41,7 @@ call plug#(s:g("mediawiki.vim"))
 
 call plug#(s:g("vim-moonfly-colors"))
 
+call plug#(s:g("CopilotChat.nvim"), s:_if(g:VDP_CFG_PLUGIN_COPILOT_CHAT == "1"))
+
 call plug#end()
 

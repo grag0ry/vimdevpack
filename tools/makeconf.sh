@@ -58,6 +58,8 @@ if [[ -z ${CFG_TOOLS+DEFINED} ]]; then
     instr-trim CFG_TOOLS_NATIVE
 fi
 
+: "${CFG_PLUGIN_COPILOT_CHAT=}"
+
 while IFS= read -r var; do
     if [[ -n ${!var:-} ]]; then
         printf "override %s = %s\n" "$var" "${!var}"
