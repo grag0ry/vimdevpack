@@ -24,6 +24,22 @@ plugin-build: $(fake-submodule)
 
 plugin: $(fake-submodule) $(fake-plugin-build) $(CACHE)/.exists $(CACHE)/undo/.exists
 
+ifneq ($(CFG_PLUGIN_COPILOT_CHAT),)
+ifeq ($(OS),Windows_NT)
+LUA_TIKTOKEN_SRC=tiktoken_core-windows-x86_64-luajit.dll
+LUA_TIKTOKEN=tiktoken_core.dll
+else
+LUA_TIKTOKEN_SRC=tiktoken_core-linux-x86_64-luajit.so
+LUA_TIKTOKEN=tiktoken_core.so
+endif
+$(DEVENV)/liblua/$(LUA_TIKTOKEN): $(DEVENV)/liblua/.exists
+	$(call github-assets,gptlang/lua-tiktoken,$@,$(LUA_TIKTOKEN_SRC))
+
+$(call vimenv-add,lua package.cpath = package.cpath .. ";" .. vim.g.PackDevenvPath .. "/liblua/?.so")
+
+plugin: $(DEVENV)/liblua/$(LUA_TIKTOKEN)
+endif
+
 # Tools
 
 ifneq ($(filter shellcheck,$(CFG_TOOLS)),)
@@ -130,6 +146,7 @@ CLEAN += vim.env
 vim.env: $(CONFIG)
 	@echo "Writing $@"
 	$(file >$@,$(VIMENV))
+	sed -i -e 's/\s*$$//' "$@"
 
 env: vim.env
 
