@@ -61,6 +61,15 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '\\q', vim.diagnostic.setloclist)
 
+if vim.g.VDP_CFG_PLUGIN_COPILOT_CHAT == "1" then
+    vim.keymap.set('n', ']c', function()
+        local splitright = vim.opt.splitright:get()
+        vim.opt.splitright = true
+        require('CopilotChat').toggle()
+        vim.opt.splitright = splitright
+    end, { desc = 'Toggle CopilotChat window' })
+end
+
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev)
