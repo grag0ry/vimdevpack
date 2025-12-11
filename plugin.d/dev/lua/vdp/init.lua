@@ -128,7 +128,7 @@ function vdp.run(name, cmd, opts, on_exit)
     return obj
 end
 
-function vdp.termrun(name, cmd, on_exit, opts)
+function vdp.termrun(name, cmd, opts, on_exit)
     opts = opts or {}
     local progress = create_progress_handle(name)
     local bufid
@@ -185,14 +185,14 @@ function vdp.make(args)
     end
 
     local shell_cmd = "/bin/bash -lc " .. vim.fn.shellescape(base .. argstr)
-    return vdp.termrun(name, shell_cmd, nil)
+    return vdp.termrun(name, shell_cmd)
 end
 
-function vdp.termrun_cmd(cmd, on_exit, opts)
+function vdp.termrun_cmd(cmd, opts, on_exit)
     if not cmd or #cmd == 0 then
         error("cmd must be a non-empty table")
     end
-    return vdp.termrun(cmd[1], cmd, on_exit, opts)
+    return vdp.termrun(cmd[1], cmd, opts, on_exit)
 end
 
 function vdp.setup()
@@ -213,7 +213,7 @@ function vdp.setup()
             vim.notify("No command provided", vim.log.levels.ERROR)
             return
         end
-        vdp.termrun_cmd(args, nil, { delete_on_success = true })
+        vdp.termrun_cmd(args, { delete_on_success = true })
     end, { nargs = "+", complete = "shellcmd" })
 end
 
