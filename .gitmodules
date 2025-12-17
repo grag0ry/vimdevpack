@@ -64,3 +64,6 @@
 [submodule "plugin.git/CopilotChat.nvim"]
 	path = plugin.git/CopilotChat.nvim
 	url = https://github.com/CopilotC-Nvim/CopilotChat.nvim.git
+[submodule "plugin.git/blink.cmp"]
+	path = plugin.git/blink.cmp
+	url = https://github.com/saghen/blink.cmp.git

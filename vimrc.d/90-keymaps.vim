@@ -90,7 +90,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', '\\r', vim.lsp.buf.rename, opts)
 
         vim.keymap.set('n', 'gs', tb.lsp_document_symbols, { buffer = ev.buf, desc = "Document symbols" })
-        vim.keymap.set('n', 'gS', tb.lsp_workspace_symbols, { buffer = ev.buf, desc = "Workspace symbols" })
+        vim.keymap.set('n', 'gS', tb.lsp_dynamic_workspace_symbols, {})
     end,
 })
 

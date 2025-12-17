@@ -12,6 +12,7 @@ filetype on
 " autocomplete
 set wildmode=longest,list,full
 set wildmenu
+set completeopt=menu,menuone,noselect,noinsert,popup
 
 " ident && tab
 set tabstop=4
@@ -25,10 +26,4 @@ set noincsearch
 
 " list
 set listchars=tab:>…,nbsp:⎵,trail:·
-
 set list
-
-" enable project specific
-" set exrc
-" set secure
-

@@ -6,6 +6,7 @@ default: plugin lsp env tools
 include common.mk
 include dotnet.mk
 include nodejs.mk
+include rust.mk
 
 # Plugins
 
@@ -22,6 +23,9 @@ endif
 plugin-build: $(fake-submodule)
 	$(MAKE) -C plugin.git/telescope-fzf-native.nvim
 
+plugin-clean:
+	git submodule foreach git clean -fdx
+
 plugin: $(fake-submodule) $(fake-plugin-build) $(CACHE)/.exists $(CACHE)/undo/.exists
 
 ifneq ($(CFG_PLUGIN_COPILOT_CHAT),)
@@ -37,7 +41,16 @@ $(DEVENV)/liblua/$(LUA_TIKTOKEN): $(DEVENV)/liblua/.exists
 
 $(call vimenv-add,lua package.cpath = package.cpath .. ";" .. vim.g.PackDevenvPath .. "/liblua/?.so")
 
-plugin: $(DEVENV)/liblua/$(LUA_TIKTOKEN)
+plugin-build: $(DEVENV)/liblua/$(LUA_TIKTOKEN)
+endif
+
+ifneq ($(CFG_PLUGIN_BLINK),)
+$(call fake,plugin-blink)
+$(call rustup-toolchain,plugin-blink,nightly)
+plugin-blink: $(fake-submodule)
+	cd plugin.git/blink.cmp && cargo +nightly build --release
+
+plugin-build: $(fake-plugin-blink)
 endif
 
 # Tools
@@ -152,7 +165,7 @@ env: vim.env
 
 # Clean
 .PHONY: clean
-clean:
+clean: plugin-clean
 	rm -rf $(CLEAN)
 
 # Install

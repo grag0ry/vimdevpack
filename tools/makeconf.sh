@@ -59,6 +59,7 @@ if [[ -z ${CFG_TOOLS+DEFINED} ]]; then
 fi
 
 : "${CFG_PLUGIN_COPILOT_CHAT=}"
+: "${CFG_PLUGIN_BLINK=}"
 
 while IFS= read -r var; do
     if [[ -n ${!var:-} ]]; then
