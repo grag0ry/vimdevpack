@@ -67,3 +67,6 @@
 [submodule "plugin.git/blink.cmp"]
 	path = plugin.git/blink.cmp
 	url = https://github.com/saghen/blink.cmp.git
+[submodule "plugin.git/friendly-snippets"]
+	path = plugin.git/friendly-snippets
+	url = https://github.com/rafamadriz/friendly-snippets.git

@@ -35,6 +35,7 @@ call plug#(s:g("telescope-ui-select.nvim"))
 call plug#(s:g("telescope.nvim"))
 
 call plug#(s:g("blink.cmp"), s:_if(g:VDP_CFG_PLUGIN_BLINK == "1"))
+call plug#(s:g("friendly-snippets"), s:_if(g:VDP_CFG_PLUGIN_BLINK == "1"))
 
 call plug#(s:g("neo-tree.nvim"))
 
