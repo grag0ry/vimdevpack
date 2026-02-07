@@ -205,3 +205,8 @@ upgrade:
 	$(MAKE) upgrade-gtags
 	$(MAKE) clean
 	$(MAKE) UPGRADE=1
+
+.PHONY: upgrade-nosm
+upgrade-nosm:
+	$(MAKE) clean
+	$(MAKE)

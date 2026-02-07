@@ -20,25 +20,24 @@ lua << EOF
     -- Highlight group 'NotifyBackground' has no background highlight
     vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "#000000" })
 
+    local types = {
+        "c", "cpp", "c_sharp",
+        "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
+        "xml",
+        "python", "perl",
+        "bash", "powershell",
+        "dockerfile"
+    }
+
+    vim.api.nvim_create_autocmd('FileType', {
+        pattern = types,
+        callback = function() vim.treesitter.start() end,
+    })
 
     vim.opt.runtimepath:prepend(vim.fn.MakeCachePath("treesitter-parsers"))
-    require'nvim-treesitter.configs'.setup {
-        ensure_installed = {
-            "c", "cpp", "c_sharp",
-            "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
-            "xml",
-            "python", "perl",
-            "bash", "powershell"
-        },
-        highlight = {
-            enable = true,
-            -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-            -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-            -- Using this option may slow down your editor, and you may see some duplicate highlights.
-            -- Instead of true it can also be a list of languages
-            additional_vim_regex_highlighting = false,
-        },
-        parser_install_dir = vim.fn.MakeCachePath("treesitter-parsers"),
+    require'nvim-treesitter'.setup {
+        install_dir = vim.fn.MakeCachePath("treesitter-parsers"),
     }
+    require'nvim-treesitter'.install(types)
 EOF
 endif
