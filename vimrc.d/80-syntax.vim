@@ -20,7 +20,7 @@ lua << EOF
     -- Highlight group 'NotifyBackground' has no background highlight
     vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "#000000" })
 
-    local types = {
+    local parsers = {
         "c", "cpp", "c_sharp",
         "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
         "xml",
@@ -28,16 +28,23 @@ lua << EOF
         "bash", "powershell",
         "dockerfile"
     }
+    local parser_set = {}
+    for _, p in ipairs(parsers) do parser_set[p] = true end
 
     vim.api.nvim_create_autocmd('FileType', {
-        pattern = types,
-        callback = function() vim.treesitter.start() end,
+        pattern = "*",
+        callback = function(ev)
+            local lang = vim.treesitter.language.get_lang(ev.match)
+            if lang and parser_set[lang] then
+                pcall(vim.treesitter.start, ev.buf, lang)
+            end
+        end,
     })
 
     vim.opt.runtimepath:prepend(vim.fn.MakeCachePath("treesitter-parsers"))
     require'nvim-treesitter'.setup {
         install_dir = vim.fn.MakeCachePath("treesitter-parsers"),
     }
-    require'nvim-treesitter'.install(types)
+    require'nvim-treesitter'.install(parsers)
 EOF
 endif
