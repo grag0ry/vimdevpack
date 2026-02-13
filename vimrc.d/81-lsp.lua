@@ -33,5 +33,7 @@ for server in cfglsp:gmatch("%S+") do
         "--stdio",
       },
     })
+  elseif  server == "ty" then
+    vim.lsp.config("ty", {})
   end
 end

@@ -27,6 +27,8 @@ $1: export PATH := $$(abspath $$(CARGO_HOME))/bin:$$(PATH)
 endef
 rustup-export = $(eval $(call rustup-export-impl,$1))
 
+rustup-toolchains-append = $(if $(filter $1,$(RUSTUP_TOOLCHAINS)),,$(eval $(RUSTUP_TOOLCHAINS) += $1))
+
 $(call fake,rustup)
 $(call rustup-export,rustup)
 rustup: $(CARGO_HOME)/bin/rustup
@@ -35,9 +37,20 @@ rustup: $(CARGO_HOME)/bin/rustup
 	)
 
 define rustup-toolchain-impl=
+ifeq ($$(filter $2,$$(RUSTUP_TOOLCHAINS)),)
 RUSTUP_TOOLCHAINS += $2
+endif
 $$(call rustup-export,$1)
 $1: $$(fake-rustup)
 
 endef
 rustup-toolchain = $(eval $(call rustup-toolchain-impl,$1,$2))
+
+define cargo-install-impl=
+$$(call rustup-toolchain,$$(CARGO_HOME)/bin/$1,stable)
+$$(CARGO_HOME)/bin/$1:
+	cargo install "$2"
+
+$$(call linkbin,$$(CARGO_HOME)/bin/$1)
+endef
+cargo-install = $(eval $(call cargo-install-impl,$1,$(if $2,$2,$1)))

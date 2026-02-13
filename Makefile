@@ -153,6 +153,11 @@ roslyn-ls: $(CACHE)/roslyn-ls.zip
 lsp: $(fake-roslyn-ls)
 endif
 
+ifneq ($(filter ty,$(CFG_LSP)),)
+$(call cargo-install,ty)
+lsp: $(BIN)/ty
+endif
+
 # Env
 
 CLEAN += vim.env

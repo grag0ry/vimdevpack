@@ -37,7 +37,7 @@ fi
 : "${CFG_NODEJS_NATIVE=$([[ -n $(command -v node) ]] && echo 1 || echo)}"
 
 if [[ -z ${CFG_LSP+DEFINED} ]]; then
-    lsp=(powershell-es pyright bash-language-server clangd roslyn-ls)
+    lsp=(powershell-es pyright bash-language-server clangd roslyn-ls ty)
     CFG_LSP=
     CFG_LSP_NATIVE=
     for t in "${lsp[@]}"; do
