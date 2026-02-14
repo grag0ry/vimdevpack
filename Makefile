@@ -7,6 +7,7 @@ include common.mk
 include dotnet.mk
 include nodejs.mk
 include rust.mk
+include uv.mk
 
 # Plugins
 
@@ -154,7 +155,7 @@ lsp: $(fake-roslyn-ls)
 endif
 
 ifneq ($(filter ty,$(CFG_LSP)),)
-$(call cargo-install,ty)
+$(call uv-tool,ty)
 lsp: $(BIN)/ty
 endif
 
