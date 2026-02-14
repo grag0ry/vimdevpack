@@ -46,10 +46,15 @@ plugin-build: $(DEVENV)/liblua/$(LUA_TIKTOKEN)
 endif
 
 ifneq ($(CFG_PLUGIN_BLINK),)
+ifeq ($(OS),Windows_NT)
+BLINK_TOOLCHAIN=nightly-x86_64-pc-windows-gnu
+else
+BLINK_TOOLCHAIN=nightly
+endif
 $(call fake,plugin-blink)
-$(call rustup-toolchain,plugin-blink,nightly)
+$(call rustup-toolchain,plugin-blink,$(BLINK_TOOLCHAIN))
 plugin-blink: $(fake-submodule)
-	cd plugin.git/blink.cmp && cargo +nightly build --release
+	cd plugin.git/blink.cmp && cargo +$(BLINK_TOOLCHAIN) build --release
 
 plugin-build: $(fake-plugin-blink)
 endif

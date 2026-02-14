@@ -47,9 +47,14 @@ endef
 rustup-toolchain = $(eval $(call rustup-toolchain-impl,$1,$2))
 
 define cargo-install-impl=
-$$(call rustup-toolchain,$$(CARGO_HOME)/bin/$1,stable)
+ifeq ($$(OS),Windows_NT)
+CARGO_TOOLCHAIN = stable-x86_64-pc-windows-gnu
+else
+CARGO_TOOLCHAIN = stable
+endif
+$$(call rustup-toolchain,$$(CARGO_HOME)/bin/$1,$$(CARGO_TOOLCHAIN))
 $$(CARGO_HOME)/bin/$1:
-	cargo install "$2"
+	$$(CARGO_HOME)/bin/cargo +$$(CARGO_TOOLCHAIN) install "$2"
 
 $$(call linkbin,$$(CARGO_HOME)/bin/$1)
 endef
