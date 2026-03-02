@@ -92,6 +92,7 @@ $1: $(BIN)/.exists
 $$(BIN)/$2: $(BIN)/.exists
 $$(BIN)/$2: $1
 	ln -fs "$$(abspath $$<)" "$$@"
+	touch "$$@"
 
 endef
 endif

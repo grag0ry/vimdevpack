@@ -35,11 +35,20 @@ endif
 NODEJS_NPMDIR = $(DEVENV)/npm
 NODEJS_NPMDIR_BIN = $(NODEJS_NPMDIR)/node_modules/.bin
 
+$(call fake,nodejs-audit-fix)
+nodejs-audit-fix:
+	jq '.overrides.minimatch = "^10.2.3"' "$(NODEJS_NPMDIR)/package.json" > "$(NODEJS_NPMDIR)/package.json.tmp"
+	mv "$(NODEJS_NPMDIR)/package.json.tmp" "$(NODEJS_NPMDIR)/package.json"
+	npm -d audit fix --prefix "$(NODEJS_NPMDIR)"
+
 define nodejs-npm-target=
 $$(NODEJS_NPMDIR_BIN)/$1: $$(fake-nodejs) $$(NODEJS_NPMDIR_BIN)/.exists
 	npm -d install --prefix "$$(NODEJS_NPMDIR)" "$2"
 
-$(call linkbin,$(NODEJS_NPMDIR_BIN)/$1)
+nodejs-audit-fix: $$(NODEJS_NPMDIR_BIN)/$1
+$$(BIN)/$1: $$(fake-nodejs-audit-fix)
+$$(call linkbin,$$(NODEJS_NPMDIR_BIN)/$1)
+
 endef
 
 nodejs-npm = $(eval $(call nodejs-npm-target,$1,$(if $2,$2,$1)))
