@@ -39,18 +39,15 @@ for server in cfglsp:gmatch("%S+") do
     vim.lsp.config("rust-analyzer", {
       cmd = { "rust-analyzer" },
       filetypes = { "rust" },
-      root_dir = function(bufnr)
-        local fname = vim.api.nvim_buf_get_name(bufnr)
-        return vim.fs.dirname(vim.fs.find({ "Cargo.toml" }, { upward = true, path = fname })[1])
-      end,
       settings = {
         ["rust-analyzer"] = {
           cargo = {
             allFeatures = true,
           },
-          checkOnSave = {
+          check = {
             command = "clippy",
           },
+          checkOnSave = true,
         },
       },
     })
