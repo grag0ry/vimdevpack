@@ -164,6 +164,29 @@ $(call uv-tool,ty)
 lsp: $(BIN)/ty
 endif
 
+ifneq ($(filter rust-analyzer,$(CFG_LSP)),)
+ifeq ($(OS),Windows_NT)
+RUST_ANALYZER_ARC = rust-analyzer-x86_64-pc-windows-msvc.zip
+else
+RUST_ANALYZER_ARC = rust-analyzer-x86_64-unknown-linux-gnu.gz
+endif
+CLEAN += $(CACHE)/$(RUST_ANALYZER_ARC)
+$(CACHE)/$(RUST_ANALYZER_ARC):
+	$(call github-assets,rust-lang/rust-analyzer,$@,$(notdir $@))
+
+$(DEVENV)/rust-analyzer/rust-analyzer: $(CACHE)/$(RUST_ANALYZER_ARC)
+	mkdir -p "$(dir $@)"
+ifeq ($(OS),Windows_NT)
+	cd "$(dir $@)" && unzip -o "$(abspath $<)"
+else
+	gunzip -k "$<" -c > "$@"
+	chmod +x "$@"
+endif
+
+$(call linkbin,$(DEVENV)/rust-analyzer/rust-analyzer)
+lsp: $(BIN)/rust-analyzer
+endif
+
 # Env
 
 CLEAN += vim.env
