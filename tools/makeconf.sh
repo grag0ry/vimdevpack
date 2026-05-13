@@ -25,6 +25,8 @@ fi
 
 : "${CFG_DEVENV:=devenv}"
 : "${CFG_CACHE:=cache}"
+: "${CFG_DL:=dl}"
+: "${CFG_STATE:=state}"
 : "${CFG_BINDIR:=devenv/bin}"
 
 : "${CFG_DOTNET_NATIVE=$([[ -n $(command -v dotnet) ]] && echo 1 || echo)}"

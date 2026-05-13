@@ -27,7 +27,7 @@ plugin-build: $(fake-submodule)
 plugin-clean:
 	git submodule foreach git clean -fdx
 
-plugin: $(fake-submodule) $(fake-plugin-build) $(CACHE)/.exists $(CACHE)/undo/.exists
+plugin: $(fake-submodule) $(fake-plugin-build) $(CACHE)/.exists $(STATE)/.exists
 
 ifneq ($(CFG_PLUGIN_COPILOT_CHAT),)
 ifeq ($(OS),Windows_NT)
@@ -63,19 +63,17 @@ endif
 
 ifneq ($(filter shellcheck,$(CFG_TOOLS)),)
 ifeq ($(OS),Windows_NT)
-CLEAN += $(CACHE)/shellcheck.zip
-$(CACHE)/shellcheck.zip:
+$(DL)/shellcheck.zip:
 	$(call github-assets,koalaman/shellcheck,$@,\.zip)
 
-$(DEVENV)/shellcheck/shellcheck: $(CACHE)/shellcheck.zip
+$(DEVENV)/shellcheck/shellcheck: $(DL)/shellcheck.zip
 	mkdir -p "$(dir $@)"
 	cd "$(dir $@)" && unzip -o "$(abspath $<)"
 else
-CLEAN += $(CACHE)/shellcheck.linux.x86_64.tar.xz
-$(CACHE)/shellcheck.linux.x86_64.tar.xz:
+$(DL)/shellcheck.linux.x86_64.tar.xz:
 	$(call github-assets,koalaman/shellcheck,$@,linux.x86_64)
 
-$(DEVENV)/shellcheck/shellcheck: $(CACHE)/shellcheck.linux.x86_64.tar.xz
+$(DEVENV)/shellcheck/shellcheck: $(DL)/shellcheck.linux.x86_64.tar.xz
 	mkdir -p "$(dir $@)"
 	tar -C "$(dir $@)" -xvf "$(abspath $<)" --strip-components=1 --touch
 endif
@@ -99,12 +97,11 @@ endif
 ifneq ($(filter powershell-es,$(CFG_LSP)),)
 $(call dotnet-tool,pwsh,powershell)
 
-CLEAN += $(CACHE)/PowerShellEditorServices.zip
-$(CACHE)/PowerShellEditorServices.zip: $(CACHE)/.exists
+$(DL)/PowerShellEditorServices.zip: $(DL)/.exists
 	$(call github-assets,PowerShell/PowerShellEditorServices,$@,$(notdir $@))
 
 $(call fake,powershell-es)
-powershell-es: $(CACHE)/PowerShellEditorServices.zip
+powershell-es: $(DL)/PowerShellEditorServices.zip
 	mkdir -p "$(DEVENV)/powershell-es"
 	cd "$(DEVENV)/powershell-es" && unzip -o "$(abspath $<)"
 
@@ -122,15 +119,14 @@ lsp: $(BIN)/bash-language-server
 endif
 
 ifneq ($(filter clangd,$(CFG_LSP)),)
-CLEAN += $(CACHE)/clangd.zip
-$(CACHE)/clangd.zip:
+$(DL)/clangd.zip:
 ifeq ($(OS),Windows_NT)
 	$(call github-assets,clangd/clangd,$@,clangd-windows)
 else
 	$(call github-assets,clangd/clangd,$@,clangd-linux)
 endif
 
-$(DEVENV)/clangd/bin/clangd: $(CACHE)/clangd.zip $(DEVENV)/.exists
+$(DEVENV)/clangd/bin/clangd: $(DL)/clangd.zip $(DEVENV)/.exists
 	rm -rf "$(DEVENV)/clangd"
 	mkdir -p "$(DEVENV)/clangd"
 	cd "$(DEVENV)/clangd" && unzip -o "$(abspath $<)"
@@ -143,8 +139,7 @@ lsp: $(BIN)/clangd
 endif
 
 ifneq ($(filter roslyn-ls,$(CFG_LSP)),)
-CLEAN += $(CACHE)/roslyn-ls.zip
-$(CACHE)/roslyn-ls.zip:
+$(DL)/roslyn-ls.zip:
 ifeq ($(OS),Windows_NT)
 	$(call github-assets,Crashdummyy/roslynLanguageServer,$@,win-x64)
 else
@@ -152,7 +147,7 @@ else
 endif
 
 $(call fake,roslyn-ls)
-roslyn-ls: $(CACHE)/roslyn-ls.zip
+roslyn-ls: $(DL)/roslyn-ls.zip
 	mkdir -p "$(DEVENV)/roslyn-ls"
 	cd "$(DEVENV)/roslyn-ls" && unzip -o "$(abspath $<)"
 
@@ -170,11 +165,10 @@ RUST_ANALYZER_ARC = rust-analyzer-x86_64-pc-windows-msvc.zip
 else
 RUST_ANALYZER_ARC = rust-analyzer-x86_64-unknown-linux-gnu.gz
 endif
-CLEAN += $(CACHE)/$(RUST_ANALYZER_ARC)
-$(CACHE)/$(RUST_ANALYZER_ARC):
+$(DL)/$(RUST_ANALYZER_ARC):
 	$(call github-assets,rust-lang/rust-analyzer,$@,$(notdir $@))
 
-$(DEVENV)/rust-analyzer/rust-analyzer: $(CACHE)/$(RUST_ANALYZER_ARC)
+$(DEVENV)/rust-analyzer/rust-analyzer: $(DL)/$(RUST_ANALYZER_ARC)
 	mkdir -p "$(dir $@)"
 ifeq ($(OS),Windows_NT)
 	cd "$(dir $@)" && unzip -o "$(abspath $<)"
@@ -189,7 +183,6 @@ endif
 
 # Env
 
-CLEAN += vim.env
 vim.env: $(CONFIG)
 	@echo "Writing $@"
 	$(file >$@,$(VIMENV))
@@ -200,7 +193,18 @@ env: vim.env
 # Clean
 .PHONY: clean
 clean: plugin-clean
-	rm -rf $(CLEAN)
+	rm -rf $(BIN) $(DEVENV) vim.env
+
+.PHONY: clean-cache
+clean-cache:
+	rm -rf $(CACHE)
+
+.PHONY: clean-dl
+clean-dl:
+	rm -rf $(DL)
+
+.PHONY: distclean
+distclean: clean clean-dl
 
 # Install
 

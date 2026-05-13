@@ -39,9 +39,10 @@ M4=m4 -P $(foreach v,$(filter CFG_%, $(.VARIABLES)),$(if $($v),-D"m4_$(v)=$($(v)
 BIN    = $(CFG_BINDIR)
 CACHE  = $(CFG_CACHE)
 DEVENV = $(CFG_DEVENV)
+DL     = $(CFG_DL)
+STATE  = $(CFG_STATE)
 
 VIMENV = " This file is auto generate by `make vim.env`
-CLEAN = $(BIN) $(DEVENV)
 
 define vimenv-add-impl =
 $(eval define VIMENV +=
@@ -54,6 +55,7 @@ vimenv-addvar = $(call vimenv-add,let $1 = '$2')
 $(call vimenv-addvar,g:PackPath,$(call winpath,$(abspath $(PRJROOT))))
 $(call vimenv-addvar,g:PackDevenvPath,$(call winpath,$(abspath $(DEVENV))))
 $(call vimenv-addvar,g:PackCachePath,$(call winpath,$(abspath $(CACHE))))
+$(call vimenv-addvar,g:PackStatePath,$(call winpath,$(abspath $(STATE))))
 
 export PATH:=$(abspath $(BIN)):$(PATH)
 $(call vimenv-add,let $$PATH = '$(call winpath,$(abspath $(BIN)))$(pathsep)' . $$PATH)

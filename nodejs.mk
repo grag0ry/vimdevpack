@@ -1,11 +1,10 @@
 $(call fake,nodejs)
 
 ifeq ($(CFG_NODEJS_NATIVE),)
-CLEAN += $(CACHE)/fnm-install.sh
-$(CACHE)/fnm-install.sh: $(CACHE)/.exists
+$(DL)/fnm-install.sh: $(DL)/.exists
 	$(call wget,https://fnm.vercel.app/install,$@)
 
-$(DEVENV)/fnm/fnm: $(CACHE)/fnm-install.sh
+$(DEVENV)/fnm/fnm: $(DL)/fnm-install.sh
 	mkdir -p "$(dir $@)"
 	$(SHELL) "$<" -s -d "$(dir $@)"
 	touch "$@"

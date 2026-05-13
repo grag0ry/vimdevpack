@@ -7,24 +7,20 @@ export DOTNET_ROOT
 $(call vimenv-addvar,$$DOTNET_ROOT,$(call winpath,$(abspath $(DOTNET_ROOT))))
 
 ifeq ($(OS),Windows_NT)
-CLEAN += $(CACHE)/dotnet-install.ps1
-
-$(CACHE)/dotnet-install.ps1: $(CACHE)/.exists
+$(DL)/dotnet-install.ps1: $(DL)/.exists
 	$(call wget,https://dot.net/v1/dotnet-install.ps1,$@)
 
 $(DOTNET_ROOT)/dotnet: $(DOTNET_ROOT)/.exists
-$(DOTNET_ROOT)/dotnet: $(CACHE)/dotnet-install.ps1
+$(DOTNET_ROOT)/dotnet: $(DL)/dotnet-install.ps1
 	$(foreach sdk,$(CFG_DOTNET_SDKS),\
 		powershell "$<" -InstallDir "$(dir $@)" -Channel "$(sdk)"$(NL)\
 	)
 else
-CLEAN += $(CACHE)/dotnet-install.sh
-
-$(CACHE)/dotnet-install.sh: $(CACHE)/.exists
+$(DL)/dotnet-install.sh: $(DL)/.exists
 	$(call wget,https://dot.net/v1/dotnet-install.sh,$@)
 
 $(DOTNET_ROOT)/dotnet: $(DOTNET_ROOT)/.exists
-$(DOTNET_ROOT)/dotnet: $(CACHE)/dotnet-install.sh
+$(DOTNET_ROOT)/dotnet: $(DL)/dotnet-install.sh
 	$(foreach sdk,$(CFG_DOTNET_SDKS),\
 		$(SHELL) "$<" --install-dir "$(dir $@)" --channel "$(sdk)"$(NL)\
 	)

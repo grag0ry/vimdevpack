@@ -1,5 +1,7 @@
 cache
 devenv
+dl
+state
 config.mk
 vim.env
 msys

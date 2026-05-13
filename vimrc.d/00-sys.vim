@@ -129,6 +129,10 @@ function g:MakeCachePath(path)
     return g:JoinPath(g:PackCachePath, a:path)
 endfunction
 
+function g:MakeStatePath(path)
+    return g:JoinPath(g:PackStatePath, a:path)
+endfunction
+
 function g:MakeDevenvPath(path)
     return g:JoinPath(g:PackDevenvPath, a:path)
 endfunction
