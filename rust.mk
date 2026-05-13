@@ -1,5 +1,5 @@
-RUSTUP_HOME = $(DEVENV)/rustup
-CARGO_HOME  = $(DEVENV)/cargo
+RUSTUP_HOME = $(DL)/rustup
+CARGO_HOME  = $(DL)/cargo
 RUSTUP_TOOLCHAINS =
 
 ifeq ($(OS),Windows_NT)
