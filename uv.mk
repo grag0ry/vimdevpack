@@ -17,7 +17,7 @@ $$(BIN)/$1: export UV_PYTHON_INSTALL_DIR := $$(abspath $$(UV_PYTHON_INSTALL_DIR)
 $$(BIN)/$1: export UV_PYTHON_BIN_DIR := $$(abspath $$(UV_PYTHON_BIN_DIR))
 
 $$(BIN)/$1: $$(BIN)/uv
-	uv tool install --reinstall "$2"
+	MAKEFLAGS= uv tool install --reinstall "$2"
 
 endef
 uv-tool = $(eval $(call uv-tool-impl,$1,$(if $2,$2,$1)))

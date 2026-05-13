@@ -12,7 +12,7 @@ include uv.mk
 # Plugins
 
 $(call fake,submodule)
-ifeq ($(UPGRADE),)
+ifeq ($(VIMDEVPACK_UPGRADE),)
 submodule:
 	git submodule update --init --recursive
 endif
@@ -242,7 +242,7 @@ upgrade:
 	$(MAKE) upgrade-submodule
 	$(MAKE) upgrade-gtags
 	$(MAKE) clean
-	$(MAKE) UPGRADE=1
+	$(MAKE) VIMDEVPACK_UPGRADE=1
 
 .PHONY: upgrade-nosm
 upgrade-nosm:

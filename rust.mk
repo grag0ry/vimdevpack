@@ -16,7 +16,7 @@ $(RUSTUP_INIT): $(DL)/.exists
 endif
 
 $(CARGO_HOME)/bin/rustup: $(RUSTUP_INIT)
-	"$<" -y --no-modify-path --default-toolchain none
+	MAKEFLAGS= "$<" -y --no-modify-path --default-toolchain none
 
 define rustup-export-impl=
 $1: export RUSTUP_HOME := $$(abspath $$(RUSTUP_HOME))
@@ -33,7 +33,7 @@ $(call fake,rustup)
 $(call rustup-export,rustup)
 rustup: $(CARGO_HOME)/bin/rustup
 	$(foreach tc,$(RUSTUP_TOOLCHAINS), \
-		$(CARGO_HOME)/bin/rustup toolchain install $(tc)$(NL) \
+		MAKEFLAGS= $(CARGO_HOME)/bin/rustup toolchain install $(tc)$(NL) \
 	)
 
 define rustup-toolchain-impl=
@@ -54,7 +54,7 @@ CARGO_TOOLCHAIN = stable
 endif
 $$(call rustup-toolchain,$$(CARGO_HOME)/bin/$1,$$(CARGO_TOOLCHAIN))
 $$(CARGO_HOME)/bin/$1:
-	$$(CARGO_HOME)/bin/cargo +$$(CARGO_TOOLCHAIN) install "$2"
+	MAKEFLAGS= $$(CARGO_HOME)/bin/cargo +$$(CARGO_TOOLCHAIN) install "$2"
 
 $$(call linkbin,$$(CARGO_HOME)/bin/$1)
 endef
