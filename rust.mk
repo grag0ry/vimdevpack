@@ -3,14 +3,16 @@ CARGO_HOME  = $(DEVENV)/cargo
 RUSTUP_TOOLCHAINS =
 
 ifeq ($(OS),Windows_NT)
-RUSTUP_INIT=$(RUSTUP_HOME)/rustup-init.exe
+RUSTUP_INIT=$(CACHE)/rustup-init.exe
+CLEAN += $(RUSTUP_INIT)
 
-$(RUSTUP_INIT): $(RUSTUP_HOME)/.exists
+$(RUSTUP_INIT): $(CACHE)/.exists
 	$(call wget,https://win.rustup.rs,$@)
 else
-RUSTUP_INIT=$(RUSTUP_HOME)/rustup-init.sh
+RUSTUP_INIT=$(CACHE)/rustup-init.sh
+CLEAN += $(RUSTUP_INIT)
 
-$(RUSTUP_INIT): $(RUSTUP_HOME)/.exists
+$(RUSTUP_INIT): $(CACHE)/.exists
 	$(call wget,https://sh.rustup.rs,$@)
 	chmod +x "$@"
 endif
