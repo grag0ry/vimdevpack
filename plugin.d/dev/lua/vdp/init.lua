@@ -231,7 +231,7 @@ function vdp.jobs_picker()
     local actions = require("telescope.actions")
     local action_state = require("telescope.actions.state")
 
-    local icons = { running = "●", done = "✓", failed = "✗" }
+    local icons = { running = "󰑖", done = "󰄬", failed = "󰅚" }
 
     local function entry_maker(e)
         return {
