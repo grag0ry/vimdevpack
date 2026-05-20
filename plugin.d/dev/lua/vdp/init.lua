@@ -192,6 +192,80 @@ function vdp.termrun(name, cmd, opts, on_exit)
     return proc
 end
 
+local function make_output_handler(buf)
+    local partial = ""
+    return function(_, data)
+        if not data then return end
+        data[1] = partial .. data[1]
+        if data[#data] == "" then
+            table.remove(data)
+            partial = ""
+        else
+            partial = table.remove(data)
+        end
+        if #data > 0 then
+            vim.schedule(function()
+                if vim.api.nvim_buf_is_valid(buf) then
+                    vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+                end
+            end)
+        end
+    end
+end
+
+local function open_buf_float(name, buf)
+    if not vim.api.nvim_buf_is_valid(buf) then return end
+    local line_count = vim.api.nvim_buf_line_count(buf)
+    local width = math.min(120, vim.o.columns - 4)
+    local height = math.min(math.max(line_count, 1), math.floor(vim.o.lines * 0.6))
+    local win = vim.api.nvim_open_win(buf, true, {
+        relative = "editor",
+        width = width,
+        height = height,
+        row = math.floor((vim.o.lines - height) / 2),
+        col = math.floor((vim.o.columns - width) / 2),
+        style = "minimal",
+        border = "rounded",
+        title = " " .. name .. ": output ",
+        title_pos = "center",
+    })
+    for _, key in ipairs({ "q", "<Esc>" }) do
+        vim.keymap.set("n", key, function() vim.api.nvim_win_close(win, true) end, { buffer = buf, nowait = true })
+    end
+end
+
+function vdp.runlive(name, cmd, on_exit)
+    local progress = create_progress_handle(name)
+    local buf = vim.api.nvim_create_buf(true, true)
+    vim.bo[buf].filetype = "log"
+
+    local handler = make_output_handler(buf)
+
+    local ok, job_id = xpcall(function()
+        return vim.fn.jobstart(cmd, {
+            on_stdout = handler,
+            on_stderr = handler,
+            on_exit = function(jid, code)
+                vim.schedule(function()
+                    local notif = progress.finish(code)
+                    if code ~= 0 then open_buf_float(name, buf) end
+                    if on_exit then on_exit(jid, code, notif) end
+                end)
+            end,
+        })
+    end, function(err)
+        progress.fail()
+        return err
+    end)
+
+    if not ok then error(job_id) end
+
+    progress.report_progress("in progress")
+    progress.start_spinner()
+
+    return job_id, buf
+end
+
 function vdp.make(args)
     local base = vim.o.makeprg
     if base == "" or base == nil then
@@ -225,20 +299,7 @@ function vdp.setup()
         vdp.make(opts.fargs)
     end, {nargs = "*", complete = "file"})
     vim.api.nvim_create_user_command("Run", function(opts)
-        local args = vim.split(opts.args, " ")
-        if #args == 0 then
-            vim.notify("No command provided", vim.log.levels.ERROR)
-            return
-        end
-        vdp.termrun_cmd(args)
-    end, { nargs = "+", complete = "shellcmd" })
-    vim.api.nvim_create_user_command("RunDel", function(opts)
-        local args = vim.split(opts.args, " ")
-        if #args == 0 then
-            vim.notify("No command provided", vim.log.levels.ERROR)
-            return
-        end
-        vdp.termrun_cmd(args, { delete_on_success = true })
+        vdp.runlive(opts.args, { "/bin/bash", "-lc", opts.args })
     end, { nargs = "+", complete = "shellcmd" })
 end
 
