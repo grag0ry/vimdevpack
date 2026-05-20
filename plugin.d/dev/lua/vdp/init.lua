@@ -180,7 +180,7 @@ end
 
 function vdp.runlive(name, cmd, on_exit)
     local progress = create_progress_handle(name)
-    local buf = vim.api.nvim_create_buf(true, true)
+    local buf = vim.api.nvim_create_buf(false, true)
     vim.bo[buf].filetype = "log"
 
     local entry = { name = name, job_id = nil, buf = buf, status = "running" }
