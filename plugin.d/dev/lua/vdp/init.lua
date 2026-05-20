@@ -183,7 +183,7 @@ function vdp.runlive(name, cmd, on_exit)
     local buf = vim.api.nvim_create_buf(false, true)
     vim.bo[buf].filetype = "log"
 
-    local entry = { name = name, job_id = nil, buf = buf, status = "running" }
+    local entry = { name = name, job_id = nil, buf = buf, status = "running", started_at = os.date("%H:%M:%S") }
     table.insert(vdp.jobs, entry)
 
     local handler = make_output_handler(buf)
@@ -229,7 +229,7 @@ function vdp.jobs_picker()
     local function entry_maker(e)
         return {
             value = e,
-            display = string.format("%s  %s", icons[e.status] or "?", e.name),
+            display = string.format("%s  %s  %s", icons[e.status] or "?", e.started_at, e.name),
             ordinal = e.name,
         }
     end
