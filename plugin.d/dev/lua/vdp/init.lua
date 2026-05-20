@@ -183,7 +183,7 @@ function vdp.runlive(name, cmd, on_exit)
     local buf = vim.api.nvim_create_buf(false, true)
     vim.bo[buf].filetype = "log"
 
-    local entry = { name = name, job_id = nil, buf = buf, status = "running", started_at = os.date("%H:%M:%S") }
+    local entry = { name = name, job_id = nil, buf = buf, status = "running", started_at = os.date("%H:%M:%S"), on_stop = nil }
     table.insert(vdp.jobs, entry)
 
     local handler = make_output_handler(buf)
@@ -205,6 +205,7 @@ function vdp.runlive(name, cmd, on_exit)
                             if j == entry then table.remove(vdp.jobs, i) break end
                         end
                     end
+                    if entry.on_stop then entry.on_stop() end
                     if on_exit then on_exit(jid, code, notif) end
                 end)
             end,
@@ -266,9 +267,14 @@ function vdp.jobs_picker()
                 local sel = action_state.get_selected_entry()
                 if sel and sel.value.job_id then
                     sel.value.stopped = true
+                    sel.value.on_stop = function()
+                        if vim.api.nvim_buf_is_valid(prompt_bufnr) then
+                            refresh(prompt_bufnr)
+                        end
+                        sel.value.on_stop = nil
+                    end
                     vim.fn.jobstop(sel.value.job_id)
                 end
-                refresh(prompt_bufnr)
             end)
             map({ "i", "n" }, "<C-d>", function()
                 local sel = action_state.get_selected_entry()
