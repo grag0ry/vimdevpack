@@ -2,6 +2,13 @@ local vdp = {}
 
 vdp.jobs = {}
 
+local function shell_cmd(s)
+    if vim.fn.has('win32') == 1 then
+        return { vim.o.shell, '/c', s }
+    end
+    return { '/bin/bash', '-lc', s }
+end
+
 function vdp.dump(o)
    if type(o) == 'table' then
       local s = '{ '
@@ -333,7 +340,7 @@ function vdp.make(args)
         shell_arg = base .. " " .. table.concat(escaped, " ")
     end
 
-    return vdp.termrun(name, { "/bin/bash", "-lc", shell_arg })
+    return vdp.termrun(name, shell_cmd(shell_arg))
 end
 
 function vdp.termrun_cmd(cmd, opts, on_exit)
@@ -348,7 +355,7 @@ function vdp.setup()
         vdp.make(opts.fargs)
     end, {nargs = "*", complete = "file"})
     vim.api.nvim_create_user_command("Run", function(opts)
-        vdp.runlive(opts.args, { "/bin/bash", "-lc", opts.args })
+        vdp.runlive(opts.args, shell_cmd(opts.args))
     end, { nargs = "+", complete = "shellcmd" })
     vim.api.nvim_create_user_command("Jobs", function()
         vdp.jobs_picker()
