@@ -198,19 +198,19 @@ function vdp.make(args)
         base = "make"
     end
 
-    local arglist = {}
+    local escaped = {}
     for _, a in ipairs(args) do
-        table.insert(arglist, vim.fn.shellescape(a))
-    end
-    local argstr = ""
-    local name = "make"
-    if #arglist > 0 then
-        argstr = " " .. table.concat(arglist, " ")
-        name = name .. " " .. table.concat(arglist, " ")
+        table.insert(escaped, vim.fn.shellescape(a))
     end
 
-    local shell_cmd = "/bin/bash -lc " .. vim.fn.shellescape(base .. argstr)
-    return vdp.termrun(name, shell_cmd)
+    local name = "make"
+    local shell_arg = base
+    if #args > 0 then
+        name = name .. " " .. table.concat(args, " ")
+        shell_arg = base .. " " .. table.concat(escaped, " ")
+    end
+
+    return vdp.termrun(name, { "/bin/bash", "-lc", shell_arg })
 end
 
 function vdp.termrun_cmd(cmd, opts, on_exit)
