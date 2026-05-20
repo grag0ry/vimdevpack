@@ -197,7 +197,14 @@ function vdp.runlive(name, cmd, on_exit)
                     entry.status = code == 0 and "done" or "failed"
                     entry.job_id = nil
                     local notif = progress.finish(code)
-                    if code ~= 0 and not entry.stopped then open_buf_float(name, buf) end
+                    if code ~= 0 and not entry.stopped and entry.buf and vim.api.nvim_buf_is_valid(entry.buf) then
+                        open_buf_float(name, buf)
+                    end
+                    if not entry.buf then
+                        for i, j in ipairs(vdp.jobs) do
+                            if j == entry then table.remove(vdp.jobs, i) break end
+                        end
+                    end
                     if on_exit then on_exit(jid, code, notif) end
                 end)
             end,
@@ -245,9 +252,14 @@ function vdp.jobs_picker()
         sorter = conf.generic_sorter({}),
         attach_mappings = function(prompt_bufnr, map)
             actions.select_default:replace(function()
-                actions.close(prompt_bufnr)
                 local sel = action_state.get_selected_entry()
-                if sel then open_buf_float(sel.value.name, sel.value.buf) end
+                if not sel then return end
+                if sel.value.buf and vim.api.nvim_buf_is_valid(sel.value.buf) then
+                    actions.close(prompt_bufnr)
+                    open_buf_float(sel.value.name, sel.value.buf)
+                else
+                    vim.notify("buffer was deleted", "warn", { title = sel.value.name })
+                end
             end)
             map({ "i", "n" }, "<C-x>", function()
                 local sel = action_state.get_selected_entry()
@@ -260,13 +272,14 @@ function vdp.jobs_picker()
             map({ "i", "n" }, "<C-d>", function()
                 local sel = action_state.get_selected_entry()
                 if sel then
-                    if sel.value.buf and vim.api.nvim_buf_is_valid(sel.value.buf) then
-                        vim.api.nvim_buf_delete(sel.value.buf, { force = true })
+                    local e = sel.value
+                    if e.buf and vim.api.nvim_buf_is_valid(e.buf) then
+                        vim.api.nvim_buf_delete(e.buf, { force = true })
                     end
-                    for i, j in ipairs(vdp.jobs) do
-                        if j == sel.value then
-                            table.remove(vdp.jobs, i)
-                            break
+                    e.buf = nil
+                    if not e.job_id then
+                        for i, j in ipairs(vdp.jobs) do
+                            if j == e then table.remove(vdp.jobs, i) break end
                         end
                     end
                 end
