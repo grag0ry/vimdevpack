@@ -128,29 +128,54 @@ function vdp.run(name, cmd, opts, on_exit)
     return obj
 end
 
+local function show_failed_output(name, stdout, stderr)
+    local lines = {}
+    for _, src in ipairs({ stdout, stderr }) do
+        if src and src ~= "" then
+            vim.list_extend(lines, vim.split(src, "\n", { plain = true }))
+        end
+    end
+    while #lines > 0 and lines[#lines] == "" do table.remove(lines) end
+    if #lines == 0 then return end
+
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+    vim.bo[buf].modifiable = false
+    vim.bo[buf].filetype = "log"
+
+    local width = math.min(120, vim.o.columns - 4)
+    local height = math.min(#lines, math.floor(vim.o.lines * 0.6))
+    local win = vim.api.nvim_open_win(buf, true, {
+        relative = "editor",
+        width = width,
+        height = height,
+        row = math.floor((vim.o.lines - height) / 2),
+        col = math.floor((vim.o.columns - width) / 2),
+        style = "minimal",
+        border = "rounded",
+        title = " " .. name .. ": output ",
+        title_pos = "center",
+    })
+    for _, key in ipairs({ "q", "<Esc>" }) do
+        vim.keymap.set("n", key, function() vim.api.nvim_win_close(win, true) end, { buffer = buf, nowait = true })
+    end
+end
+
 function vdp.termrun(name, cmd, opts, on_exit)
     opts = opts or {}
     local progress = create_progress_handle(name)
-    local bufid
 
-    local on_exit_impl = function(job_id, code, event)
-        vim.schedule(function()
-            local notif = progress.finish(code)
-            if opts.delete_on_success and code == 0 and bufid and vim.api.nvim_buf_is_valid(bufid) then
-                vim.api.nvim_buf_delete(bufid, { force = true })
-            end
-            if on_exit then on_exit(job_id, code, event, notif) end
-        end)
-    end
-
-    local ok, job_id = xpcall(
+    local ok, proc = xpcall(
         function()
-            local current = vim.api.nvim_get_current_buf()
-            bufid = vim.api.nvim_create_buf(true, true)
-            vim.api.nvim_set_current_buf(bufid)
-            local result = vim.fn.jobstart(cmd, { term = true, on_exit = on_exit_impl })
-            vim.api.nvim_set_current_buf(current)
-            return result
+            return vim.system(cmd, { text = true }, function(obj)
+                vim.schedule(function()
+                    local notif = progress.finish(obj.code)
+                    if obj.code ~= 0 then
+                        show_failed_output(name, obj.stdout, obj.stderr)
+                    end
+                    if on_exit then on_exit(obj.pid, obj.code, nil, notif) end
+                end)
+            end)
         end,
         function(err)
             progress.fail()
@@ -158,13 +183,13 @@ function vdp.termrun(name, cmd, opts, on_exit)
         end
     )
     if not ok then
-        error(job_id)
+        error(proc)
     end
 
-    progress.report_progress("in progress")
+    progress.report_progress("in progress. pid " .. tostring(proc.pid))
     progress.start_spinner()
 
-    return job_id
+    return proc
 end
 
 function vdp.make(args)
