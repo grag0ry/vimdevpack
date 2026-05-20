@@ -23,6 +23,7 @@ nnoremap <C-\><C-k> :lprevious<CR>
 nnoremap <C-h>      :colder<CR>
 nnoremap <C-l>      :cnewer<CR>
 
+nnoremap \j :Jobs<CR>
 nnoremap \b :Telescope buffers<CR>
 nnoremap <c-f> :Telescope find_files<CR>
 nnoremap \g :Telescope grep_string<CR>
