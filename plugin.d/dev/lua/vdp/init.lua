@@ -232,7 +232,7 @@ function vdp.jobs_picker()
     local actions = require("telescope.actions")
     local action_state = require("telescope.actions.state")
 
-    local icons = { running = "󰑖", done = "󰄬", failed = "󰅚" }
+    local icons = { running = "󰑖", stopping = "󰒆", done = "󰄬", failed = "󰅚" }
 
     local function entry_maker(e)
         local icon = (e.status == "running" and not e.buf) and "󰈉" or (icons[e.status] or "?")
@@ -266,14 +266,32 @@ function vdp.jobs_picker()
             map({ "i", "n" }, "<C-x>", function()
                 local sel = action_state.get_selected_entry()
                 if sel and sel.value.job_id then
-                    sel.value.stopped = true
-                    sel.value.on_stop = function()
-                        if vim.api.nvim_buf_is_valid(prompt_bufnr) then
-                            refresh(prompt_bufnr)
-                        end
-                        sel.value.on_stop = nil
+                    local e = sel.value
+                    e.stopped = true
+                    e.status = "stopping"
+                    e.on_stop = function()
+                        if vim.api.nvim_buf_is_valid(prompt_bufnr) then refresh(prompt_bufnr) end
+                        e.on_stop = nil
                     end
-                    vim.fn.jobstop(sel.value.job_id)
+                    vim.fn.jobstop(e.job_id)
+                    refresh(prompt_bufnr)
+                end
+            end)
+            map({ "i", "n" }, "<C-k>", function()
+                local sel = action_state.get_selected_entry()
+                if sel and sel.value.job_id then
+                    local e = sel.value
+                    local pid = vim.fn.jobpid(e.job_id)
+                    if pid and pid > 0 then
+                        e.stopped = true
+                        e.status = "stopping"
+                        e.on_stop = function()
+                            if vim.api.nvim_buf_is_valid(prompt_bufnr) then refresh(prompt_bufnr) end
+                            e.on_stop = nil
+                        end
+                        vim.uv.kill(pid, 9)
+                        refresh(prompt_bufnr)
+                    end
                 end
             end)
             map({ "i", "n" }, "<C-d>", function()
