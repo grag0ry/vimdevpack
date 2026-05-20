@@ -234,9 +234,10 @@ function vdp.jobs_picker()
     local icons = { running = "󰑖", done = "󰄬", failed = "󰅚" }
 
     local function entry_maker(e)
+        local icon = (e.status == "running" and not e.buf) and "󰈉" or (icons[e.status] or "?")
         return {
             value = e,
-            display = string.format("%s  %s  %s", icons[e.status] or "?", e.started_at, e.name),
+            display = string.format("%s  %s  %s", icon, e.started_at, e.name),
             ordinal = e.name,
         }
     end
