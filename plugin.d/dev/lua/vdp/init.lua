@@ -158,6 +158,7 @@ local function show_failed_output(name, stdout, stderr)
         title = " " .. name .. ": output ",
         title_pos = "center",
     })
+    vim.cmd("stopinsert")
     for _, key in ipairs({ "q", "<Esc>" }) do
         vim.keymap.set("n", key, function() vim.api.nvim_win_close(win, true) end, { buffer = buf, nowait = true })
     end
@@ -231,6 +232,7 @@ local function open_buf_float(name, buf)
         title = " " .. name .. ": output ",
         title_pos = "center",
     })
+    vim.cmd("stopinsert")
     for _, key in ipairs({ "q", "<Esc>" }) do
         vim.keymap.set("n", key, function() vim.api.nvim_win_close(win, true) end, { buffer = buf, nowait = true })
     end
@@ -255,7 +257,7 @@ function vdp.runlive(name, cmd, on_exit)
                     entry.status = code == 0 and "done" or "failed"
                     entry.job_id = nil
                     local notif = progress.finish(code)
-                    if code ~= 0 then open_buf_float(name, buf) end
+                    if code ~= 0 and not entry.stopped then open_buf_float(name, buf) end
                     if on_exit then on_exit(jid, code, notif) end
                 end)
             end,
@@ -310,6 +312,7 @@ function vdp.jobs_picker()
             map({ "i", "n" }, "<C-x>", function()
                 local sel = action_state.get_selected_entry()
                 if sel and sel.value.job_id then
+                    sel.value.stopped = true
                     vim.fn.jobstop(sel.value.job_id)
                 end
                 refresh(prompt_bufnr)
