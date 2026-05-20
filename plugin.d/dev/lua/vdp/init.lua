@@ -1,5 +1,7 @@
 local vdp = {}
 
+vdp.jobs = {}
+
 function vdp.dump(o)
    if type(o) == 'table' then
       local s = '{ '
@@ -239,6 +241,9 @@ function vdp.runlive(name, cmd, on_exit)
     local buf = vim.api.nvim_create_buf(true, true)
     vim.bo[buf].filetype = "log"
 
+    local entry = { name = name, job_id = nil, buf = buf, status = "running" }
+    table.insert(vdp.jobs, entry)
+
     local handler = make_output_handler(buf)
 
     local ok, job_id = xpcall(function()
@@ -247,6 +252,8 @@ function vdp.runlive(name, cmd, on_exit)
             on_stderr = handler,
             on_exit = function(jid, code)
                 vim.schedule(function()
+                    entry.status = code == 0 and "done" or "failed"
+                    entry.job_id = nil
                     local notif = progress.finish(code)
                     if code ~= 0 then open_buf_float(name, buf) end
                     if on_exit then on_exit(jid, code, notif) end
@@ -255,15 +262,71 @@ function vdp.runlive(name, cmd, on_exit)
         })
     end, function(err)
         progress.fail()
+        entry.status = "failed"
         return err
     end)
 
     if not ok then error(job_id) end
 
+    entry.job_id = job_id
     progress.report_progress("in progress")
     progress.start_spinner()
 
     return job_id, buf
+end
+
+function vdp.jobs_picker()
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local conf = require("telescope.config").values
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+
+    local icons = { running = "●", done = "✓", failed = "✗" }
+
+    pickers.new({}, {
+        prompt_title = "VDP Jobs",
+        finder = finders.new_table({
+            results = vdp.jobs,
+            entry_maker = function(e)
+                return {
+                    value = e,
+                    display = string.format("%s  %s", icons[e.status] or "?", e.name),
+                    ordinal = e.name,
+                }
+            end,
+        }),
+        sorter = conf.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr, map)
+            actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local sel = action_state.get_selected_entry()
+                if sel then open_buf_float(sel.value.name, sel.value.buf) end
+            end)
+            map({ "i", "n" }, "<C-x>", function()
+                local sel = action_state.get_selected_entry()
+                if sel and sel.value.job_id then
+                    vim.fn.jobstop(sel.value.job_id)
+                end
+            end)
+            map({ "i", "n" }, "<C-d>", function()
+                local sel = action_state.get_selected_entry()
+                if sel then
+                    if sel.value.buf and vim.api.nvim_buf_is_valid(sel.value.buf) then
+                        vim.api.nvim_buf_delete(sel.value.buf, { force = true })
+                    end
+                    for i, j in ipairs(vdp.jobs) do
+                        if j == sel.value then
+                            table.remove(vdp.jobs, i)
+                            break
+                        end
+                    end
+                end
+                actions.close(prompt_bufnr)
+            end)
+            return true
+        end,
+    }):find()
 end
 
 function vdp.make(args)
@@ -301,6 +364,9 @@ function vdp.setup()
     vim.api.nvim_create_user_command("Run", function(opts)
         vdp.runlive(opts.args, { "/bin/bash", "-lc", opts.args })
     end, { nargs = "+", complete = "shellcmd" })
+    vim.api.nvim_create_user_command("Jobs", function()
+        vdp.jobs_picker()
+    end, {})
 end
 
 return vdp
