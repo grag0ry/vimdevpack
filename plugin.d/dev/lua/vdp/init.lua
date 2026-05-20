@@ -284,18 +284,22 @@ function vdp.jobs_picker()
 
     local icons = { running = "●", done = "✓", failed = "✗" }
 
+    local function entry_maker(e)
+        return {
+            value = e,
+            display = string.format("%s  %s", icons[e.status] or "?", e.name),
+            ordinal = e.name,
+        }
+    end
+
+    local function refresh(prompt_bufnr)
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        picker:refresh(finders.new_table({ results = vdp.jobs, entry_maker = entry_maker }), { reset_prompt = false })
+    end
+
     pickers.new({}, {
         prompt_title = "VDP Jobs",
-        finder = finders.new_table({
-            results = vdp.jobs,
-            entry_maker = function(e)
-                return {
-                    value = e,
-                    display = string.format("%s  %s", icons[e.status] or "?", e.name),
-                    ordinal = e.name,
-                }
-            end,
-        }),
+        finder = finders.new_table({ results = vdp.jobs, entry_maker = entry_maker }),
         sorter = conf.generic_sorter({}),
         attach_mappings = function(prompt_bufnr, map)
             actions.select_default:replace(function()
@@ -308,6 +312,7 @@ function vdp.jobs_picker()
                 if sel and sel.value.job_id then
                     vim.fn.jobstop(sel.value.job_id)
                 end
+                refresh(prompt_bufnr)
             end)
             map({ "i", "n" }, "<C-d>", function()
                 local sel = action_state.get_selected_entry()
@@ -322,7 +327,7 @@ function vdp.jobs_picker()
                         end
                     end
                 end
-                actions.close(prompt_bufnr)
+                refresh(prompt_bufnr)
             end)
             return true
         end,
