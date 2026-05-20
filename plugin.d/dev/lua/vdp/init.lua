@@ -130,69 +130,9 @@ function vdp.run(name, cmd, opts, on_exit)
     return obj
 end
 
-local function show_failed_output(name, stdout, stderr)
-    local lines = {}
-    for _, src in ipairs({ stdout, stderr }) do
-        if src and src ~= "" then
-            vim.list_extend(lines, vim.split(src, "\n", { plain = true }))
-        end
-    end
-    while #lines > 0 and lines[#lines] == "" do table.remove(lines) end
-    if #lines == 0 then return end
-
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-    vim.bo[buf].modifiable = false
-    vim.bo[buf].filetype = "log"
-
-    local width = math.min(120, vim.o.columns - 4)
-    local height = math.min(#lines, math.floor(vim.o.lines * 0.6))
-    local win = vim.api.nvim_open_win(buf, true, {
-        relative = "editor",
-        width = width,
-        height = height,
-        row = math.floor((vim.o.lines - height) / 2),
-        col = math.floor((vim.o.columns - width) / 2),
-        style = "minimal",
-        border = "rounded",
-        title = " " .. name .. ": output ",
-        title_pos = "center",
-    })
-    vim.cmd("stopinsert")
-    for _, key in ipairs({ "q", "<Esc>" }) do
-        vim.keymap.set("n", key, function() vim.api.nvim_win_close(win, true) end, { buffer = buf, nowait = true })
-    end
-end
 
 function vdp.termrun(name, cmd, opts, on_exit)
-    opts = opts or {}
-    local progress = create_progress_handle(name)
-
-    local ok, proc = xpcall(
-        function()
-            return vim.system(cmd, { text = true }, function(obj)
-                vim.schedule(function()
-                    local notif = progress.finish(obj.code)
-                    if obj.code ~= 0 then
-                        show_failed_output(name, obj.stdout, obj.stderr)
-                    end
-                    if on_exit then on_exit(obj.pid, obj.code, nil, notif) end
-                end)
-            end)
-        end,
-        function(err)
-            progress.fail()
-            return err
-        end
-    )
-    if not ok then
-        error(proc)
-    end
-
-    progress.report_progress("in progress. pid " .. tostring(proc.pid))
-    progress.start_spinner()
-
-    return proc
+    return vdp.runlive(name, cmd, on_exit)
 end
 
 local function make_output_handler(buf)
