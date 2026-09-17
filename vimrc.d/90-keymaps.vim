@@ -3,10 +3,10 @@ nnoremap <F3>  :nohlsearch<CR>
 nnoremap <F4>  :DelExtraWhitespace<CR>
 nnoremap <F5>  :redraw!<CR>
 nnoremap <F7>  :XxdToggle<CR>
-nnoremap <F9>  :LspStart<CR>
-nnoremap <F10>  :LspStop<CR>
-nnoremap <F11>  :LspRestart<CR>
-nnoremap <F12>  :LspInfo<CR>
+nnoremap <F9>  :LspSelect<CR>
+nnoremap <F10>  :lsp stop<CR>
+nnoremap <F11>  :lsp restart<CR>
+nnoremap <F12>  :checkhealth vim.lsp<CR>
 
 noremap _y "+y
 noremap _p "+p

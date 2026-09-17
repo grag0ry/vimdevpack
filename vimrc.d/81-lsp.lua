@@ -1,17 +1,19 @@
 -- vim: set tabstop=2 shiftwidth=2 expandtab:
 local cfglsp = (vim.g.VDP_CFG_LSP or "") .. " " .. (vim.g.VDP_CFG_LSP_NATIVE or "")
 
+local vdp = require('vdp')
+
 for server in cfglsp:gmatch("%S+") do
   if server == "csharp-ls" then
-    vim.lsp.config("csharp_ls", {})
+    vdp.lsp.config("csharp_ls", {})
   elseif server == "clangd" then
-    vim.lsp.config("clangd", {})
+    vdp.lsp.config("clangd", {})
   elseif server == "pyright" then
-    vim.lsp.config("pyright", {})
+    vdp.lsp.config("pyright", {})
   elseif server == "bash-language-server" then
-    vim.lsp.config("bashls", {})
+    vdp.lsp.config("bashls", {})
   elseif server == "powershell-es" then
-    vim.lsp.config("powershell_es", {
+    vdp.lsp.config("powershell_es", {
       bundle_path = vim.fn.MakeDevenvPath("powershell-es"),
     })
   elseif server == "roslyn-ls" then
@@ -22,7 +24,7 @@ for server in cfglsp:gmatch("%S+") do
         vim.lsp.enable('roslyn', false)
       end,
     })
-    vim.lsp.config("roslyn", {
+    vdp.lsp.config("roslyn", {
       cmd = {
         "dotnet",
         vim.fn.MakeDevenvPath("roslyn-ls/Microsoft.CodeAnalysis.LanguageServer.dll"),
@@ -34,9 +36,9 @@ for server in cfglsp:gmatch("%S+") do
       },
     })
   elseif  server == "ty" then
-    vim.lsp.config("ty", {})
+    vdp.lsp.config("ty", {})
   elseif server == "rust-analyzer" then
-    vim.lsp.config("rust-analyzer", {
+    vdp.lsp.config("rust-analyzer", {
       cmd = { "rust-analyzer" },
       filetypes = { "rust" },
       settings = {
@@ -53,3 +55,4 @@ for server in cfglsp:gmatch("%S+") do
     })
   end
 end
+

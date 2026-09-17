@@ -350,6 +350,8 @@ function vdp.termrun_cmd(cmd, opts, on_exit)
     return vdp.termrun(cmd[1], cmd, opts, on_exit)
 end
 
+vdp.lsp = require("vdp.lsp")
+
 function vdp.setup()
     vim.api.nvim_create_user_command("Make", function(opts)
         vdp.make(opts.fargs)
@@ -360,6 +362,34 @@ function vdp.setup()
     vim.api.nvim_create_user_command("Jobs", function()
         vdp.jobs_picker()
     end, {})
+
+    vim.api.nvim_create_user_command("LspSelect", function()
+      local sorted = vim.deepcopy(vdp.lsp.list())
+      table.sort(sorted)
+
+      local display = {}
+      for _, name in ipairs(sorted) do
+        table.insert(display, { name = name, enabled = vim.lsp.is_enabled(name) })
+      end
+
+      vim.ui.select(display,
+        {
+            prompt = "LSP:",
+            format_item = function(item)
+                return string.format("%s %s", item.enabled and "" or "", item.name)
+            end,
+        },
+        function(selected)
+            if selected.enabled then
+                vim.lsp.enable(selected.name, false)
+                vim.notify("LSP disabled: " .. selected.name, vim.log.levels.INFO)
+            else
+                vim.lsp.enable(selected.name)
+                vim.notify("LSP enabled: " .. selected.name, vim.log.levels.INFO)
+            end
+        end
+      )
+    end, { desc = "LSP select"})
 end
 
 return vdp
