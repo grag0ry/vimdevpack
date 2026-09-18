@@ -231,6 +231,7 @@ uninstall:
 .PHONY: upgrade-submodule
 upgrade-submodule:
 	git submodule foreach $(abspath "$(TOOLS)/git-upgrade.sh") git
+	cd plugin.git/blink.cmp/ && $(abspath "$(TOOLS)/git-upgrade.sh") git v1
 
 .PHONY: upgrade-gtags
 upgrade-gtags:
