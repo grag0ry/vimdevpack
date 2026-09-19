@@ -1,33 +1,56 @@
 .PHONY: default
 default: plugin lsp env tools
 
-.PHONY: plugin lsp env tools
-
 include common.mk
+include plugin.mk
 include dotnet.mk
 include nodejs.mk
 include rust.mk
 include uv.mk
 
+.PHONY: lsp env tools
+
 # Plugins
+$(call plugin-github,nvim-neo-tree/neo-tree.nvim.git)
+$(call plugin-github,MunifTanjim/nui.nvim.git)
+$(call plugin-github,bluz71/vim-moonfly-colors.git)
+$(call plugin-github,junegunn/vim-plug.git)
+$(call plugin-github,seblyng/roslyn.nvim)
+$(call plugin-github,will133/vim-dirdiff.git)
+$(call plugin-github,vim-scripts/mediawiki.vim.git)
+$(call plugin-github,nvim-lua/plenary.nvim.git)
+$(call plugin-github,nvim-lualine/lualine.nvim.git)
+$(call plugin-github,nvim-telescope/telescope.nvim.git)
+$(call plugin-github,nvim-tree/nvim-web-devicons.git)
+$(call plugin-github,nvim-telescope/telescope-ui-select.nvim.git)
+$(call plugin-github,dpezto/gnuplot.vim)
+$(call plugin-github,nvim-treesitter/nvim-treesitter.git)
+$(call plugin-github,f-person/git-blame.nvim.git)
+$(call plugin-github,nvim-telescope/telescope-fzf-native.nvim.git)
+$(call plugin-github,preservim/tagbar.git)
+$(call plugin-github,rcarriga/nvim-notify.git)
+$(call plugin-github,rafamadriz/friendly-snippets.git)
+$(call plugin-github,neovim/nvim-lspconfig.git)
+$(call plugin-github,vim-syntastic/syntastic.git)
+$(call plugin-github,sindrets/diffview.nvim.git)
+$(call plugin-local,dev)
+$(call plugin-local,gtags)
 
-$(call fake,submodule)
-ifeq ($(VIMDEVPACK_UPGRADE),)
-submodule:
-	git submodule update --init --recursive
-endif
+plugin-telescope-fzf-native.nvim.git:
+	$(MAKE) -C $(PLUGIN)/telescope-fzf-native.nvim.git
 
-$(call fake,plugin-build)
+ifneq ($(CFG_PLUGIN_BLINK),)
 ifeq ($(OS),Windows_NT)
-plugin-build: export MSYSTEM=MSYS
+BLINK_TOOLCHAIN=nightly-x86_64-pc-windows-gnu
+else
+BLINK_TOOLCHAIN=nightly
 endif
-plugin-build: $(fake-submodule)
-	$(MAKE) -C plugin.git/telescope-fzf-native.nvim
 
-plugin-clean:
-	git submodule foreach git clean -fdx
-
-plugin: $(fake-submodule) $(fake-plugin-build) $(CACHE)/.exists $(STATE)/.exists
+$(call plugin-github,saghen/blink.cmp.git,v1)
+$(call rustup-toolchain,plugin-blink.cmp.git,$(BLINK_TOOLCHAIN))
+plugin-blink.cmp.git:
+	cd $(PLUGIN)/blink.cmp.git && cargo +$(BLINK_TOOLCHAIN) build --release
+endif # CFG_PLUGIN_BLINK
 
 ifneq ($(CFG_PLUGIN_COPILOT_CHAT),)
 ifeq ($(OS),Windows_NT)
@@ -37,27 +60,14 @@ else
 LUA_TIKTOKEN_SRC=tiktoken_core-linux-x86_64-luajit.so
 LUA_TIKTOKEN=tiktoken_core.so
 endif
+$(call plugin-github,CopilotC-Nvim/CopilotChat.nvim.git)
+
 $(DEVENV)/liblua/$(LUA_TIKTOKEN): $(DEVENV)/liblua/.exists
 	$(call github-assets,gptlang/lua-tiktoken,$@,$(LUA_TIKTOKEN_SRC))
 
+plugin-CopilotChat.nvim.git: $(DEVENV)/liblua/$(LUA_TIKTOKEN)
 $(call vimenv-add,lua package.cpath = package.cpath .. ";" .. vim.g.PackDevenvPath .. "/liblua/?.so")
-
-plugin-build: $(DEVENV)/liblua/$(LUA_TIKTOKEN)
-endif
-
-ifneq ($(CFG_PLUGIN_BLINK),)
-ifeq ($(OS),Windows_NT)
-BLINK_TOOLCHAIN=nightly-x86_64-pc-windows-gnu
-else
-BLINK_TOOLCHAIN=nightly
-endif
-$(call fake,plugin-blink)
-$(call rustup-toolchain,plugin-blink,$(BLINK_TOOLCHAIN))
-plugin-blink: $(fake-submodule)
-	cd plugin.git/blink.cmp && cargo +$(BLINK_TOOLCHAIN) build --release
-
-plugin-build: $(fake-plugin-blink)
-endif
+endif # CFG_PLUGIN_COPILOT_CHAT
 
 # Tools
 
@@ -192,8 +202,8 @@ env: vim.env
 
 # Clean
 .PHONY: clean
-clean: plugin-clean
-	rm -rf $(BIN) $(DEVENV) vim.env
+clean:
+	rm -rf $(BIN) $(PLUGIN) $(DEVENV) vim.env
 
 .PHONY: clean-cache
 clean-cache:
@@ -228,11 +238,6 @@ uninstall:
 
 # Upgrade
 
-.PHONY: upgrade-submodule
-upgrade-submodule:
-	git submodule foreach $(abspath "$(TOOLS)/git-upgrade.sh") git
-	cd plugin.git/blink.cmp/ && $(abspath "$(TOOLS)/git-upgrade.sh") git v1
-
 .PHONY: upgrade-gtags
 upgrade-gtags:
 	$(call wget,https://cvs.savannah.gnu.org/viewvc/*checkout*/global/global/gtags.vim,plugin.d/gtags/plugin/gtags.vim) \
@@ -240,12 +245,5 @@ upgrade-gtags:
 
 .PHONY: upgrade
 upgrade:
-	$(MAKE) upgrade-submodule
-	$(MAKE) upgrade-gtags
-	$(MAKE) clean
-	$(MAKE) VIMDEVPACK_UPGRADE=1
-
-.PHONY: upgrade-nosm
-upgrade-nosm:
 	$(MAKE) clean
 	$(MAKE)

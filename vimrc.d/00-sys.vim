@@ -117,8 +117,6 @@ function g:DirName(path)
     return fnamemodify(a:path, ':h')
 endfunction
 
-let g:PackPluginGit = g:JoinPath(g:PackPath, 'plugin.git')
-let g:PackPluginDir = g:JoinPath(g:PackPath, 'plugin.d')
 if isdirectory(".git")
     let g:GitTopLevel = fnamemodify(resolve('.'), ':p')
 else

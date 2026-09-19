@@ -41,6 +41,7 @@ CACHE  = $(CFG_CACHE)
 DEVENV = $(CFG_DEVENV)
 DL     = $(CFG_DL)
 STATE  = $(CFG_STATE)
+PLUGIN = $(CFG_PLUGIN_DIR)
 
 VIMENV = " This file is auto generate by `make vim.env`
 
@@ -56,6 +57,7 @@ $(call vimenv-addvar,g:PackPath,$(call winpath,$(abspath $(PRJROOT))))
 $(call vimenv-addvar,g:PackDevenvPath,$(call winpath,$(abspath $(DEVENV))))
 $(call vimenv-addvar,g:PackCachePath,$(call winpath,$(abspath $(CACHE))))
 $(call vimenv-addvar,g:PackStatePath,$(call winpath,$(abspath $(STATE))))
+$(call vimenv-addvar,g:PackPluginDir,$(call winpath,$(abspath $(PLUGIN))))
 
 export PATH:=$(abspath $(BIN)):$(PATH)
 $(call vimenv-add,let $$PATH = '$(call winpath,$(abspath $(BIN)))$(pathsep)' . $$PATH)
@@ -69,7 +71,7 @@ $(foreach v,$(filter CFG_%, $(.VARIABLES)),$(call vimenv-addvar,g:VDP_$v,$($v)))
 define fake-target =
 .PHONY: $1
 fake-$1 = $$(DEVENV)/.fake-$1
-$$(fake-$1): $$(DEVENV)/.exists
+$$(fake-$1): $$(DEVENV)/.exists $(if $2,$2,)
 	$$(MAKE) -f $$(firstword $$(MAKEFILE_LIST)) $1
 	touch "$$@"
 
@@ -99,7 +101,7 @@ $$(BIN)/$2: $1
 endef
 endif
 
-fake = $(eval $(call fake-target,$1))
+fake = $(eval $(call fake-target,$1,$2))
 linkbin = $(eval $(call linkbin-target,$1,$(if $2,$2,$(notdir $1))))
 wget = wget --progress=dot:giga "$1" -O "$2" --no-use-server-timestamps
 github-assets = set -o pipefail && $(TOOLS)github-assets.sh "$1" \

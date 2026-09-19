@@ -28,6 +28,7 @@ fi
 : "${CFG_DL:=dl}"
 : "${CFG_STATE:=state}"
 : "${CFG_BINDIR:=devenv/bin}"
+: "${CFG_PLUGIN_DIR:=devenv/plugin}"
 
 : "${CFG_DOTNET_NATIVE=$([[ -n $(command -v dotnet) ]] && echo 1 || echo)}"
 if [[ -n $CFG_DOTNET_NATIVE ]]; then
