@@ -71,15 +71,18 @@ $(foreach v,$(filter CFG_%, $(.VARIABLES)),$(call vimenv-addvar,g:VDP_$v,$($v)))
 define fake-target =
 .PHONY: $1
 fake-$1 = $$(DEVENV)/.fake-$1
-$$(fake-$1): $$(DEVENV)/.exists $(if $2,$2,)
+ifneq ($2,)
+$1: $2
+endif
+$$(fake-$1): $(if $2,$2,) | $$(DEVENV)/.exists
 	$$(MAKE) -f $$(firstword $$(MAKEFILE_LIST)) $1
 	touch "$$@"
 
 endef
 
+.PHONY: clean-bin
 ifeq ($(OS),Windows_NT)
 define linkbin-target =
-$1: $(BIN)/.exists
 $$(BIN)/$2: $(BIN)/.exists
 $$(BIN)/$2: $1
 	printf "%s\n" \
@@ -89,15 +92,24 @@ $$(BIN)/$2: $1
 	ln -fs "$$(abspath $$<)" "$$@"
 	touch "$$@"
 
+.PHONY: clean-bin-$(notdir $1)
+clean-bin-$(notdir $1):
+	rm -f "$$(BIN)/$2" "$$(BIN)/$2.bat"
+
+clean-bin: clean-bin-$(notdir $1)
 endef
 else
 define linkbin-target =
-$1: $(BIN)/.exists
 $$(BIN)/$2: $(BIN)/.exists
 $$(BIN)/$2: $1
 	ln -fs "$$(abspath $$<)" "$$@"
 	touch "$$@"
 
+.PHONY: clean-bin-$(notdir $1)
+clean-bin-$(notdir $1):
+	rm -f "$$(BIN)/$2"
+
+clean-bin: clean-bin-$(notdir $1)
 endef
 endif
 

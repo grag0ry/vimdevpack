@@ -93,7 +93,7 @@ tools: $(BIN)/shellcheck
 endif
 
 ifneq ($(filter tree-sitter,$(CFG_TOOLS)),)
-$(call nodejs-npm,tree-sitter,tree-sitter-cli)
+$(call npm,tree-sitter,tree-sitter-cli)
 tools: $(BIN)/tree-sitter
 endif
 
@@ -119,12 +119,12 @@ lsp: $(BIN)/pwsh $(fake-powershell-es)
 endif
 
 ifneq ($(filter pyright,$(CFG_LSP)),)
-$(call nodejs-npm,pyright-langserver,pyright)
+$(call npm,pyright-langserver,pyright)
 lsp: $(BIN)/pyright-langserver
 endif
 
 ifneq ($(filter bash-language-server,$(CFG_LSP)),)
-$(call nodejs-npm,bash-language-server)
+$(call npm,bash-language-server)
 lsp: $(BIN)/bash-language-server
 endif
 
@@ -202,8 +202,8 @@ env: vim.env
 
 # Clean
 .PHONY: clean
-clean:
-	rm -rf $(BIN) $(PLUGIN) $(DEVENV) vim.env
+clean: clean-bin clean-plugin
+	rm -rf $(DEVENV) vim.env
 
 .PHONY: clean-cache
 clean-cache:
