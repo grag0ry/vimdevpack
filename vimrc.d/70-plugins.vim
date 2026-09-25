@@ -1,12 +1,12 @@
-let s:d = { n -> g:JoinPath(g:PackPluginDir, n) }
-let s:g = { n -> g:JoinPath(g:PackPluginDir, n) }
+let s:d = { n -> g:JoinPath(g:VDP_PluginPath, n) }
+let s:g = { n -> g:JoinPath(g:VDP_PluginPath, n) }
 
 function! s:_if(cond, ...)
     let opts = get(a:000, 0, {})
     return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
 endfunction
 
-exe 'source ' . fnameescape(g:JoinPath(g:PackPluginDir, "vim-plug.git", "plug.vim"))
+exe 'source ' . fnameescape(g:JoinPath(g:VDP_PluginPath, "vim-plug.git", "plug.vim"))
 
 call plug#begin()
 

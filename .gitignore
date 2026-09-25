@@ -1,7 +1,9 @@
-cache
-devenv
-dl
-state
-config.mk
-vim.env
-msys
+/cache
+/devenv
+/dl
+/state
+/config.mk
+/vim.env
+/msys
+/.fake-target
+/.lock

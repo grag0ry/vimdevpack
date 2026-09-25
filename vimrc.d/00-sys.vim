@@ -124,14 +124,14 @@ else
 endif
 
 function g:MakeCachePath(path)
-    return g:JoinPath(g:PackCachePath, a:path)
+    return g:JoinPath(g:VDP_CachePath, a:path)
 endfunction
 
 function g:MakeStatePath(path)
-    return g:JoinPath(g:PackStatePath, a:path)
+    return g:JoinPath(g:VDP_StatePath, a:path)
 endfunction
 
 function g:MakeDevenvPath(path)
-    return g:JoinPath(g:PackDevenvPath, a:path)
+    return g:JoinPath(g:VDP_DevenvPath, a:path)
 endfunction
 

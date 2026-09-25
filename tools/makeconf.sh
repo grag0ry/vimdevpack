@@ -23,12 +23,12 @@ fi
 
 : "${CFG_WSL=$([[ $(uname -r) = *-microsoft-* ]] && echo 1 || echo)}"
 
-: "${CFG_DEVENV:=devenv}"
-: "${CFG_CACHE:=cache}"
-: "${CFG_DL:=dl}"
-: "${CFG_STATE:=state}"
-: "${CFG_BINDIR:=devenv/bin}"
-: "${CFG_PLUGIN_DIR:=devenv/plugin}"
+CFG_PATH_PRJROOT=$(realpath -m "$(dirname "${BASH_SOURCE[0]}")/..")
+: "${CFG_PATH_DEVENV:=devenv}"
+: "${CFG_PATH_CACHE:=cache}"
+: "${CFG_PATH_DL:=dl}"
+: "${CFG_PATH_STATE:=state}"
+: "${CFG_PATH_PLUGIN:=$CFG_PATH_DEVENV/plugin}"
 
 : "${CFG_DOTNET_NATIVE=$([[ -n $(command -v dotnet) ]] && echo 1 || echo)}"
 if [[ -n $CFG_DOTNET_NATIVE ]]; then
