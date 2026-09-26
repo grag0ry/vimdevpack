@@ -6,7 +6,7 @@ define plugin-git-impl =
 PLUGIN_STATE := $$(CFG_PATH_PLUGIN)/$(notdir $1)/.plugin-updated
 
 $$(CFG_PATH_PLUGIN)/$(notdir $1)/.plugin-updated: | $$(CFG_PATH_PLUGIN)/.exists
-	git clone --depth 1 --single-branch \
+	git clone -q --depth 1 --single-branch \
 		$(if $2,--branch "$2",) \
 		"$1" "$$(CFG_PATH_PLUGIN)/$(notdir $1)"
 	touch "$$@"

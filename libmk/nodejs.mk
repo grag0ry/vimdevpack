@@ -19,7 +19,7 @@ endif
 $(call fake,install-nodejs,$(CFG_PATH_DEVENV)/fnm/fnm)
 update-nodejs: update-fnm
 install-nodejs update-nodejs:
-	$(call lock,"$(CFG_PATH_DEVENV)/fnm/fnm" --fnm-dir="$(abspath $(CFG_PATH_DEVENV)/fnm)" install --lts,nodejs)
+	$(call lock,"$(CFG_PATH_DEVENV)/fnm/fnm" --log-level error --fnm-dir="$(abspath $(CFG_PATH_DEVENV)/fnm)" install --lts,nodejs)
 
 $(call side-effects,$(fake-install-nodejs),$(NODEJS_BINDIR)/node $(NODEJS_BINDIR)/npm $(NODEJS_BINDIR)/npx)
 
@@ -49,9 +49,11 @@ clean-npm:
 		$(call fake-target,npm-*)
 
 .PHONY: update-npm
+update-npm: export CI := true
 update-npm: $(if $(CFG_NODEJS_NATIVE),,update-bin-node update-bin-npm update-bin-npx)
 	$(call lock,npm update --prefix "$(NPM_DIR)",nodejs)
 	$(call lock,npm audit --prefix "$(NPM_DIR)",nodejs)
+
 
 define npm-impl-bin =
 
@@ -63,6 +65,7 @@ endef
 
 define npm-impl =
 $$(call fake,npm-$1,$$(fake-nodejs))
+npm-$1: export CI := true
 npm-$1: | $(NPM_DIR)/.exists
 	$$(call lock,npm install --prefix "$$(NPM_DIR)" $1,nodejs)
 	$$(call lock,npm audit --prefix "$$(NPM_DIR)",nodejs)

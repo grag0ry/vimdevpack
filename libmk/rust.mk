@@ -19,10 +19,11 @@ $1: export RUSTUP_HOME := $$(abspath $$(RUSTUP_HOME))
 $1: export CARGO_HOME := $$(abspath $$(CARGO_HOME))
 $1: export RUSTUP_INIT_SKIP_PATH_CHECK = yes
 $1: export PATH := $$(abspath $$(CARGO_HOME))/bin:$$(PATH)
+$1: export CARGO_TERM_PROGRESS_WHEN := never
 endef
 rustup-export = $(eval $(call rustup-export-impl,$1))
 
-rustup = MAKEFLAGS= $(call lock,rustup $1,rust)
+rustup = MAKEFLAGS= $(call lock,rustup -q $1,rust)
 cargo = MAKEFLAGS= $(call lock,cargo $1,rust)
 
 $(call rustup-export,$(CARGO_HOME)/bin/rustup)

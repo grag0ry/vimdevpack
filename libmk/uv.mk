@@ -12,6 +12,7 @@ $1: export UV_TOOL_DIR := $$(abspath $$(UV_TOOL_DIR))
 $1: export UV_TOOL_BIN_DIR := $$(abspath $$(UV_TOOL_BIN_DIR))
 $1: export UV_PYTHON_INSTALL_DIR := $$(abspath $$(UV_PYTHON_INSTALL_DIR))
 $1: export UV_PYTHON_BIN_DIR := $$(abspath $$(UV_PYTHON_BIN_DIR))
+$1: export UV_NO_PROGRESS := 1
 $1: export PATH := $$(abspath $$(UV_TOOL_BIN_DIR)):$$(PATH)
 endef
 uv-export = $(eval $(call uv-export-impl,$1))
