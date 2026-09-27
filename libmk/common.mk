@@ -72,7 +72,7 @@ clean-fake:
 	rm -rf "$(FAKE_TARGET_DIR)"
 
 ifeq ($(OS),Windows_NT)
-define linkbin-target =
+define linkbin-impl =
 $$(BIN)/$2: | $$(BIN)/.exists
 $$(BIN)/$2: $1
 	printf "%s\n" \
