@@ -119,6 +119,15 @@ github-assets = set -o pipefail && $(TOOLS)/github-assets.sh "$1" \
 	| grep -m1 "$(if $3,$3,.*)" \
 	| xargs -r -i $(call fetch-newer,{},$2)
 
+ifeq ($(OS),Windows_NT)
+pwsh = powershell.exe \
+	-NoProfile \
+	-NoLogo \
+	-ExecutionPolicy Bypass \
+	-WindowStyle Hidden \
+	-Command '$1'
+endif
+
 define dl-impl =
 .PHONY: update-dl-$2
 update-dl-$2 $$(CFG_PATH_DL)/$2: | $$(CFG_PATH_DL)/.exists

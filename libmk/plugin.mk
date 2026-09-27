@@ -33,7 +33,11 @@ endef
 
 define plugin-local-impl =
 $$(CFG_PATH_PLUGIN)/$1: | $$(CFG_PATH_PLUGIN)/.exists
+ifeq ($(OS),Windows_NT)
+	$(call pwsh,New-Item -ItemType Junction -Path "$$@" -Target "$$(call winpath,$$(abspath plugin.d/$1))")
+else
 	ln -snf "$$(abspath plugin.d/$1)" "$$@"
+endif
 
 $$(call fake,plugin-$1)
 plugin-$1: | $$(CFG_PATH_PLUGIN)/$1
