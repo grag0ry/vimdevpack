@@ -15,7 +15,7 @@ call plug#(s:g("nvim-web-devicons.git"))
 call plug#(s:g("nvim-notify.git"))
 call plug#(s:g("nui.nvim.git"))
 call plug#(s:g("nvim-lspconfig.git"))
-call plug#(s:g("nvim-treesitter.git"), s:_if(g:OS != "windows", {'do': ':TSUpdate'}))
+call plug#(s:g("nvim-treesitter.git"), s:_if(g:VDP_CFG_PLUGIN_TREESITTER == "1"))
 call plug#(s:g("roslyn.nvim"))
 
 call plug#(s:d('dev'))

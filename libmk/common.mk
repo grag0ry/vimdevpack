@@ -39,6 +39,7 @@ endef
 vimenv-add = $(call vimenv-add-impl,$(subst $$,$$$$,$1))
 vimenv-addvar = $(call vimenv-add,let $1 = '$2')
 vimenv-addvar-path = $(call vimenv-addvar,$1,$(call winpath,$(abspath $2)))
+vimenv-addvar-array = $(call vimenv-add,let $1 = [$(foreach v,$2,'$v', )])
 
 $(foreach v,$(filter CFG_%, $(.VARIABLES)),$(call vimenv-addvar,g:VDP_$v,$($v)))
 $(call vimenv-add,let $$PATH = '$(call winpath,$(abspath $(BIN)))$(pathsep)' . $$PATH)
@@ -157,5 +158,6 @@ arc = $(eval $(call arc-impl,$1,$2,$3))
 define side-effects-impl
 $2: $1
 	test -f "$$@"
+	touch "$$@" -r "$$<"
 endef
 side-effects = $(eval $(call side-effects-impl,$1,$2))

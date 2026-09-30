@@ -16,6 +16,7 @@ $(call vimenv-addvar-path,g:VDP_DevenvPath,$(CFG_PATH_DEVENV))
 $(call vimenv-addvar-path,g:VDP_CachePath,$(CFG_PATH_CACHE))
 $(call vimenv-addvar-path,g:VDP_StatePath,$(CFG_PATH_STATE))
 $(call vimenv-addvar-path,g:VDP_PluginPath,$(CFG_PATH_PLUGIN))
+$(call vimenv-addvar-array,g:VDP_LSP,$(CFG_LSP) $(CFG_LSP_NATIVE))
 env: vim.env
 
 # Plugins
@@ -33,7 +34,6 @@ $(call plugin-github,nvim-telescope/telescope-fzf-native.nvim.git)
 $(call plugin-github,nvim-telescope/telescope.nvim.git)
 $(call plugin-github,nvim-telescope/telescope-ui-select.nvim.git)
 $(call plugin-github,nvim-tree/nvim-web-devicons.git)
-$(call plugin-github,nvim-treesitter/nvim-treesitter.git)
 $(call plugin-github,preservim/tagbar.git)
 $(call plugin-github,rafamadriz/friendly-snippets.git)
 $(call plugin-github,rcarriga/nvim-notify.git)
@@ -47,6 +47,14 @@ $(call plugin-local,gtags)
 
 plugin-telescope-fzf-native.nvim.git:
 	$(MAKE) -C $(CFG_PATH_PLUGIN)/telescope-fzf-native.nvim.git
+
+ifneq ($(CFG_PLUGIN_TREESITTER),)
+$(call plugin-github,nvim-treesitter/nvim-treesitter.git)
+$(call vimenv-addvar-array,g:VDP_TsParsers,$(CFG_TS_PARSERS))
+$(call vimenv-addvar-path,g:VDP_TsParsersDir,$(CFG_PATH_CACHE)/treesitter-parsers)
+plugin-nvim-treesitter.git: vim.env
+	$(TOOLS)/install-treesitter.sh "$<"
+endif
 
 ifneq ($(CFG_PLUGIN_BLINK),)
 ifeq ($(OS),Windows_NT)

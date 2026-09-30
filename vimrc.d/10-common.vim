@@ -27,3 +27,15 @@ set noincsearch
 " list
 set listchars=tab:>…,nbsp:⎵,trail:·
 set list
+
+
+lua << EOF
+vim.provider.python = false
+vim.provider.node = false
+vim.provider.ruby = false
+vim.provider.perl = false
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_python3_provider = 0
+EOF

@@ -61,6 +61,19 @@ if [[ -z ${CFG_TOOLS+DEFINED} ]]; then
     instr-trim CFG_TOOLS_NATIVE
 fi
 
+if [[ -z ${CFG_TS_PARSERS+DEFINED} ]]; then
+    parsers=(
+        c cpp c_sharp
+        lua vim vimdoc query
+        markdown markdown_inline
+        xml json
+        python perl bash powershell
+        dockerfile
+    )
+    IFS=' ' CFG_TS_PARSERS="${parsers[@]}"
+fi
+
+: "${CFG_PLUGIN_TREESITTER=}"
 : "${CFG_PLUGIN_COPILOT_CHAT=}"
 : "${CFG_PLUGIN_BLINK=}"
 

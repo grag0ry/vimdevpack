@@ -3,7 +3,7 @@ local cfglsp = (vim.g.VDP_CFG_LSP or "") .. " " .. (vim.g.VDP_CFG_LSP_NATIVE or 
 
 local vdp = require('vdp')
 
-for server in cfglsp:gmatch("%S+") do
+for _, server in ipairs(vim.g.VDP_LSP) do
   if server == "csharp-ls" then
     vdp.lsp.config("csharp_ls", {})
   elseif server == "clangd" then

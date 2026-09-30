@@ -20,16 +20,8 @@ lua << EOF
     -- Highlight group 'NotifyBackground' has no background highlight
     vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "#000000" })
 
-    local parsers = {
-        "c", "cpp", "c_sharp",
-        "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
-        "xml",
-        "python", "perl",
-        "bash", "powershell",
-        "dockerfile"
-    }
     local parser_set = {}
-    for _, p in ipairs(parsers) do parser_set[p] = true end
+    for _, p in ipairs(vim.g.VDP_TsParsers) do parser_set[p] = true end
 
     vim.api.nvim_create_autocmd('FileType', {
         pattern = "*",
@@ -41,10 +33,6 @@ lua << EOF
         end,
     })
 
-    vim.opt.runtimepath:prepend(vim.fn.MakeCachePath("treesitter-parsers"))
-    require'nvim-treesitter'.setup {
-        install_dir = vim.fn.MakeCachePath("treesitter-parsers"),
-    }
-    require'nvim-treesitter'.install(parsers)
+    require'nvim-treesitter'.setup({ install_dir = vim.g.VDP_TsParsersDir })
 EOF
 endif
