@@ -2,6 +2,7 @@ BIN = $(CFG_PATH_DEVENV)/bin
 TOOLS = tools
 FAKE_TARGET_DIR = .fake-target
 LOCK_DIR = .lock
+NVIM ?= nvim
 
 ifeq ($(OS),Windows_NT)
 export MSYS := winsymlinks:native

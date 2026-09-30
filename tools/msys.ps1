@@ -49,6 +49,7 @@ function Invoke-Msys2
 {
     param([string]$cmd)
     $batch = Join-Path $MsysDir -Child "msys2_shell.cmd"
+    $env:NVIM = &(Join-Path $MsysDir -Child "usr\bin\cygpath.exe") (Get-Command nvim).Source
     if ($cmd)
     {
         & $batch -defterm -here -ucrt64 -no-start -shell bash -l -c "$cmd"

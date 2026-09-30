@@ -53,7 +53,10 @@ $(call plugin-github,nvim-treesitter/nvim-treesitter.git)
 $(call vimenv-addvar-array,g:VDP_TsParsers,$(CFG_TS_PARSERS))
 $(call vimenv-addvar-path,g:VDP_TsParsersDir,$(CFG_PATH_CACHE)/treesitter-parsers)
 plugin-nvim-treesitter.git: vim.env
-	$(TOOLS)/install-treesitter.sh "$<"
+	"$(NVIM)" --headless --clean -l $(TOOLS)/install-treesitter.lua "$<"
+ifeq ($(OS),Windows_NT)
+plugin-nvim-treesitter.git: export CC := $(call winpath,$(shell which "$(CC)"))
+endif
 endif
 
 ifneq ($(CFG_PLUGIN_BLINK),)
@@ -194,6 +197,9 @@ ifneq ($(filter tree-sitter,$(CFG_TOOLS)),)
 $(call npm,tree-sitter-cli,tree-sitter)
 tools: $(BIN)/tree-sitter
 update-tools: update-bin-tree-sitter
+ifneq ($(CFG_PLUGIN_TREESITTER),)
+plugin-nvim-treesitter.git: $(BIN)/tree-sitter
+endif
 endif
 
 # Common
