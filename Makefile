@@ -236,3 +236,11 @@ install:
 .PHONY: uninstall
 uninstall:
 	sed -i -e '/vimdevpack/{:a;N;/endvimdevpack/!ba};/vimdevpack/d' "$(NVIM_CONFIG)"
+
+ifneq ($(OS),Windows_NT)
+.PHONY: nvim
+$(call dl-github,neovim/neovim,neovim.appimage,linux-x86_64.appimage$$)
+$(call linkbin,$(CFG_PATH_DL)/neovim.appimage,nvim)
+nvim: $(BIN)/nvim
+	chmod +x "$<"
+endif
