@@ -15,7 +15,6 @@ if exists(':GuiFont')
 endif
 
 colorscheme moonfly
-if g:OS != "windows"
 lua << EOF
     -- Highlight group 'NotifyBackground' has no background highlight
     vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "#000000" })
@@ -35,4 +34,3 @@ lua << EOF
 
     require'nvim-treesitter'.setup({ install_dir = vim.g.VDP_TsParsersDir })
 EOF
-endif
