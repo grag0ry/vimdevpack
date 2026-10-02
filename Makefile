@@ -202,6 +202,17 @@ plugin-nvim-treesitter.git: $(BIN)/tree-sitter
 endif
 endif
 
+# Minimal
+vimrc.minimal.color: vimrc.minimal $(fake-plugin-vim-moonfly-colors.git)
+	cat vimrc.minimal > "$@"
+	cat $(CFG_PATH_PLUGIN)/vim-moonfly-colors.git/autoload/moonfly.vim >> "$@"
+	cat $(CFG_PATH_PLUGIN)/vim-moonfly-colors.git/colors/moonfly.vim >> "$@"
+	sed -i -e "s/moonfly#Style/MoonflyStyle/g" "$@"
+	echo "call MoonflyStyle()" >> "$@"
+
+.PHONY: minimal
+minimal: vimrc.minimal.color
+
 # Common
 
 .PHONY: clean clean-cache clean-dl distclean

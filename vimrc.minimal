@@ -1,0 +1,90 @@
+scriptencoding utf-8
+set backspace=2 " make backspace work like most other apps
+set mouse=a
+
+set number
+set ruler
+set linebreak
+set laststatus=2
+filetype on
+
+set wildmode=longest,list,full
+set wildmenu
+set completeopt=menu,menuone,noselect,noinsert,popup
+
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
+set smartindent
+
+set noincsearch
+
+set listchars=tab:>…,nbsp:⎵,trail:·
+set list
+
+set noswapfile
+set nobackup
+set nowritebackup
+
+let g:netrw_liststyle = 3
+let g:netrw_altv = 1
+let g:netrw_browse_split = 4
+let g:netrw_banner = 0
+
+
+lua << EOF
+vim.provider.python = false
+vim.provider.node = false
+vim.provider.ruby = false
+vim.provider.perl = false
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_python3_provider = 0
+EOF
+
+if has("termguicolors")
+    set termguicolors
+else
+    set t_Co=256
+endif
+
+syntax on
+
+set cursorline
+set hlsearch
+set colorcolumn=81
+
+function! Buffers()
+lua << EOF
+vim.ui.select(
+    vim.fn.getbufinfo({buflisted = 1}),
+    {
+        prompt = "Buffers",
+        format_item = function(buf)
+            return buf.bufnr .. ": " .. buf.name
+        end,
+    },
+    function(buf)
+      if buf then vim.cmd('buffer ' .. buf.bufnr) end
+    end
+)
+EOF
+endfunction
+
+command! -range=% DelExtraWhitespace <line1>,<line2>s/\s\+$//e
+command! -nargs=0 Buffers call Buffers()
+nnoremap <F2>  :set list!<CR>
+nnoremap <F3>  :nohlsearch<CR>
+nnoremap <F4>  :DelExtraWhitespace<CR>
+nnoremap <F5>  :redraw!<CR>
+nnoremap <C-c>      :cclose<CR>:lclose<CR>
+nnoremap <C-j>      :cn<CR>
+nnoremap <C-k>      :cp<CR>
+nnoremap <C-\><C-j> :lnext<CR>
+nnoremap <C-\><C-k> :lprevious<CR>
+nnoremap <C-h>      :colder<CR>
+nnoremap <C-l>      :cnewer<CR>
+nnoremap \b :Buffers<CR>
+nnoremap \d :exec 'edit ' . expand('%:p:h')<CR>
