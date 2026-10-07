@@ -75,10 +75,12 @@ endfunction
 
 command! -range=% DelExtraWhitespace <line1>,<line2>s/\s\+$//e
 command! -nargs=0 Buffers call Buffers()
+" cheat: F2 toggle whitespace display, F3 clear search highlight, F4 strip trailing whitespace, F5 force redraw
 nnoremap <F2>  :set list!<CR>
 nnoremap <F3>  :nohlsearch<CR>
 nnoremap <F4>  :DelExtraWhitespace<CR>
 nnoremap <F5>  :redraw!<CR>
+" cheat: C-j/C-k next/prev quickfix, C-\C-j/C-\C-k next/prev loclist, C-h/C-l older/newer qf list, C-c closes both
 nnoremap <C-c>      :cclose<CR>:lclose<CR>
 nnoremap <C-j>      :cn<CR>
 nnoremap <C-k>      :cp<CR>
@@ -86,5 +88,7 @@ nnoremap <C-\><C-j> :lnext<CR>
 nnoremap <C-\><C-k> :lprevious<CR>
 nnoremap <C-h>      :colder<CR>
 nnoremap <C-l>      :cnewer<CR>
+" cheat: \b - pick an open buffer
 nnoremap \b :Buffers<CR>
+" cheat: \d - open netrw at the current file's directory
 nnoremap \d :exec 'edit ' . expand('%:p:h')<CR>
