@@ -61,15 +61,27 @@ $$(call fake,npm-$1,$$(fake-nodejs))
 npm-$1: export CI := true
 npm-$1: | $$(NPM_DIR)/$1/.exists
 	$$(call lock,npm install --prefix "$$(NPM_DIR)/$1" $1,nodejs)
+ifneq ($$(filter $1,$$(NPM_AUDIT_FIX)),)
+	$$(call lock,npm audit --prefix "$$(NPM_DIR)/$1" fix,nodejs)
+endif
 ifneq ($$(filter $1,$$(NPM_AUDIT_FIX_FORCE)),)
 	$$(call lock,npm audit --prefix "$$(NPM_DIR)/$1" fix --force,nodejs)
 endif
+ifeq ($$(filter $1,$$(NPM_AUDIT_IGNORE)),)
 	$$(call lock,npm audit --prefix "$$(NPM_DIR)/$1",nodejs)
+endif
 
 .PHONY: update-npm-$1
 update-npm-$1: export CI := true
 update-npm-$1: $(if $$(CFG_NODEJS_NATIVE),,update-bin-node update-bin-npm update-bin-npx)
 	$$(call lock,npm update --prefix "$$(NPM_DIR)/$1",nodejs)
+ifneq ($$(filter $1,$$(NPM_AUDIT_FIX)),)
+	$$(call lock,npm audit --prefix "$$(NPM_DIR)/$1",nodejs) || ( \
+		rm -rf "$$(NPM_DIR)/$1" \
+			&& $$(call lock,npm install --prefix "$$(NPM_DIR)/$1" $1,nodejs) \
+			&& $$(call lock,npm audit --prefix "$$(NPM_DIR)/$1" fix,nodejs) \
+	)
+endif
 ifneq ($$(filter $1,$$(NPM_AUDIT_FIX_FORCE)),)
 	$$(call lock,npm audit --prefix "$$(NPM_DIR)/$1",nodejs) || ( \
 		rm -rf "$$(NPM_DIR)/$1" \
@@ -77,7 +89,9 @@ ifneq ($$(filter $1,$$(NPM_AUDIT_FIX_FORCE)),)
 			&& $$(call lock,npm audit --prefix "$$(NPM_DIR)/$1" fix --force,nodejs) \
 	)
 endif
+ifeq ($$(filter $1,$$(NPM_AUDIT_IGNORE)),)
 	$$(call lock,npm audit --prefix "$$(NPM_DIR)/$1",nodejs)
+endif
 
 
 $(foreach b,$2,$(call npm-impl-bin,$1,$b))
